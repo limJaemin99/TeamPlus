@@ -2,6 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.teamplus.mvc.dao.ProjectMapper">
 
+    <!-- 프로젝트 번호 시퀀스 -->
+    <select id="getSequence" resultType="int">
+        SELECT projectNo_seq.nextval
+        FROM dual
+    </select>
 
+    <!-- 프로젝트 [등록] -->
+    <insert id="newProject" parameterType="ProjectDTO">
+        INSERT INTO
+            project (projectNo,title,description,startDate,dueDate,endDate,password)
+        VALUES (#{projectNo},#{title},#{description},#{startDate},#{dueDate},#{endDate},#{password})
+    </insert>
+
+    <!-- 프로젝트 [수정] -->
+    <update id="update" parameterType="ProjectDTO">
+        UPDATE project
+        SET title=#{title},description=#{description},startDate=#{startDate},dueDate=#{dueDate},endDate=#{endDate},password=#{password},status=#{status}
+        WHERE projectNo=#{projectNo}
+    </update>
+
+    <!-- 프로젝트 [삭제] -->
+    <delete id="delete" parameterType="java.util.Map">
+        DELETE FROM
+            project
+        WHERE projectNo=#{projectNo} AND password=#{password}
+    </delete>
+
+    <!-- 프로젝트 정보 [출력] -->
+    <select id="selectOne" parameterType="java.util.Map" resultType="ProjectDTO">
+        SELECT *
+        FROM project
+        WHERE projectNo=#{projectNo} AND password=#{password}
+    </select>
 
 </mapper>
