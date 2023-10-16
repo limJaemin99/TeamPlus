@@ -34,7 +34,7 @@ File: Main Css File
 }
 @font-face {
   font-family: "hkgrotesk";
-  src: url("../fonts/hkgrotesk-bold.eot");
+  src: url("../fonts/hkgrotesk-bold.ttf");
   src: local("hkgrotesk bold"), url("../fonts/hkgrotesk-bold.woff") format("woff");
   font-weight: 700;
 }
@@ -16221,7 +16221,6 @@ span.flatpickr-weekday {
   position: absolute;
   bottom: -18px;
   right: -35px;
-}radius: 0.25rem;
 }
 @media (max-width: 576.98px) {
   .about-img-section::before {
