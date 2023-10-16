@@ -25,29 +25,7 @@ public class Pages {
 	public String team() {
 		return "pages/team";
 	}
-	
-	@GetMapping("/pages-timeline")
-	public String timeline() {
-		return "pages/timeline";
-	}
-	
 
-	@GetMapping("/pages-pricing")
-	public String pricing() {
-		return "pages/pricing";
-	}
-	
-	@GetMapping("/pages-gallery")
-	public String gallery() {
-		return "pages/gallery";
-	}
-	
-
-	@GetMapping("/pages-coming-soon")
-	public String coming_soon() {
-		return "pages/coming-soon";
-	}
-	
 	@GetMapping("/pages-sitemap")
 	public String sitemap() {
 		return "pages/sitemap";
