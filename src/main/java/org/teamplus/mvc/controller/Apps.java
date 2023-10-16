@@ -11,12 +11,7 @@ public class Apps {
 	public String apps_calendar() {
 		return "apps/calendar";
 	}
-	
-	@GetMapping("/apps-chat")
-	public String apps_chat(Model model) {
-		model.addAttribute("page","appchat");
-		return "apps/chat";
-	}
+
 	
 	@GetMapping("/apps-mailbox")
 	public String apps_mailbox() {
