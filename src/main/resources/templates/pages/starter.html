@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+
+<th:block layout:fragment="pagetitle">
+	<!--page title-->
+	<div th:replace="partials/title-meta :: title-meta('Starter')"></div>
+</th:block>
+
+<head>
+</head>
+
+<body>
+	<div layout:fragment="content">
+		 <!-- start page title -->
+		<div th:replace="partials/page-title :: page-title('Starter','Pages')"></div>
+
+	</div>
+
+	<th:block layout:fragment="pagejs">
+	</th:block>
+</body>
+
+</html>
