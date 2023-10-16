@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.teamplus.mvc.dao.TeamTodoMapper">
-    <!-- TodoNo 만들기 위한 시퀀스 추출-->
+    <!-- 프로젝트 투두리스트 [시퀀스 추출] -->
     <select id="getSequence" resultType="int">
         select
             teamTodoNo_seq.nextval
@@ -9,8 +9,8 @@
             dual
     </select>
 
-    <!-- 프로젝트-할일리스트 등록(insert문)-->
-    <insert id="insert">
+    <!-- 프로젝트 투두리스트 [등록] -->
+    <insert id="newTeamTodo">
         insert
         into
             TeamTodo(TodoNO,ProjectNo,UserNO,Title,Description,TodoDate,DueDate)
@@ -19,7 +19,7 @@
 
     </insert>
 
-    <!-- 프로젝트-할일리스트 진행상태 설정하는 update문 (파라미터 타입 : Map<String,object> _ -->
+    <!-- 프로젝트 투두리스트 [진행상태 설정] (파라미터 타입 : Map<String,object> _ -->
     <!--
     예시)
     Map<String,Objec> map = new HashMap<>();
@@ -35,7 +35,7 @@
             TodoNo=#{todoNO}
     </update>
 
-    <!-- TeamTodo에서 할일리스트 내용 수정하는 update문-->
+    <!-- 프로젝트 투두리스트 [내용 수정] -->
     <update id="update">
         update TeamTodo
         set
@@ -47,7 +47,7 @@
             TodoNo=#{todoNo}
     </update>
 
-    <!-- 할일 완료 설정 update문-->
+    <!-- 프로젝트 투두리스트 [진행여부 : 완료 설정] -->
     <!-- 시작전 : 0(기본값) / 진행중 : 1 / 완료 : 2 로 기준 -->
     <update id="setComplete">
         update TeamTodo
@@ -58,27 +58,28 @@
             TodoNO=#{todoNO}
     </update>
 
-    <!-- TodoNo으로 TeamTodo에서 삭제하는 delete문-->
+    <!-- T프로젝트 투두리스트 [삭제] -->
     <delete id="delete">
         delete
         from TeamTodo
         where TodoNo=#{todoNO}
     </delete>
 
-    <!-- TeamTodo 전체 조회-->
-    <select id="selectAll" resultType="TeamTodoDTO">
+    <!-- 프로젝트 투두리스트 [전체 조회] -->
+    <select id="selectList" resultType="TeamTodoDTO">
         select * from TeamTodo
     </select>
 
-    <!-- ProjectNo 와 UserNo별 조회-->
-    <select id="selectByuserNO" resultType="TeamTodoDTO">
+    <!-- 프로젝트 투두리스트 [ProjectNo 와 UserNo별 조회]-->
+    <select id="selectByUserNo" resultType="TeamTodoDTO">
         select *
         from TeamTodo
         where
             ProjectNo=#{projectNo} AND UserNo=#{userNO}
     </select>
 
-    <!-- 할일 상태별 조회-->
+    <!--프로젝트 투두리스트 [진행상태별 출력]-->
+
     <select id="selectByStatus" resultType="TeamTodoDTO">
         select *
         from TeamTodo
@@ -86,7 +87,7 @@
             Status=#{status}
     </select>
 
-    <!-- 종료 예정일별 조회? (필요 시 추가)-->
+    <!-- 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가 -->
 
 
 </mapper>
