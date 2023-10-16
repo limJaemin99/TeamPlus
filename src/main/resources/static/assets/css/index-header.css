@@ -1,0 +1,50 @@
+@charset "UTF-8";
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    z-index: 100;
+    border-bottom: 3px solid black;
+}
+
+#flex-items {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#flex-items #left-items{
+    display: flex;
+    align-items: center;
+}
+
+#flex-items .dropdown{
+    margin-left: 20px;
+}
+
+#flex-items #right-items{
+    display: flex;
+    align-items: center;
+}
+
+#flex-items #login{
+    margin-right: 20px;
+}
+
+#flex-items #right-items a{
+    color: black;
+    text-decoration: none;
+}
+
+#div-space{
+    margin-top: 100px;
+}
+
+#banner{
+    text-align: center;
+    background-color: #FCFCFC;
+}
