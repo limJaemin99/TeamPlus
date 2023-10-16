@@ -2,7 +2,6 @@ package org.teamplus.mvc.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -12,11 +11,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CommentsDTO {
-    private int commentNo;
-    private String todoNo;
+public class MyNoteDTO {
     private String userNo;
-    private String Content;
+    private int noteNo;
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate regDate;
+    private LocalDate noteDate;
+    private String title;
+    private String content;
 }
