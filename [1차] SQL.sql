@@ -41,6 +41,7 @@ CREATE TABLE DataShare
 	Content varchar2(4000) NOT NULL,
 	DataURL varchar2(4000) NOT NULL,
 	Count number DEFAULT 0 NOT NULL,
+	regDate date DEFAULT sysdate NOT NULL,
 	PRIMARY KEY (ShareNo)
 );
 
