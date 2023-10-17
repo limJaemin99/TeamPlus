@@ -78,10 +78,15 @@ public class Dashboard {
 		return "dashboard/team";
 	}
 
-	// index, home 컨트롤러
+	// 프로젝트 목록/생성/참가 화면 index
 	@GetMapping("/project-index")
 	public String project_index() {
 		return "dashboard/project-index";
 	}
 
+	//프로젝트 참가 화면
+	@GetMapping("/project-join")
+	public String project_join(){
+		return "dashboard/project-join";
+	}
 }
