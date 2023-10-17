@@ -6,29 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class Pages {
 
-	@GetMapping("/pages-starter")
-	public String starter() {
-		return "pages/starter";
-	}
-	
-	@GetMapping("/pages-profile")
-	public String profile() {
-		return "pages/profile";
-	}
-	
-	@GetMapping("/pages-profile-settings")
-	public String profile_settings() {
-		return "pages/profile-settings";
-	}
-	
-	@GetMapping("/pages-team")
-	public String team() {
-		return "pages/team";
+	// 사이트맵 컨트롤러
+	@GetMapping("/TeamPlus-sitemap")
+	public String sitemap() {
+		return "TeamPlus/sitemap";
 	}
 
-	@GetMapping("/pages-sitemap")
-	public String sitemap() {
-		return "pages/sitemap";
+	// 자주 묻는 질문 컨트롤러
+	@GetMapping("/TeamPlus-faqs")
+	public String faqs() {
+		return "TeamPlus/faqs";
 	}
 
 }

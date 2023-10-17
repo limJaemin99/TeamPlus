@@ -6,6 +6,10 @@ Contact: Themesbrand@gmail.com
 File: Two step verification Init Js File
 */
 
+
+// 2단계 인증
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 // move next
 
 function getInputElement(index) {

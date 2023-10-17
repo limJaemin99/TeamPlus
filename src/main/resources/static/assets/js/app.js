@@ -329,12 +329,12 @@ File: Main Js File
 						};
 						var siblings = getSiblings(collapse.parentElement);
 						Array.from(siblings).forEach(function (item) {
-							if (item.childNodes.length > 2)
+							if (item.childNodes.length > 1)
 								item.firstElementChild.setAttribute("aria-expanded", "false");
 							var ids = item.querySelectorAll("*[id]");
 							Array.from(ids).forEach(function (item1) {
 								item1.classList.remove("show");
-								if (item1.childNodes.length > 2) {
+								if (item1.childNodes.length > 1) {
 									var val = item1.querySelectorAll("ul li a");
 									Array.from(val).forEach(function (subitem) {
 										if (subitem.hasAttribute("aria-expanded"))

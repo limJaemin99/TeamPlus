@@ -6,6 +6,9 @@ Contact: Themesbrand@gmail.com
 File: Team Init Js File
 */
 
+// 팀
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 //Fiter Js
 var list = document.querySelectorAll(".team-list");
 if (list) {

@@ -6,6 +6,9 @@ Contact: Themesbrand@gmail.com
 File: Project create init js
 */
 
+// 프로젝트 생성
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 // ckeditor
 var ckeditorClassic = document.querySelector('#ckeditor-classic');
 if (ckeditorClassic) {
