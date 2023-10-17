@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.teamplus.mvc.dao.TeamMapper">
 
-<!-- 팀 등록하기 (insert) -->
-    <insert id="insert">
+<!-- 팀 [등록] -->
+    <insert id="newTeam">
          insert
         into Team
             (UserNo,ProjectNo)
@@ -11,7 +11,7 @@
             (#{userNO},#{projectNo})
     </insert>
 
-    <!-- userNo으로 leader 설정하는 update 문 -->
+    <!-- 팀 [리더 설정] -->
     <!--
     예시)
     Map<String,Objec> map = new HashMap<>();
@@ -27,20 +27,20 @@
             UserNo=#{userNo}
     </update>
 
-    <!-- ProjectNo 과 userNo으로 Team에서 삭제하는 delete문-->
+    <!-- 팀 [팀원 삭제] : ProjectNo 과 userNo으로 삭제 -->
     <delete id="delete">
         delete from Team
         where
-            UserNo=#{userNo} AND ProjectNo=#{projectNO}
+            UserNo=#{userNo} AND ProjectNo=#{projectNo}
     </delete>
 
-    <!-- Team 전체 조회 (select *) -->
-    <select id="selectAll" resultType="TeamDTO">
+    <!-- Team [전체 출력] -->
+    <select id="selectList" resultType="TeamDTO">
         select *
         from Team
     </select>
 
-    <!-- ProjectNo별 Team 조회 (select * where ProjectNO) -->
+    <!-- 팀 [프로젝트별 출력] -->
     <select id="selectByProjectNo" resultType="TeamDTO">
         select *
         from Team
@@ -48,11 +48,11 @@
             ProjectNo=#{projectNo}
     </select>
 
-    <!-- UserNo별 Team 조회 (select * where UserNO) -->
+    <!-- 팀 [유저별 출력] -->
     <select id="selectByUserNo" resultType="TeamDTO">
         select *
         from Team
         where
-            UserNo=#{userNO}
+            UserNo=#{userNo}
     </select>
 </mapper>

@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.teamplus.mvc.dao.UsersMapper">
 
-    <!-- UserNO 만들기 위한 시퀀스 추출-->
+    <!-- 유저 번호 시퀀스 -->
     <select id="getSequence" resultType="int">
         select
             userNo_seq.nextval
         from dual
     </select>
 
-    <!-- ID 중복확인 파라미터로 전달한 ID가 이미 존재하면 1 반환/ 아니면 0 반환-->
+    <!-- 유저 [아이디 중복확인] : ID가 이미 존재하면 1 반환/ 아니면 0 반환 -->
     <select id="isIdExist" resultType="int">
         select count(*)
         from Users
@@ -17,7 +17,7 @@
             Id=#{id}
     </select>
 
-    <!-- Email 중복확인 파라미터로 전달한 Email가 이미 존재하면 1 반환/ 아니면 0 반환-->
+    <!-- 유저 [이메일 중복확인] : email가 이미 존재하면 1 반환/ 아니면 0 반환 -->
     <select id="isEmailExist" resultType="int">
         select count(*)
         from Users
@@ -25,7 +25,7 @@
             Email=#{email}
     </select>
 
-    <!-- NickName 중복확인 파라미터로 전달한 NickName가 이미 존재하면 1 반환/ 아니면 0 반환-->
+    <!-- 유저 [닉네임 중복확인] : nickName가 이미 존재하면 1 반환/ 아니면 0 반환 -->
     <select id="isNicknameExist" resultType="int">
         select count(*)
         from Users
@@ -33,14 +33,14 @@
              NickName=#{nickName}
     </select>
 
-    <!-- 회원가입 insert문(register, signup, join)-->
+    <!-- 유저 [회원가입] -->
     <insert id="signUp">
         insert
         into Users
         values(#{userNo},#{id},#{password},#{name},#{nickName})
     </insert>
 
-    <!-- 회원정보 수정(닉네임) update 문-->
+    <!-- 유저 [회원정보 수정(닉네임)] -->
     <update id="changeNickName">
         update Users
         set
@@ -48,26 +48,27 @@
         where
             UserNo=#{userNO}
     </update>
-    <!-- 회원탈퇴 delete문 -->
+
+    <!-- 유저 [회원 탈퇴] -->
     <delete id="delete">
         delete from Users
         where
             UserNo=#{userNo}
     </delete>
 
-    <!-- 전체 회원 조회 -->
-    <select id="selectAll">
+    <!-- 유저 [전체회원 출력] -->
+    <select id="selectList">
         select * from Users
     </select>
 
-    <!-- userNo으로 회원 조회-->
+    <!-- 유저 [사용자번호별 출력] -->
     <select id="selectOne" resultType="UsersDTO">
         select * from Users
         where
             UserNO=#{userNO}
     </select>
 
-    <!-- 이름과 email로 아이디 찾기-->
+    <!-- 유저 [name과 email로 id 찾기] -->
     <select id="findId" resultType="UsersDTO">
         select *
         from Users
@@ -75,8 +76,8 @@
             Name=#{name} AND Email=#{email}
     </select>
 
-    <!-- 비밀번호 재설정(비밀번호 까먹었을 때, 로그인 안된 상태) -->
-    <!-- id랑 email 입력해서 일치하는 정보 뽑기-->
+    <!-- 유저 [비밀번호 재설정] : id랑 email 입력해서 일치하는 유저 비밀번호 변경 -->
+    <!-- 로그인 상태 X -->
     <update id="changePassword">
         update Users
         set Password=#{password}
