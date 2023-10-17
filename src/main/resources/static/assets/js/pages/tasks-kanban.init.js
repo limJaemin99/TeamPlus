@@ -6,6 +6,9 @@ Contact: Themesbrand@gmail.com
 File: tasks-kanaban  init js
 */
 
+// 작업 보드
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 var tasks_list = [
     document.getElementById("kanbanboard"),
     document.getElementById("unassigned-task"),

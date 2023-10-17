@@ -6,6 +6,9 @@ Contact: Themesbrand@gmail.com
 File: Tasks-list init js
 */
 
+// 작업 목록
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 var checkAll = document.getElementById("checkAll");
 if (checkAll) {
   checkAll.onclick = function () {

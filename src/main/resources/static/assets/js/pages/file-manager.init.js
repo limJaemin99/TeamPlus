@@ -6,6 +6,8 @@ Contact: Themesbrand@gmail.com
 File: file-manager Js File
 */
 
+// 파일 관리자
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // get colors array from the string
 function getChartColorsArray(chartId) {
   if (document.getElementById(chartId) !== null) {

@@ -6,6 +6,9 @@ Contact: Themesbrand@gmail.com
 File: Profile init js
 */
 
+// 프로필
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 // project-swiper
 var swiper = new Swiper(".project-swiper", {
     slidesPerView: 1,

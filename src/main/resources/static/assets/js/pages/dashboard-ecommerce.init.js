@@ -5,6 +5,8 @@ Website: https://Themesbrand.com/
 Contact: Themesbrand@gmail.com
 File: Ecommerce Dashboard init js
 */
+// index
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 // get colors array from the string
 function getChartColorsArray(chartId) {
