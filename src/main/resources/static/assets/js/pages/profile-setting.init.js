@@ -6,6 +6,10 @@ Contact: Themesbrand@gmail.com
 File: Profile-setting init js
 */
 
+
+// 프로필 수정
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 // Profile Foreground Img
 if (document.querySelector("#profile-foreground-img-file-input")) {
     document.querySelector("#profile-foreground-img-file-input").addEventListener("change", function () {

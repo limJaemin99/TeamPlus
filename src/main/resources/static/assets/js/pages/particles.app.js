@@ -2,14 +2,14 @@
 /* How to use? : Check the GitHub README
 /* ----------------------------------------------- */
 
-/* To load a config file (particles.json) you need to host this demo (MAMP/WAMP/local)... */
+/* 구성 파일(particles.json)을 로드하려면 이 데모(MAMP/WAMP/local)를 호스팅해야 합니다.... */
 /*
 particlesJS.load('particles-js', 'particles.json', function() {
   console.log('particles.js loaded - callback');
 });
 */
 
-/* Otherwise just put the config content (json): */
+/* 그렇지 않으면 구성 콘텐츠(json)를 넣으세요.: */
 
 
 particlesJS('auth-particles',

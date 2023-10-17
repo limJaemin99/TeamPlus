@@ -6,6 +6,9 @@ Contact: Themesbrand@gmail.com
 File: Project overview init js
 */
 
+// 프로젝트 개요
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 // favourite btn
 var favouriteBtn = document.querySelectorAll(".favourite-btn");
 if (favouriteBtn) {

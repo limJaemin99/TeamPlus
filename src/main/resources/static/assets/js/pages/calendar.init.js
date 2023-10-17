@@ -6,6 +6,8 @@ Contact: Themesbrand@gmail.com
 File: Calendar init js
 */
 
+// 달력
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 var start_date = document.getElementById("event-start-date");
 var timepicker1 = document.getElementById("timepicker1");

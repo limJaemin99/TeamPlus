@@ -5,7 +5,6 @@ job.html ▶ 직업 관련 분석
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ※ apps 폴더 & 사이드바 ※
 calendar.html ▶ 캘린더 추가 및 월&주&일&리스트로 확인 가능
-chat.html ▶ 채팅
 mailbox.html ▶ 이메일 발신,수신
 projects-list.html ▶ 프로젝트 관련 작업량
 projects-overview.html ▶ 프로젝트 내용(요약)
@@ -38,8 +37,4 @@ starter.html ▶ 빈 화면
 profile.html ▶ 프로필 화면
 profile-settings.html ▶ 프로필 수정 화면
 team.html ▶ 팀원 프로필 화면
-timeline.html ▶ 타임라인 화면
-gallery.html ▶ 갤러리 화면
-coming-soon.html ▶ 준비중인 화면
 sitemap.html ▶ 사이트 맵(userFlow 느낌)
-pricing.html ▶ 사용자 플랜 결제 화면

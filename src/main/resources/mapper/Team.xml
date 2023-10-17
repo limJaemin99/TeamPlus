@@ -2,6 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.teamplus.mvc.dao.TeamMapper">
 
+<!-- 팀 [등록] -->
+    <insert id="newTeam">
+         insert
+        into Team
+            (UserNo,ProjectNo)
+        values
+            (#{userNO},#{projectNo})
+    </insert>
 
+    <!-- 팀 [리더 설정] -->
+    <!--
+    예시)
+    Map<String,Objec> map = new HashMap<>();
+    map.put("isLeader",1);
+    map.put("userNO","user1");
+    setLeader(map);
+    -->
+    <update id="setLeader">
+        update Team
+        set
+            Leader=#{isLeader}
+        where
+            UserNo=#{userNo}
+    </update>
 
+    <!-- 팀 [팀원 삭제] : ProjectNo 과 userNo으로 삭제 -->
+    <delete id="delete">
+        delete from Team
+        where
+            UserNo=#{userNo} AND ProjectNo=#{projectNo}
+    </delete>
+
+    <!-- Team [전체 출력] -->
+    <select id="selectList" resultType="TeamDTO">
+        select *
+        from Team
+    </select>
+
+    <!-- 팀 [프로젝트별 출력] -->
+    <select id="selectByProjectNo" resultType="TeamDTO">
+        select *
+        from Team
+        where
+            ProjectNo=#{projectNo}
+    </select>
+
+    <!-- 팀 [유저별 출력] -->
+    <select id="selectByUserNo" resultType="TeamDTO">
+        select *
+        from Team
+        where
+            UserNo=#{userNo}
+    </select>
 </mapper>

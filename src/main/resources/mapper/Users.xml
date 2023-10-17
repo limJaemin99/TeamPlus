@@ -2,6 +2,86 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.teamplus.mvc.dao.UsersMapper">
 
+    <!-- 유저 번호 시퀀스 -->
+    <select id="getSequence" resultType="int">
+        select
+            userNo_seq.nextval
+        from dual
+    </select>
 
+    <!-- 유저 [아이디 중복확인] : ID가 이미 존재하면 1 반환/ 아니면 0 반환 -->
+    <select id="isIdExist" resultType="int">
+        select count(*)
+        from Users
+        where
+            Id=#{id}
+    </select>
 
+    <!-- 유저 [이메일 중복확인] : email가 이미 존재하면 1 반환/ 아니면 0 반환 -->
+    <select id="isEmailExist" resultType="int">
+        select count(*)
+        from Users
+        where
+            Email=#{email}
+    </select>
+
+    <!-- 유저 [닉네임 중복확인] : nickName가 이미 존재하면 1 반환/ 아니면 0 반환 -->
+    <select id="isNicknameExist" resultType="int">
+        select count(*)
+        from Users
+        where
+             NickName=#{nickName}
+    </select>
+
+    <!-- 유저 [회원가입] -->
+    <insert id="signUp">
+        insert
+        into Users
+        values(#{userNo},#{id},#{password},#{name},#{nickName})
+    </insert>
+
+    <!-- 유저 [회원정보 수정(닉네임)] -->
+    <update id="changeNickName">
+        update Users
+        set
+            NickName=#{nickname}
+        where
+            UserNo=#{userNO}
+    </update>
+
+    <!-- 유저 [회원 탈퇴] -->
+    <delete id="delete">
+        delete from Users
+        where
+            UserNo=#{userNo}
+    </delete>
+
+    <!-- 유저 [전체회원 출력] -->
+    <select id="selectList">
+        select * from Users
+    </select>
+
+    <!-- 유저 [사용자번호별 출력] -->
+    <select id="selectOne" resultType="UsersDTO">
+        select * from Users
+        where
+            UserNO=#{userNO}
+    </select>
+
+    <!-- 유저 [name과 email로 id 찾기] -->
+    <select id="findId" resultType="UsersDTO">
+        select *
+        from Users
+        where
+            Name=#{name} AND Email=#{email}
+    </select>
+
+    <!-- 유저 [비밀번호 재설정] : id랑 email 입력해서 일치하는 유저 비밀번호 변경 -->
+    <!-- 로그인 상태 X -->
+    <update id="changePassword">
+        update Users
+        set Password=#{password}
+        where
+            Id=#{id} AND Email=#{email}
+    </update>
 </mapper>
