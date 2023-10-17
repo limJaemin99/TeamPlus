@@ -6,6 +6,8 @@ Contact: Themesbrand@gmail.com
 File: Project list init js
 */
 
+// 프로젝트 목록
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // favourite btn
 var favouriteBtn = document.querySelectorAll(".favourite-btn");
 if (favouriteBtn) {

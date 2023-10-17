@@ -6,6 +6,10 @@ Contact: Themesbrand@gmail.com
 File: Password addon Js File
 */
 
+
+// 패스워드 변경
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 // password addon
 Array.from(document.querySelectorAll("form .auth-pass-inputgroup")).forEach(function (item) {
     Array.from(item.querySelectorAll(".password-addon")).forEach(function (subitem) {
