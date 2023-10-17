@@ -37,7 +37,7 @@
     <insert id="signUp">
         insert
         into Users
-        values(#{userNo},#{id},#{password},#{name},#{nickName})
+        values(#{userNo},#{id},#{password},#{name},#{nickName},#{job},#{description},#{profileURL})
     </insert>
 
     <!-- 유저 [회원정보 수정(닉네임)] -->
@@ -45,6 +45,33 @@
         update Users
         set
             NickName=#{nickname}
+        where
+            UserNo=#{userNO}
+    </update>
+
+    <!-- 유저 [회원정보 수정(직업)] -->
+    <update id="changeJob">
+        update Users
+        set
+            job=#{job}
+        where
+            UserNo=#{userNO}
+    </update>
+
+    <!-- 유저 [회원정보 수정(자기소개)] -->
+    <update id="changeDescription">
+        update Users
+        set
+            description=#{description}
+        where
+            UserNo=#{userNO}
+    </update>
+
+    <!-- 유저 [회원정보 수정(프로필 사진)] -->
+    <update id="changeProfile">
+        update Users
+        set
+            profileURL=#{profileURL}
         where
             UserNo=#{userNO}
     </update>
