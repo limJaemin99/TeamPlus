@@ -42,6 +42,21 @@ public class UsersService {
         return dao.changeNickName(dto);
     }
 
+    // 유저 [회원정보 수정(직업)]
+    int changeJob(UsersDTO dto){
+        return dao.changeJob(dto);
+    }
+
+    // 유저 [회원정보 수정(자기소개)]
+    int changeDescription(UsersDTO dto){
+        return dao.changeDescription(dto);
+    }
+
+    // 유저 [회원정보 수정(프로필 사진)]
+    int changeProfile(UsersDTO dto){
+        return dao.changeProfile(dto);
+    }
+
     // 유저 [회원 탈퇴]
     public int delete(UsersDTO dto){
         return dao.delete(dto);

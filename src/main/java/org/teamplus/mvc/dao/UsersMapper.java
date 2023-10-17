@@ -25,6 +25,15 @@ public interface UsersMapper {
     // 유저 [회원정보 수정(닉네임)]
     int changeNickName(UsersDTO dto);
 
+    // 유저 [회원정보 수정(직업)]
+    int changeJob(UsersDTO dto);
+
+    // 유저 [회원정보 수정(자기소개)]
+    int changeDescription(UsersDTO dto);
+
+    // 유저 [회원정보 수정(프로필 사진)]
+    int changeProfile(UsersDTO dto);
+
     // 유저 [회원 탈퇴]
     int delete(UsersDTO dto);
 
