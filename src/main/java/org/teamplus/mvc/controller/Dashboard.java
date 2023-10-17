@@ -5,13 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/dashboard")
 public class Dashboard {
 
 	// index, home 컨트롤러
-	@GetMapping("/index")
-	public void index() {
-
+	@GetMapping("/home")
+	public String index() {
+		return "dashboard/index";
 	}
 
 	// 프로젝트 진행사항 컨트롤러

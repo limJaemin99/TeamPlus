@@ -16,7 +16,6 @@ import java.nio.file.Paths;
 @Slf4j
 @Controller
 public class test {
-        private final static String LOCAL_MANUAL_PATH = "manuals/";
 
         @GetMapping("/")
         public String markdownView(@RequestParam(required = false) String page, Model model) throws Exception {
@@ -37,7 +36,7 @@ public class test {
 
         public String getMarkdownValueFormLocal(String manualPage) throws Exception {
             StringBuilder stringBuilder = new StringBuilder();
-            ClassPathResource classPathResource = new ClassPathResource(LOCAL_MANUAL_PATH + manualPage);
+            ClassPathResource classPathResource = new ClassPathResource("markdown/"+manualPage);
 
             BufferedReader br = Files.newBufferedReader(Paths.get(classPathResource.getURI()));
             br.lines().forEach(line -> stringBuilder.append(line).append("\n"));
