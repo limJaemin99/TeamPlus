@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome!</title>
+    <script src="./dist/vendors/jquery-1.10.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
     <div layout:fragment="content">
         <div id="index-content" style="text-align: center; background-color: #FCFCFC;">
-            <h1>이 부분에 README.md 파일 넣을 예정</h1>
-            <h1>markedjs 라이브러리 고려</h1>
+            <div th:utext="${contents}"></div>
             <h1>.</h1>
             <h1>.</h1>
             <h1>.</h1>
@@ -30,11 +31,9 @@
             <h1>.</h1>
             <h1>.</h1>
             <h1>.</h1>
-            <h1>스크롤 해도 header 고정 확인 ✔</h1>
             <h1>.</h1>
             <h1>.</h1>
             <h1>.</h1>
-            <h1>footer 고민중</h1>
             <h1>.</h1>
             <h1>.</h1>
             <h1>.</h1>

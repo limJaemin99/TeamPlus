@@ -2,14 +2,16 @@ package org.teamplus.mvc.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/dashboard")
 public class Dashboard {
 
 	// index, home 컨트롤러
-	@GetMapping("/")
-	public String index() {
-		return "dashboard/index";
+	@GetMapping("/index")
+	public void index() {
+
 	}
 
 	// 프로젝트 진행사항 컨트롤러
