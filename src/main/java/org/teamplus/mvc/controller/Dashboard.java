@@ -2,7 +2,6 @@ package org.teamplus.mvc.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class Dashboard {
@@ -77,6 +76,12 @@ public class Dashboard {
 	@GetMapping("/dashboard-team")
 	public String team() {
 		return "dashboard/team";
+	}
+
+	// index, home 컨트롤러
+	@GetMapping("/project-index")
+	public String project_index() {
+		return "dashboard/project-index";
 	}
 
 }
