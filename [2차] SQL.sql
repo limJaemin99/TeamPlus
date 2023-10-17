@@ -144,6 +144,9 @@ CREATE TABLE Users
 	name varchar2(50) NOT NULL,
 	email varchar2(1000) NOT NULL UNIQUE,
 	NickName varchar2(100) NOT NULL UNIQUE,
+	job varchar2(100),
+	description varchar2(4000),
+    profileURL varchar2(4000),
 	PRIMARY KEY (UserNo)
 );
 

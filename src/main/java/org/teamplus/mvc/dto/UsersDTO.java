@@ -21,4 +21,7 @@ public class UsersDTO {
     private String email;
     @Pattern(regexp = "^[a-zA-Z가-힣0-9]{2,}$",message = "닉네임 - 특수문자 사용 불가 (2글자 이상)")
     private String nickName;
+    private String job;
+    private String description;
+    private String profileURL;
 }
