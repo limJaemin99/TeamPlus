@@ -2,15 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.teamplus.mvc.dao.TeamMapper">
 
-<!-- 팀 [등록] -->
-    <insert id="newTeam">
-         insert
-        into Team
-            (UserNo,ProjectNo)
-        values
-            (#{userNO},#{projectNo})
-    </insert>
-
     <!-- 팀 [리더 설정] -->
     <!--
     예시)
@@ -55,4 +46,12 @@
         where
             UserNo=#{userNo}
     </select>
+
+    <!-- 프로젝트 참가 -->
+    <insert id="join" parameterType="TeamDTO">
+        INSERT INTO
+            Team
+        VALUES (#{userNo},#{projectNo},#{leader})
+    </insert>
+
 </mapper>

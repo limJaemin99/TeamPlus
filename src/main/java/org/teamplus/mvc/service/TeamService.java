@@ -11,11 +11,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
+
     private final TeamMapper dao;
-    // 팀 [등록]
-    int newTeam(TeamDTO dto){
-        return dao.newTeam(dto);
-    }
 
     // 팀 [리더 설정]
     public int setLeader(Map<String,Object> map){
@@ -42,5 +39,7 @@ public class TeamService {
         return dao.selectByUserNo(userNo);
     }
 
+    //프로젝트 참가
+    int join(TeamDTO dto){return dao.join(dto);}
 
 }
