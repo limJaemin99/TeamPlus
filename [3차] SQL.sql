@@ -58,7 +58,24 @@ CREATE TABLE MyNote
 	NoteDate date NOT NULL,
 	Title varchar2(4000) NOT NULL,
 	Content varchar2(4000) NOT NULL,
+	password varchar2(100) NOT NULL,
 	PRIMARY KEY (UserNo, NoteNo)
+);
+
+
+CREATE TABLE PrivateCalendar
+(
+    -- user1
+    UserNo varchar2(1000) NOT NULL,
+    -- 할 일 번호 - 유저아이디_1
+    id varchar2(4000) NOT NULL,
+    title varchar2(1000) NOT NULL,
+    startDate date NOT NULL,
+    endDate date,
+    className varchar2(1000) NOT NULL,
+    allDay number(1) NOT NULL,
+    description varchar2(1000),
+    PRIMARY KEY (UserNo, id)
 );
 
 
@@ -88,6 +105,22 @@ CREATE TABLE Project
 	Password varchar2(4000) NOT NULL,
 	Status number(1) DEFAULT 0 NOT NULL,
 	PRIMARY KEY (ProjectNo)
+);
+
+
+CREATE TABLE ProjectCalendar
+(
+    -- 프로젝트 번호 (ProjectNo) - project1
+    ProjectNo varchar2(1000) NOT NULL,
+    -- 할 일 번호 - 유저아이디_1
+    id varchar2(4000) NOT NULL,
+    title varchar2(1000) NOT NULL,
+    startDate date NOT NULL,
+    endDate date,
+    className varchar2(1000) NOT NULL,
+    allDay number(1) NOT NULL,
+    description varchar2(1000),
+    PRIMARY KEY (ProjectNo, id)
 );
 
 
@@ -137,7 +170,7 @@ CREATE TABLE TeamTodo
 CREATE TABLE Users
 (
 	-- user1
-	UserNo varchar2(4000) NOT NULL,
+	UserNo varchar2(1000) NOT NULL,
 	Id varchar2(100) NOT NULL UNIQUE,
 	-- Spring sequrity 사용
 	password varchar2(1000) NOT NULL,

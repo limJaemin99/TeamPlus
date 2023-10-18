@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{project-index-layout}" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark"
+	layout:decorate="~{project-index-layout}" lang="en" data-layout="vertical" data-topbar="light" data-sidebar="light"
 	  data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 	
 <th:block layout:fragment="pagetitle" >
@@ -63,18 +63,18 @@
 													<p class="text-muted"> Enter the invitation code to join the project </p>
 												</div>
 												<div class="p-2 mt-4">
-													<form action="/">
+													<form action="project-join" method="post">
 														<div class="mb-3">
-															<label for="code" class="form-label">Invitation Code</label>
-															<input type="text" class="form-control" id="code" placeholder="초대 코드를 입력하세요">
+															<label for="projectNo" class="form-label">Invitation Code</label>
+															<input type="text" class="form-control" id="projectNo" name="projectNo" placeholder="초대 코드를 입력하세요">
 														</div>
 														<div class="mb-3">
-															<label class="form-label" for="password-input">Password</label>
+															<label class="form-label" for="password">Password</label>
 															<div class="position-relative auth-pass-inputgroup mb-3">
-																<input type="password" class="form-control pe-5 password-input" placeholder="비밀번호를 입력하세요" id="password-input">
+																<input type="password" class="form-control pe-5 password-input" placeholder="비밀번호를 입력하세요" id="password" name="password">
 																<button
 																		class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
-																		type="button" id="password-addon"><i
+																		type="submit" id="password-addon"><i
 																		class="ri-eye-fill align-middle"></i>
 																</button>
 															</div>
