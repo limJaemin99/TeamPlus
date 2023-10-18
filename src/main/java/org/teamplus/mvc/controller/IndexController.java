@@ -15,13 +15,14 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 @Slf4j
 @Controller
-public class test {
+public class IndexController {
 
         @GetMapping("/")
         public String markdownView(@RequestParam(required = false) String page, Model model) throws Exception {
-            log.info("page: {}", page);
-            if (page == null)
+            if (page == null) {
                 page="README.md";
+            }
+            log.info("page: {}", page);
             String markdownValueFormLocal = getMarkdownValueFormLocal(page);
             Parser parser = Parser.builder().build();
             Node document = parser.parse(markdownValueFormLocal);

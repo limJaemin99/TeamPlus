@@ -48,16 +48,28 @@ public class Dashboard {
 		return "dashboard/tasks-kanban";
 	}
 
-	// 작업 목록 컨트롤러
+	// 메모 목록 컨트롤러
 	@GetMapping("/dashboard-tasks-list-view")
 	public String apps_tasks_list_view() {
 		return "dashboard/tasks-list-view";
 	}
 
-	// 작업 세부정보 컨트롤러
+	// 메모 등록
 	@GetMapping("/dashboard-tasks-details")
 	public String apps_tasks_list_details() {
 		return "dashboard/tasks-list-details";
+	}
+	
+	// 나중에 사용할 일 있으면 사용해도 됨
+	@GetMapping("/dashboard-tasks-details2")
+	public String apps_tasks_list_details2() {
+		return "dashboard/tasks-list-details2";
+	}
+	
+	// 작업 세부정보 컨트롤러
+	@GetMapping("/dashboard-tasks-read")
+	public String apps_tasks_reads() {
+		return "dashboard/tasks-read";
 	}
 
 	// 파일 관리자 컨트롤러

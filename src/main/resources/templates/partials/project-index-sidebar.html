@@ -37,6 +37,9 @@
 					</div>
 					<ul class="navbar-nav" id="navbar-nav">
 						<li class="menu-title"><span data-key="t-menu">Menu</span></li>
+						<a class="nav-link menu-link" href="/home">
+							<i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">home</span>
+						</a>
 						<li class="nav-item">
 							<a class="nav-link menu-link" href="#sidebarDashboards" data-bs-toggle="collapse"
 								role="button" aria-expanded="false" aria-controls="sidebarDashboards">
@@ -53,8 +56,58 @@
 									<li class="nav-item">
 										<a href="/project-join" class="nav-link" data-key="t-ecommerce"> 프로젝트 참가 </a>
 									</li>
+									<li class="nav-item">
+										<a href="/dashboard-projects" class="nav-link" data-key="t-projects">
+											프로젝트 진행사항</a>
+									</li>
+									<li class="nav-item">
+										<a href="/dashboard-projects-overview" class="nav-link"
+										   data-key="t-overview"> 프로젝트 개요 </a>
+									</li>
+									<li class="nav-item">
+										<a href="/dashboard-team" class="nav-link" data-key="t-team"> 팀 </a>
+									</li>
+									<li class="nav-item">
+										<a href="/dashboard-file-manager" class="nav-link"> <span
+												data-key="t-file-manager">파일 관리자</span></a>
+									</li>
 								</ul>
 							</div>
+						<li class="nav-item">
+							<a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
+							   aria-expanded="false" aria-controls="sidebarAuth">
+								<i class="ri-account-circle-line"></i> <span
+									data-key="t-authentication">TODO</span>
+							</a>
+						<div class="collapse menu-dropdown" id="sidebarAuth">
+							<ul class="nav nav-sm flex-column">
+									<li class="nav-item">
+										<a href="/dashboard-todo" class="nav-link"> <span data-key="t-to-do">TODO 페이지 ❌ 보류</span></a>
+									</li>
+									<li class="nav-item">
+										<a href="/dashboard-tasks-kanban" class="nav-link"
+										   data-key="t-kanbanboard">
+											TODO 리스트 </a>
+									</li>
+									<li class="nav-item">
+										<a href="/dashboard-tasks-details" class="nav-link"
+										   data-key="t-list-view">
+											메모 생성 </a>
+									</li>
+								<li class="nav-item">
+										<a href="/dashboard-tasks-list-view" class="nav-link"
+										   data-key="t-list-view">
+											개인 메모 목록 </a>
+									</li>
+								<li class="nav-item">
+										<a href="/dashboard-tasks-read" class="nav-link"
+										   data-key="t-list-view">
+											메모 보기 ❌ 나중에 삭제 </a>
+									</li>
+								</ul>
+							</div>
+						</li>
+
 						<li class="nav-item">
 							<a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
 							   aria-expanded="false" aria-controls="sidebarPages">
@@ -113,41 +166,6 @@
 						</li>
 						</li> <!-- end Dashboard Menu -->
 						<li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Pages</span></li>
-
-						<li class="nav-item">
-							<a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
-								aria-expanded="false" aria-controls="sidebarAuth">
-								<i class="ri-account-circle-line"></i> <span
-									data-key="t-authentication">성공 & 에러페이지</span>
-							</a>
-							<div class="collapse menu-dropdown" id="sidebarAuth">
-								<ul class="nav nav-sm flex-column">
-									<li class="nav-item">
-										<a href="/success-msg" class="nav-link"
-										   data-key="t-Success Message"> 성공 메세지
-										</a>
-									</li>
-									<li class="nav-item">
-										<a href="#sidebarErrors" class="nav-link" data-bs-toggle="collapse"
-											role="button" aria-expanded="false" aria-controls="sidebarErrors"
-											data-key="t-errors"> Errors
-										</a>
-										<div class="collapse menu-dropdown" id="sidebarErrors">
-											<ul class="nav nav-sm flex-column">
-												<li class="nav-item">
-													<a href="/404Errors" class="nav-link"
-														data-key="t-404-basic"> 404 </a>
-												</li>
-												<li class="nav-item">
-													<a href="/500Errors" class="nav-link" data-key="t-500"> 500 </a>
-												</li>
-
-											</ul>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</li>
 						<li class="nav-item">
 							<a class="nav-link menu-link" href="#sidebar" data-bs-toggle="collapse" role="button"
 							   aria-expanded="false" aria-controls="sidebar">
