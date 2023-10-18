@@ -1,6 +1,6 @@
 package org.teamplus.mvc.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-@Slf4j
+@Log4j2
 @Controller
 public class IndexController {
 
