@@ -38,24 +38,33 @@
 
         <div id="right-items">
             <!-- LogIn -->
-            <div id="login">
-                <a href="/MyPage-signin" class="login">
+            <th:block th:if="${session.user == null}">
+                <div id="login">
+                    <a href="/users/signin" class="login">
                     <span>
                         <img src="/assets/images/users/login.gif" height="50">
                     </span>
-                    로그인
-                </a>
-            </div>
+                        로그인
+                    </a>
+                </div>
 
-            <!-- Join -->
-            <div id="join">
-                <a href="/MyPage-signup" class="join">
+                <!-- Join -->
+                <div id="join">
+                    <a href="/users/signup" class="join">
                     <span>
                         <img src="/assets/images/users/join.gif" height="50">
                     </span>
-                    회원가입
-                </a>
-            </div>
+                        회원가입
+                    </a>
+                </div>
+            </th:block>
+            <th:block th:if="${session.user != null}">
+                <div id="goProjectList">
+                    <a href="/project/list" class="goProjectList">
+                        프로젝트 리스트 보러 가기
+                    </a>
+                </div>
+            </th:block>
         </div>
     </div>
 </header>

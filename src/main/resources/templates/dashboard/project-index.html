@@ -82,11 +82,20 @@
 																</th:block>
 															</div>
 															<div class="flex-grow-1 text-muted overflow-hidden" style="text-align: right;">
-																<h4 style="padding-top: 10px;">
-																	<a href="">종료 예정일</a>
-																	<br>
-																	<a href="" th:text="${list.getDueDate()}"></a>
-																</h4>
+																<th:block th:if="${list.getEndDate() == null}">
+																	<h4 style="padding-top: 10px;">
+																		<a href="" style="font-weight: bold">종료 예정일</a>
+																		<br>
+																		<a href="" th:text="${list.getDueDate()}"></a>
+																	</h4>
+																</th:block>
+																<th:block th:if="${list.getEndDate() != null}">
+																	<h4 style="padding-top: 10px;">
+																		<a style="color: darkgrey; font-weight: bold;">종료일</a>
+																		<br>
+																		<a style="color: darkgrey" th:text="${list.getEndDate()}"></a>
+																	</h4>
+																</th:block>
 															</div>
 														</div>
 													</div>
