@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.teamplus.mvc.dto.ProjectDTO;
 import org.teamplus.mvc.service.ProjectService;
 
@@ -82,6 +83,15 @@ public class ProjectController {
     //프로젝트 생성 화면
     @GetMapping("/create")
     public String createView() { return "dashboard/project-create"; }
+
+    @PostMapping("/create")
+    public String createAction(ProjectDTO dto){
+        String projectNo="project"+service.getSequence();
+        log.info(">>>>> 생성된 프로젝트번호 : {}",projectNo);
+        dto.setProjectNo(projectNo);
+        service.newProject(dto);
+        return "redirect:/project/list";
+    }
 
     //프로젝트 참가 화면
     @GetMapping("/join")

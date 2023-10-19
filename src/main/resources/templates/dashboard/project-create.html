@@ -9,174 +9,124 @@
 
 <head>
 	<!-- Plugins css -->
-	<link href="/assets/libs/dropzone/dropzone.css" rel="stylesheet" type="text/css" />
+	<link href="/assets/libs/dropzone/dropzone.css" rel="stylesheet" type="text/css"/>
 </head>
 
 <body>
 <div layout:fragment="content">
 	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
+	<form action="/project/create" method="post" name="project-create-form">
 
-	<div class="row">
-		<div class="col-lg-8">
-			<div class="card">
-				<div class="card-body">
-					<div class="mb-3">
-						<label class="form-label" for="project-title-input">프로젝트명(Project Title)</label>
-						<input type="text" class="form-control" id="project-title-input" name="title"
-							   placeholder="Enter project title">
+
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">공개범위_미정(Privacy)</h5>
 					</div>
-
-
-					<div class="mb-3">
-						<label class="form-label">프로젝트 설명(Project Description)</label>
-						<div id="ckeditor-classic">
-							<input type="text" name="description" placeholder="프로젝트 설명을 입력하세요.">
+					<div class="card-body">
+						<div>
+							<label for="choices-privacy-status-input" class="form-label">Status</label>
+							<select class="form-select" data-choices data-choices-search-false
+									id="choices-privacy-status-input">
+								<option value="Private" selected>Private</option>
+								<option value="Team">Team</option>
+							</select>
 						</div>
 					</div>
+					<!-- end card body -->
 				</div>
-				<!-- end card body -->
-			</div>
-			<!-- end card -->
+				<!-- end card -->
 
-			<div class="card">
-				<div class="card-header">
-					<h5 class="card-title mb-0">프로젝트 시작 / 종료 예정일 (startDate / DueDate)</h5>
-				</div>
-				<div class="card-body">
-					<input type="date" name="startDate">
-					<input type="date" name="dueDate">
-				</div>
-			</div>
-			<!-- end card -->
+				<div class="card">
+					<div class="card-body">
+						<div class="mb-3">
+							<label class="form-label" for="project-title-input">프로젝트명(Project Title)</label>
+							<input type="text" class="form-control" id="project-title-input" name="title"
+								   placeholder="Enter project title">
+						</div>
 
-			<div class="card">
-				<div class="card-header">
-					<h5 class="card-title mb-0">프로젝트 비밀번호 (Password)</h5>
-				</div>
-				<div class="card-body">
-					<input type="password" name="password" class="form-control"
-						   placeholder="프로젝트 참가 시 사용할 비밀번호를 입력하세요.">
-				</div>
-			</div>
-			<!-- end card -->
 
-			<div class="text-end mb-4">
-				<!--<button type="submit" class="btn btn-danger w-sm">Delete</button>
-                    <button type="submit" class="btn btn-secondary w-sm">Draft</button>-->
-				<button type="submit" class="btn btn-success w-sm">Create</button>
-			</div>
-		</div>
-		<!-- end col -->
-		<div class="col-lg-4">
-			<div class="card">
-				<div class="card-header">
-					<h5 class="card-title mb-0">Privacy</h5>
-				</div>
-				<div class="card-body">
-					<div>
-						<label for="choices-privacy-status-input" class="form-label">Status</label>
-						<select class="form-select" data-choices data-choices-search-false
-								id="choices-privacy-status-input">
-							<option value="Private" selected>Private</option>
-							<option value="Team">Team</option>
-							<option value="Public">Public</option>
-						</select>
-					</div>
-				</div>
-				<!-- end card body -->
-			</div>
-			<!-- end card -->
-
-			<div class="card">
-				<div class="card-header">
-					<h5 class="card-title mb-0">Tags</h5>
-				</div>
-				<div class="card-body">
-					<div class="mb-3">
-						<label for="choices-categories-input" class="form-label">Categories</label>
-						<select class="form-select" data-choices data-choices-search-false
-								id="choices-categories-input">
-							<option value="Designing" selected>Designing</option>
-							<option value="Development">Development</option>
-						</select>
-					</div>
-
-					<div>
-						<label for="choices-text-input" class="form-label">Skills</label>
-						<input class="form-control" id="choices-text-input" data-choices
-							   data-choices-limit="Required Limit" placeholder="Enter Skills" type="text"
-							   value="UI/UX, Figma, HTML, CSS, Javascript, C#, Nodejs" />
-					</div>
-				</div>
-				<!-- end card body -->
-			</div>
-			<!-- end card -->
-
-			<div class="card">
-				<div class="card-header">
-					<h5 class="card-title mb-0">Members</h5>
-				</div>
-				<div class="card-body">
-					<div class="mb-3">
-						<label for="choices-lead-input" class="form-label">Team Lead</label>
-						<select class="form-select" data-choices data-choices-search-false id="choices-lead-input">
-							<option value="Brent Gonzalez" selected>Brent Gonzalez</option>
-							<option value="Darline Williams">Darline Williams</option>
-							<option value="Sylvia Wright">Sylvia Wright</option>
-							<option value="Ellen Smith">Ellen Smith</option>
-							<option value="Jeffrey Salazar">Jeffrey Salazar</option>
-							<option value="Mark Williams">Mark Williams</option>
-						</select>
-					</div>
-
-					<div>
-						<label class="form-label">Team Members</label>
-						<div class="avatar-group">
-							<a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-							   data-bs-trigger="hover" data-bs-placement="top" title="Brent Gonzalez">
-								<div class="avatar-xs">
-									<img src="assets/images/users/user-dummy-img.jpg" alt=""
-										 class="rounded-circle img-fluid">
-								</div>
-							</a>
-							<a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-							   data-bs-trigger="hover" data-bs-placement="top" title="Sylvia Wright">
-								<div class="avatar-xs">
-									<div class="avatar-title rounded-circle bg-secondary">
-										S
-									</div>
-								</div>
-							</a>
-							<a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-							   data-bs-trigger="hover" data-bs-placement="top" title="Ellen Smith">
-								<div class="avatar-xs">
-									<img src="assets/images/users/user-dummy-img.jpg" alt=""
-										 class="rounded-circle img-fluid">
-								</div>
-							</a>
-							<a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
-							   data-bs-trigger="hover" data-bs-placement="top" title="Add Members">
-								<div class="avatar-xs" data-bs-toggle="modal" data-bs-target="#inviteMembersModal">
-									<div
-											class="avatar-title fs-16 rounded-circle bg-light border-dashed border text-primary">
-										+
-									</div>
-								</div>
-							</a>
+						<div class="mb-3">
+							<label class="form-label">프로젝트 설명(Project Description)</label>
+								<textarea type="text" id="ckeditor-classic" name="description" placeholder="프로젝트 설명을 입력하세요.">
+								</textarea>
 						</div>
 					</div>
+					<!-- end card body -->
 				</div>
-				<!-- end card body -->
+				<!-- end card -->
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<h5 class="card-title mb-0">프로젝트 시작 예정일 (startDate)</h5>
+							</div>
+							<div class="card-body">
+								<input type="date" name="startDate" class="choices__inner">
+								<!-- <div class="input-group">
+                                     <input type="text" id="event-start-date"
+                                            class="form-control flatpickr flatpickr-input"
+                                            placeholder="Select date" readonly required>
+                                     <span class="input-group-text"><i
+                                             class="ri-calendar-event-line"></i></span>-->
+							</div>
+						</div>
+						<!-- end card -->
+					</div>
+					<div class="col-md-6">
+						<div class="card">
+							<div class="card-header">
+								<h5 class="card-title mb-0">프로젝트 종료 예정일 (DueDate)</h5>
+							</div>
+							<div class="card-body">
+								<input type="date" name="dueDate">
+							</div>
+						</div>
+						<!-- end card -->
+					</div>
+					<!-- end col -->
+				</div>
+				<!-- end row -->
+
+				<div class="card">
+					<div class="card-header">
+						<h5 class="card-title mb-0">프로젝트 비밀번호 (Password)</h5>
+					</div>
+					<div class="card-body">
+						<input type="password" name="password" class="form-control"
+							   placeholder="프로젝트 참가 시 사용할 비밀번호를 입력하세요.">
+					</div>
+				</div>
+				<!-- end card -->
+
+				<div class="text-end mb-4">
+					<!--<button type="submit" class="btn btn-danger w-sm">Delete</button>
+                        <button type="submit" class="btn btn-secondary w-sm">Draft</button>-->
+					<button type="submit" class="btn btn-success w-sm">Create</button>
+				</div>
 			</div>
-			<!-- end card -->
+			<!-- end col -->
 		</div>
-		<!-- end col -->
-	</div>
+	</form>
 </div>
 
 
 <th:block layout:fragment="modal">
-
+	<script layout:fragment="script" th:inline="javascript">
+		// 애트리뷰트 result 를 받아서 js 객체 result에 저장
+		const result=[[${result}]]
+		// modal객체 생성
+		const modal = new bootstrap.Modal(document.querySelector(".modal"))
+		// result가 있으면
+		if(result) {
+			// id가 messege인 요소의 내부값을 result로 설정
+			document.querySelector('#message').innerHTML=result;
+			// 모달을 화면에 출력
+			modal.show();
+		}
+	</script>
 </th:block>
 
 <th:block layout:fragment="pagejs">
@@ -188,7 +138,15 @@
 	<script src="/assets/libs/dropzone/dropzone-min.js"></script>
 	<!-- project-create init -->
 	<script src="/assets/js/pages/project-create.init.js"></script>
+	<!--
 
+        &lt;!&ndash; calendar min js &ndash;&gt;
+        <script src="/assets/libs/fullcalendar/main.min.js"></script>
+
+        &lt;!&ndash; Calendar init &ndash;&gt;
+        <script src="/assets/js/pages/calendar.init.js"></script>
+
+    -->
 </th:block>
 </body>
 
