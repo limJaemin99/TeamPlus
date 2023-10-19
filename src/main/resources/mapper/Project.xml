@@ -30,8 +30,15 @@
     </delete>
 
     <!-- 프로젝트 정보 [출력] -->
-    <select id="selectOne" parameterType="java.util.Map" resultType="ProjectDTO">
+    <select id="selectOne" parameterType="String" resultType="ProjectDTO">
         SELECT *
+        FROM project
+        WHERE projectNo=#{projectNo}
+    </select>
+
+    <!-- 프로젝트 로그인 (프로젝트 참여용) -->
+    <select id="isExist" parameterType="ProjectDTO" resultType="int">
+        SELECT COUNT(*)
         FROM project
         WHERE projectNo=#{projectNo} AND password=#{password}
     </select>

@@ -3,12 +3,24 @@ package org.teamplus.mvc.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.teamplus.mvc.dto.ProjectDTO;
+import org.teamplus.mvc.dto.TeamDTO;
+import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.ProjectService;
+import org.teamplus.mvc.service.TeamService;
+import org.teamplus.mvc.service.UsersService;
+
+import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @Controller
@@ -76,7 +88,52 @@ public class ProjectController {
 
     //프로젝트 리스트 (로그인 후 프로젝트 리스트를 출력하는 화면)
     @GetMapping("/list")
-    public String listView() {
+    public String listView(/*@SessionAttribute("user")*/UsersDTO user,Model model) {
+        String userNo = user.getUserNo();
+        //todo 아직 session 에 user 정보가 없으므로 임의로 값을 부여함 2023-10-18 오후 (재민)
+        userNo = "test1";
+        log.info("━━━━━━━━━━ userNo : {}",userNo);
+
+        LocalDate today = LocalDate.now();
+
+        int testCount = 1;
+
+        List<TeamDTO> teamList = service.teamListByUserNo(userNo);
+        List<String> projectNoList = new ArrayList<>();
+        for(TeamDTO dto : teamList){
+            projectNoList.add(dto.getProjectNo());
+            log.info("━━━━━━━━━━ projectNoList {}번 : {}",testCount,dto.getProjectNo());
+            testCount++;
+        }
+
+        testCount = 1;
+
+        List<ProjectDTO> projectList = new ArrayList<>();
+        for(String projectNo : projectNoList){
+            projectList.add(service.selectOne(projectNo));
+            log.info("━━━━━━━━━━ projectList {}번 : {}",testCount,service.selectOne(projectNo));
+            testCount++;
+        }
+
+        testCount = 1;
+
+        Map<String,Object> members = new HashMap<>();
+        for(String projectNo : projectNoList){
+            List<String> memberName = new ArrayList<>();
+            List<TeamDTO> memberList = service.teamListByProjectNo(projectNo);
+            for(TeamDTO member : memberList){
+                memberName.add(service.nameByUserNo(member.getUserNo()));
+            }
+            members.put(projectNo,memberName);
+            log.info("━━━━━━━━━━ members {}번 : {}",testCount,memberName.toString());
+            testCount++;
+        }
+
+
+        model.addAttribute("list",projectList);
+        model.addAttribute("members",members);
+        model.addAttribute("today",today);
+
         return "dashboard/project-index";
     }
 
@@ -101,13 +158,35 @@ public class ProjectController {
 
     //프로젝트 참가 todo [POST]
     @PostMapping("/join")
-    public void joinPost(String userNo , ProjectDTO dto) {
+    public String joinPost(String userNo , ProjectDTO dto) {
         //TODO 로그인 화면이 아직 구성되지 않았으므로 userNo는 임의로 값을 부여함 2023-10-18 오전 (재민)
-        userNo = "test1";
+        userNo = "test3";
         log.info("┏━━━━━━━━━ userNo : {}",userNo);
         log.info("━━━━━━━━━━ projectNo : {}",dto.getProjectNo());
         log.info("┗━━━━━━━━━ password : {}",dto.getPassword());
 
+        int exist = service.isExist(dto);
+        int result = 0;
+
+        log.info("━━━━━━━━━━ 프로젝트 존재 확인 : {}",exist);
+
+        if(exist == 1){
+            TeamDTO teamDTO = TeamDTO.builder()
+                            .userNo(userNo)
+                            .projectNo(dto.getProjectNo())
+                            .build();
+            result = service.join(teamDTO);
+        } else {
+            log.info("▶▶▶▶▶▶▶▶▶▶ 존재하지 않는 프로젝트입니다 : {}",dto.getProjectNo());
+        }
+
+        if(result == 1){
+            log.info("▶▶▶▶▶▶▶▶▶▶ 프로젝트 참여 성공 ⭕");    //todo 이 부분에 모달 띄워야함
+        } else {
+            log.info("▶▶▶▶▶▶▶▶▶▶ 프로젝트 참여 실패 ❌");    //todo 이 부분에 모달 띄워야함
+        }
+
+        return "redirect:/project/list" ;
     }
 
 }

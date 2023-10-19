@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.support.SessionStatus;
 import org.teamplus.mvc.service.UsersService;
 
 @Log4j2
@@ -53,7 +54,9 @@ public class UsersController {
 
     // 로그아웃
     @GetMapping("/logout")
-    public String logout() {
+    public String logout(SessionStatus session) {
+        session.setComplete();
+
         return "MyPage/logout";
     }
 

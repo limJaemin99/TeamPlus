@@ -44,123 +44,18 @@
 							<div class="collapse menu-dropdown" id="sidebarDashboards">
 								<ul class="nav nav-sm flex-column">
 									<li class="nav-item">
-										<a href="/project-index" class="nav-link" data-key="t-ecommerce"> 참여중인 프로젝트 </a>
+										<a href="../project/list" class="nav-link" data-key="t-ecommerce"> 참여중인 프로젝트 </a>
 									</li>
 									<li class="nav-item">
-										<a href="/dashboard-projects-create" class="nav-link" data-key="t-ecommerce"> 프로젝트 생성 </a>
+										<a href="../project/create" class="nav-link" data-key="t-ecommerce"> 프로젝트 생성 </a>
 									</li>
 									<li class="nav-item">
-										<a href="/project-join" class="nav-link" data-key="t-ecommerce"> 프로젝트 참가 </a>
-									</li>
-									<li class="nav-item">
-										<a href="/dashboard-projects" class="nav-link" data-key="t-projects">
-											프로젝트 진행사항</a>
-									</li>
-									<li class="nav-item">
-										<a href="/dashboard-projects-overview" class="nav-link"
-										   data-key="t-overview"> 프로젝트 개요 </a>
-									</li>
-									<li class="nav-item">
-										<a href="/dashboard-team" class="nav-link" data-key="t-team"> 팀 </a>
-									</li>
-									<li class="nav-item">
-										<a href="/dashboard-file-manager" class="nav-link"> <span
-												data-key="t-file-manager">파일 관리자</span></a>
+										<a href="../project/join" class="nav-link" data-key="t-ecommerce"> 프로젝트 참가 </a>
 									</li>
 								</ul>
 							</div>
-						<li class="nav-item">
-							<a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
-							   aria-expanded="false" aria-controls="sidebarAuth">
-								<i class="ri-account-circle-line"></i> <span
-									data-key="t-authentication">TODO</span>
-							</a>
-						<div class="collapse menu-dropdown" id="sidebarAuth">
-							<ul class="nav nav-sm flex-column">
-									<li class="nav-item">
-										<a href="/dashboard-todo" class="nav-link"> <span data-key="t-to-do">TODO 페이지 ❌ 보류</span></a>
-									</li>
-									<li class="nav-item">
-										<a href="/dashboard-tasks-kanban" class="nav-link"
-										   data-key="t-kanbanboard">
-											TODO 리스트 </a>
-									</li>
-									<li class="nav-item">
-										<a href="/dashboard-tasks-details" class="nav-link"
-										   data-key="t-list-view">
-											메모 생성 </a>
-									</li>
-								<li class="nav-item">
-										<a href="/dashboard-tasks-list-view" class="nav-link"
-										   data-key="t-list-view">
-											개인 메모 목록 </a>
-									</li>
-								<li class="nav-item">
-										<a href="/dashboard-tasks-read" class="nav-link"
-										   data-key="t-list-view">
-											메모 보기 ❌ 나중에 삭제 </a>
-									</li>
-								</ul>
-							</div>
-						</li>
-
-						<li class="nav-item">
-							<a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-							   aria-expanded="false" aria-controls="sidebarPages">
-								<i class="ri-pages-line"></i> <span data-key="t-pages">My Page</span>
-							</a>
-							<div class="collapse menu-dropdown" id="sidebarPages">
-								<ul class="nav nav-sm flex-column">
-									<li class="nav-item">
-										<a href="/MyPage-starter" class="nav-link" data-key="t-starter"> Starter </a>
-									</li>
-									<li class="nav-item">
-										<a href="#sidebarProfile" class="nav-link" data-bs-toggle="collapse"
-										   role="button" aria-expanded="false" aria-controls="sidebarProfile"
-										   data-key="t-profile"> 프로필
-										</a>
-										<div class="collapse menu-dropdown" id="sidebarProfile">
-											<ul class="nav nav-sm flex-column">
-												<li class="nav-item">
-													<a href="/MyPage-profile" class="nav-link"
-													   data-key="t-simple-page">
-														프로필 보기 </a>
-												</li>
-												<li class="nav-item">
-													<a href="/MyPage-profile-settings" class="nav-link"
-													   data-key="t-settings"> 프로필 수정 </a>
-												</li>
-											</ul>
-										</div>
-									</li>
-
-									<li class="nav-item">
-										<a href="/MyPage-pass-change" class="nav-link"
-										   data-key="t-Password Create">
-											비밀번호 변경 <strong>❌보류</strong>
-										</a>
-									</li>
-									<li class="nav-item">
-										<a href="/MyPage-twostep" class="nav-link"
-										   data-key="t-Two Step Verification"> 2단계 인증 <strong>❌보류</strong>
-										</a>
-									</li>
-									<li class="nav-item">
-										<a href="/MyPage-lockscreen" class="nav-link"
-										   data-key="t-Lock Screen">
-											잠금 모드
-										</a>
-									</li>
-
-									<li class="nav-item">
-										<a href="/MyPage-logout" class="nav-link"
-										   data-key="t-Logout"> 로그아웃
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
 						</li> <!-- end Dashboard Menu -->
+
 						<li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Pages</span></li>
 						<li class="nav-item">
 							<a class="nav-link menu-link" href="#sidebar" data-bs-toggle="collapse" role="button"
@@ -171,10 +66,10 @@
 							<div class="collapse menu-dropdown" id="sidebar">
 								<ul class="nav nav-sm flex-column">
 							<li class="nav-item">
-							<a href="/TeamPlus-sitemap" class="nav-link" data-key="t-sitemap"> 사이트 맵 </a>
+							<a href="../info/sitemap-white" class="nav-link" data-key="t-sitemap"> 사이트 맵 </a>
 							</li>
 									<li class="nav-item">
-										<a href="/TeamPlus-faqs" class="nav-link" data-key="t-faqs"> 자주 묻는 질문 </a>
+										<a href="../info/faq-white" class="nav-link" data-key="t-faqs"> 자주 묻는 질문 </a>
 									</li>
 								</ul>
 								</div>

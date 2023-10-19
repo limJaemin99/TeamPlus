@@ -18,4 +18,11 @@ public class InfoController {
 	@GetMapping("/faq")
 	public void faq() {}
 
+	//[프로젝트 리스트용] 사이트맵
+	@GetMapping("/sitemap-white")
+	public void sitemapWhite() {}
+
+	//[프로젝트 리스트용] 자주 묻는 질문
+	@GetMapping("/faq-white")
+	public void faqWhite() {}
 }

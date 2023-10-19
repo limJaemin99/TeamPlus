@@ -8,8 +8,6 @@ import java.util.Map;
 
 @Mapper
 public interface TeamMapper {
-    // 팀 [등록]
-    int newTeam(TeamDTO dto);
 
     // 팀 [리더 설정]
     int setLeader(Map<String,Object> map);
@@ -26,5 +24,6 @@ public interface TeamMapper {
     // 팀 [유저별 출력]
     List<TeamDTO> selectByUserNo(String userNo);
 
-
+    //프로젝트 참가
+    int join(TeamDTO dto);
 }

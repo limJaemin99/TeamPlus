@@ -21,5 +21,8 @@ public interface ProjectMapper {
     int delete(Map<String,String> map);
 
     //프로젝트 정보 [출력]
-    ProjectDTO selectOne(Map<String,String> map);
+    ProjectDTO selectOne(String projectNo);
+
+    //프로젝트 로그인 (프로젝트 참여용)
+    int isExist(ProjectDTO dto);
 }
