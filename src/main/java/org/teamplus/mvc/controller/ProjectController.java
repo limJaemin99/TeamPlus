@@ -17,6 +17,8 @@ import org.teamplus.mvc.service.TeamService;
 import org.teamplus.mvc.service.UsersService;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,6 +96,8 @@ public class ProjectController {
         userNo = "test1";
         log.info("━━━━━━━━━━ userNo : {}",userNo);
 
+        LocalDate today = LocalDate.now();
+
         int testCount = 1;
 
         List<TeamDTO> teamList = service.teamListByUserNo(userNo);
@@ -127,8 +131,10 @@ public class ProjectController {
             testCount++;
         }
 
+
         model.addAttribute("list",projectList);
         model.addAttribute("members",members);
+        model.addAttribute("today",today);
 
         return "dashboard/project-index";
     }

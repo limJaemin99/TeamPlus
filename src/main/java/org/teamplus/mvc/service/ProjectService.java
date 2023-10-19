@@ -47,5 +47,5 @@ public class ProjectService {
     public List<TeamDTO> teamListByProjectNo(String projectNo){return teamDao.selectByProjectNo(projectNo);}
 
     //유저 [사용자 번호별 출력]
-    public String nameByUserNo(String userNo){return userDao.selectOne(userNo).getName();}
+    public String nameByUserNo(String userNo){return userDao.selectOne(userNo).getNickName();}
 }
