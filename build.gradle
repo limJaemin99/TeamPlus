@@ -50,7 +50,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.atlassian.commonmark/commonmark
     implementation group: 'com.atlassian.commonmark', name: 'commonmark', version: '0.12.1'
 
-
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
 tasks.named('test') {

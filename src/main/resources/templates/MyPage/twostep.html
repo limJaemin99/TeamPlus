@@ -61,14 +61,15 @@
 												class="fw-semibold">example@abc.com</span></p>
 									</div>
 
-									<form autocomplete="off">
+									<form action="resetpw" method="post">
+										<input type="hidden" id="code" name="code" th:value="${code}">
 										<div class="row">
 											<div class="col-3">
 												<div class="mb-3">
 													<label for="digit1-input" class="visually-hidden">Digit 1</label>
 													<input type="text"
 														class="form-control form-control-lg bg-light border-light text-center"
-														onkeyup="moveToNext(1, event)" maxLength="1" id="digit1-input">
+														onkeyup="moveToNext(1, event)" maxLength="1" id="digit1-input" name="first">
 												</div>
 											</div><!-- end col -->
 
@@ -77,7 +78,7 @@
 													<label for="digit2-input" class="visually-hidden">Digit 2</label>
 													<input type="text"
 														class="form-control form-control-lg bg-light border-light text-center"
-														onkeyup="moveToNext(2, event)" maxLength="1" id="digit2-input">
+														onkeyup="moveToNext(2, event)" maxLength="1" id="digit2-input" name="second">
 												</div>
 											</div><!-- end col -->
 
@@ -86,7 +87,7 @@
 													<label for="digit3-input" class="visually-hidden">Digit 3</label>
 													<input type="text"
 														class="form-control form-control-lg bg-light border-light text-center"
-														onkeyup="moveToNext(3, event)" maxLength="1" id="digit3-input">
+														onkeyup="moveToNext(3, event)" maxLength="1" id="digit3-input" name="third">
 												</div>
 											</div><!-- end col -->
 
@@ -95,15 +96,14 @@
 													<label for="digit4-input" class="visually-hidden">Digit 4</label>
 													<input type="text"
 														class="form-control form-control-lg bg-light border-light text-center"
-														onkeyup="moveToNext(4, event)" maxLength="1" id="digit4-input">
+														onkeyup="moveToNext(4, event)" maxLength="1" id="digit4-input" name="fourth">
 												</div>
 											</div><!-- end col -->
 										</div>
+										<div class="mt-3">
+											<button type="submit" class="btn btn-success w-100">Confirm</button>
+										</div>
 									</form><!-- end form -->
-
-									<div class="mt-3">
-										<button type="button" class="btn btn-success w-100">Confirm</button>
-									</div>
 								</div>
 							</div>
 							<!-- end card body -->
