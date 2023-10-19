@@ -25,4 +25,7 @@ public class InfoController {
 	//[프로젝트 리스트용] 자주 묻는 질문
 	@GetMapping("/faq-white")
 	public void faqWhite() {}
+
+	@GetMapping("/modal")
+	public String model() {return "info/modals";}
 }

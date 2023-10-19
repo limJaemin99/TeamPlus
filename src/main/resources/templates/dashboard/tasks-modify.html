@@ -15,9 +15,9 @@
 <body>
 <div layout:fragment="content">
 	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
-<form action="/project/save" method="post">
+<form action="/project/modifysave" method="post">
 	<input type="hidden" value="test1" name="userNo">
-	<input type="hidden" name="noteNo" th:value="${noteNo}+1">
+	<input type="hidden" name="noteNo" th:value="${vo.noteNo}">
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="card">
@@ -25,14 +25,14 @@
 					<div class="mb-3">
 						<label class="form-label" for="project-title-input">개인 메모</label>
 						<input type="text" class="form-control" id="project-title-input" name="title"
-							   placeholder="제목을 입력하세요.">
+							  th:value="${vo.title}">
 					</div>
 
 
 					<div class="mb-3">
 						<label class="form-label">메모</label>
 						<!--<div id="ckeditor-classic">-->
-							<textarea type="text" name="content" id="ckeditor-classic">
+							<textarea type="text" name="content" id="ckeditor-classic" th:utext="${vo.content}">
 							</textarea>
 						<!--</div>-->
 					</div>
@@ -47,7 +47,7 @@
 				</div>
 				<div class="card-body">
 					<input type="password" name="password" class="form-control"
-						   placeholder="메모 확인시 사용할 비밀번호를 입력하세요.">
+						   th:value="${vo.password}">
 				</div>
 			</div>
 			<!-- end card -->
@@ -67,7 +67,7 @@
 				<div class="card-body">
 					<div>
 						<label for="choices-date" class="form-label">Date</label>
-						<div><input name="noteDate" id="choices-date" type="date" class="choices__inner" style="padding-right: 8px;">
+						<div><input name="noteDate" id="choices-date" type="date" class="choices__inner" style="padding-right: 8px;" th:value="${vo.noteDate}" disabled>
 						</div>
 					</div>
 				</div>
@@ -82,7 +82,7 @@
 						<label for="choices-privacy-status-input" class="form-label">Status</label>
 						<select class="form-select" data-choices data-choices-search-false
 								id="choices-privacy-status-input">
-							<option value="비공개" name="isPrivate" selected readonly>비공개</option>
+							<option value="비공개" selected disabled>[[${vo.isPrivate}]]</option>
 						</select>
 					</div>
 				</div>
