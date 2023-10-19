@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.teamplus.mvc.dto.MailCodeDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.UsersService;
+import org.teamplus.mvc.util.MailCheck;
 
 @Log4j2
 @Controller
@@ -72,15 +74,46 @@ public class UsersController {
     }
 
     // 비밀번호 재설정 2 (인증번호 기입)
-    @GetMapping("/auth")
-    public String authView() {
+    @PostMapping("/auth")
+    public String authView(String email, Model model) {
+
+        log.info("━━━━━━━━━━ 입력한 email : {}",email);
+
+        MailCheck mail = new MailCheck();
+
+        String code = mail.random();
+        log.info("━━━━━━━━━━ 생성된 코드 : {}",code);
+
+        mail.setCode(code);
+        mail.sendMail(email);
+
+        model.addAttribute("code",code);
+
         return "MyPage/twostep";
     }
 
+
+
     // 비밀번호 재설정 3 (비밀번호 재설정)
-    @GetMapping("/resetpw")
-    public String resetpwView() {
-        return "MyPage/pass-change";
+    @PostMapping ("/resetpw")
+    public String resetpwView(MailCodeDTO dto, String code) {
+        String redirect = "";
+
+        StringBuilder insertDTOCode = new StringBuilder();
+        insertDTOCode.append(dto.getFirst()).append(dto.getSecond()).append(dto.getThird()).append(dto.getFourth());
+
+        String insertCode = insertDTOCode.toString();
+        log.info("━━━━━━━━━━ 생성된 코드 : {}",code);
+        log.info("━━━━━━━━━━ 입력한 코드 : {}",insertCode);
+
+        if(insertCode.equals(code)){    //인증번호 일치
+            redirect = "MyPage/pass-change";
+            log.info("━━━━━━━━━━ 인증번호 일치 ⭕");
+        } else {    //인증번호 불일치
+            log.info("━━━━━━━━━━ 인증번호 불일치 ❌");
+        }
+
+        return redirect;
     }
 
     // 잠금 모드 (비밀번호 입력시 해제)

@@ -121,4 +121,11 @@
             id=#{id} AND password=#{password}
     </select>
 
+    <!-- [비밀번호 재설정용] email 로 정보 가져오기 -->
+    <select id="selectByEmail" parameterType="String" resultType="UsersDTO">
+        SELECT *
+        FROM users
+        WHERE email=#{email}
+    </select>
+
 </mapper>

@@ -96,5 +96,8 @@ public class UsersService {
         }
     }
 
+    //[비밀번호 재설정용] email 로 정보 가져오기
+    UsersDTO selectByEmail(String email){return dao.selectByEmail(email);}
+
 }
 
