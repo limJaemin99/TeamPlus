@@ -40,17 +40,15 @@ public class UsersController {
         log.info("━━━━━━━━━━ 로그인 결과 : {}",user.toString());
 
         if (user != null) {
-            log.info("━━━━━━━━━━ 로그인 성공 1 ⭕");
+            log.info("━━━━━━━━━━ 로그인 성공 ⭕");
             model.addAttribute("user",user);
-            log.info("━━━━━━━━━━ 로그인 성공 2 ⭕⭕");
-            redirect = "redirect:/project/list"; // 로그인 성공 시 홈 페이지로 리디렉션
-            log.info("━━━━━━━━━━ 로그인 성공 3 ⭕⭕⭕");
+            redirect = "redirect:/project/list";
         } else {
             log.info("━━━━━━━━━━ 로그인 실패 ❌");
-            model.addAttribute("error", "로그인 실패"); // 로그인 실패 시 에러 메시지 전달
+            model.addAttribute("error", "로그인 실패");
             redirect = "redirect:/users/signin";
         }
-        log.info("━━━━━━━━━━ if 종료 : {}",redirect);
+
         return redirect; // 로그인 페이지로 리디렉션
     }
 

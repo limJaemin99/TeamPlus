@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.teamplus.mvc.dto.ProjectDTO;
 import org.teamplus.mvc.dto.TeamDTO;
 import org.teamplus.mvc.dto.UsersDTO;
@@ -34,7 +32,11 @@ public class ProjectController {
 
     //프로젝트 홈 (프로젝트 선택 후 나타나는 '해당 프로젝트의 홈화면')
     @GetMapping("/home")
-    public String home() {
+    public String home(@SessionAttribute("user") UsersDTO user,Model model) {
+        log.info("━━━━━━━━━━ user : {}",user.toString());
+
+        model.addAttribute("user",user);
+
         return "dashboard/index";
     }
 
@@ -88,10 +90,9 @@ public class ProjectController {
 
     //프로젝트 리스트 (로그인 후 프로젝트 리스트를 출력하는 화면)
     @GetMapping("/list")
-    public String listView(/*@SessionAttribute("user")*/UsersDTO user,Model model) {
+    public String listView(@SessionAttribute("user") UsersDTO user, Model model) {
         String userNo = user.getUserNo();
         //todo 아직 session 에 user 정보가 없으므로 임의로 값을 부여함 2023-10-18 오후 (재민)
-        userNo = "test1";
         log.info("━━━━━━━━━━ userNo : {}",userNo);
 
         LocalDate today = LocalDate.now();
@@ -158,10 +159,9 @@ public class ProjectController {
 
     //프로젝트 참가 todo [POST]
     @PostMapping("/join")
-    public String joinPost(String userNo , ProjectDTO dto) {
-        //TODO 로그인 화면이 아직 구성되지 않았으므로 userNo는 임의로 값을 부여함 2023-10-18 오전 (재민)
-        userNo = "test3";
-        log.info("┏━━━━━━━━━ userNo : {}",userNo);
+    public String joinPost(@SessionAttribute("user") UsersDTO user , ProjectDTO dto) {
+
+        log.info("┏━━━━━━━━━ userNo : {}",user.getUserNo());
         log.info("━━━━━━━━━━ projectNo : {}",dto.getProjectNo());
         log.info("┗━━━━━━━━━ password : {}",dto.getPassword());
 
@@ -172,7 +172,7 @@ public class ProjectController {
 
         if(exist == 1){
             TeamDTO teamDTO = TeamDTO.builder()
-                            .userNo(userNo)
+                            .userNo(user.getUserNo())
                             .projectNo(dto.getProjectNo())
                             .build();
             result = service.join(teamDTO);
