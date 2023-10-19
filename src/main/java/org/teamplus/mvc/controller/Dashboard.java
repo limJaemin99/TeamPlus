@@ -35,11 +35,7 @@ public class Dashboard {
 		return "dashboard/tasks-list-details2";
 	}
 	
-	// 작업 세부정보 컨트롤러 todo 보류 : 개인 메모 메뉴인데 뭔지 모르겠음
-	@GetMapping("/dashboard-tasks-read")
-	public String apps_tasks_reads() {
-		return "dashboard/tasks-read";
-	}
+
 
 
 

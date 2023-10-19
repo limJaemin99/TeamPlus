@@ -3,7 +3,7 @@
 <mapper namespace="org.teamplus.mvc.dao.MyNoteMapper">
 
     <!-- 노트 번호 시퀀스 -->
-    <select id="getSequence" resultType="int">
+    <select id="getMynoteSequence" resultType="int">
         SELECT CASE WHEN MAX(noteNo) is null THEN 1
                     ELSE MAX(noteNo)
                    END AS noteNo
@@ -14,18 +14,25 @@
     <insert id="write" parameterType="MyNoteDTO">
         INSERT INTO
             myNote
-        VALUES (#{userNo},#{noteNo},#{noteDate},#{title},#{content})
+        VALUES (#{userNo},#{noteNo},#{noteDate},#{title},#{content},#{password},'비공개')
     </insert>
 
     <!-- 사용자 + 날짜 지정 노트 글 리스트 [출력] -->
-    <select id="selectList" parameterType="java.util.Map" resultType="MyNoteDTO">
+    <select id="selectList" parameterType="String" resultType="MyNoteDTO">
         SELECT *
         FROM myNote
-        WHERE userNo=#{userNo} AND noteDate=#{noteDate}
+        WHERE userNo=#{userNo}
+    </select>
+
+    <!-- 노트 내용 확인 -->
+    <select id="selectOne" parameterType="int" resultType="MyNoteDTO">
+        SELECT *
+        FROM myNote
+        WHERE noteNo=#{noteNo}
     </select>
 
     <!-- 사용자 + 날짜 지정 노트 글 [삭제] -->
-    <delete id="delete" parameterType="String">
+    <delete id="delete" parameterType="int">
         DELETE FROM
             myNote
         WHERE
@@ -35,7 +42,7 @@
     <!-- 사용자 + 날짜 지정 노트 글 [수정] -->
     <update id="update" parameterType="MyNoteDTO">
         UPDATE myNote
-        SET title=#{title},content=#{content}
+        SET title=#{title},content=#{content},password=#{password}
         WHERE noteNo=#{noteNo}
     </update>
 
