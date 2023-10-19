@@ -11,8 +11,8 @@
     <!-- 프로젝트 [등록] -->
     <insert id="newProject" parameterType="ProjectDTO">
         INSERT INTO
-            project (projectNo,title,description,startDate,dueDate,endDate,password)
-        VALUES (#{projectNo},#{title},#{description},#{startDate},#{dueDate},#{endDate},#{password})
+            project (projectNo,title,description,startDate,dueDate,password)
+        VALUES (#{projectNo},#{title},#{description},#{startDate},#{dueDate},#{password})
     </insert>
 
     <!-- 프로젝트 [수정] -->
