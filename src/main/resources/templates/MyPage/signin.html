@@ -50,11 +50,10 @@
 									<p class="text-muted">Sign in to continue to TeamPlus.</p>
 								</div>
 								<div class="p-2 mt-4">
-									<form action="/">
-
+									<form action="signin" method="post">
 										<div class="mb-3">
-											<label for="username" class="form-label">Username</label>
-											<input type="text" class="form-control" id="username"
+											<label for="id" class="form-label">Username</label>
+											<input type="text" class="form-control" id="id" name="id"
 												placeholder="Enter username">
 										</div>
 
@@ -66,19 +65,12 @@
 											<label class="form-label" for="password-input">Password</label>
 											<div class="position-relative auth-pass-inputgroup mb-3">
 												<input type="password" class="form-control pe-5 password-input"
-													placeholder="Enter password" id="password-input">
+													placeholder="Enter password" id="password-input" name="password">
 												<button
 													class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 													type="button" id="password-addon"><i
 														class="ri-eye-fill align-middle"></i></button>
 											</div>
-										</div>
-
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value=""
-												id="auth-remember-check">
-											<label class="form-check-label" for="auth-remember-check">Remember
-												me</label>
 										</div>
 
 										<div class="mt-4">
@@ -112,7 +104,7 @@
 						<!-- end card -->
 
 						<div class="mt-4 text-center">
-							<p class="mb-0"> 계정이 없으신가요? <a href="/MyPage-signup"
+							<p class="mb-0"> 계정이 없으신가요? <a href="/users/signup"
 									class="fw-semibold text-primary text-decoration-underline"> 회원가입 </a> </p>
 						</div>
 
@@ -143,7 +135,32 @@
 	</div>
 
 	<div th:replace="partials/vendor-scripts :: scripts"></div>
+	<script>
+		// 비밀번호 숨김/표시 토글
+		const passwordInput = document.getElementById('password-input');
+		const passwordAddon = document.getElementById('password-addon');
 
+		passwordAddon.addEventListener('click', function() {
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+			} else {
+				passwordInput.type = 'password';
+			}
+		});
+
+		// 폼 제출 시 유효성 검사
+		const loginForm = document.getElementById('loginForm');
+
+		loginForm.addEventListener('submit', function(event) {
+			const username = document.getElementById('username').value;
+			const password = passwordInput.value;
+
+			if (!username || !password) {
+				event.preventDefault(); // 폼 제출을 막음
+				alert('아이디와 비밀번호를 모두 입력해주세요.');
+			}
+		});
+	</script>
 </body>
 
 </html>

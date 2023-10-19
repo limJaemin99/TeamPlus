@@ -36,9 +36,10 @@
     <!-- 유저 [회원가입] -->
     <insert id="signUp">
         insert
-        into Users
-        values(#{userNo},#{id},#{password},#{name},#{nickName},#{job},#{description},#{profileURL})
+        into Users(userno,id,password,name,email,nickname,job)
+        values(userno_seq.nextval,#{id},#{password},#{name},#{email},#{nickName},#{job})
     </insert>
+
 
     <!-- 유저 [회원정보 수정(닉네임)] -->
     <update id="changeNickName">
@@ -111,4 +112,13 @@
         where
             Id=#{id} AND Email=#{email}
     </update>
+
+    <select id="signin" resultType="UsersDTO" parameterType="UsersDTO">
+        select *
+        from
+            Users
+        where
+            id=#{id} AND password=#{password}
+    </select>
+
 </mapper>

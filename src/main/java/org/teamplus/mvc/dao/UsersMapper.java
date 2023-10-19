@@ -1,9 +1,11 @@
 package org.teamplus.mvc.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.teamplus.mvc.dto.UsersDTO;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface UsersMapper {
@@ -49,5 +51,6 @@ public interface UsersMapper {
     // 유저 [비밀번호 재설정] : id랑 email 입력해서 일치하는 유저 비밀번호 변경
     int changePassword(UsersDTO dto);
 
+    UsersDTO signin(UsersDTO dto);
 
 }
