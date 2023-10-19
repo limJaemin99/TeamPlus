@@ -32,10 +32,13 @@ public class ProjectController {
 
     //프로젝트 홈 (프로젝트 선택 후 나타나는 '해당 프로젝트의 홈화면')
     @GetMapping("/home")
-    public String home(@SessionAttribute("user") UsersDTO user,Model model) {
-        log.info("━━━━━━━━━━ user : {}",user.toString());
+    public String home(@SessionAttribute("user") UsersDTO user,String projectNo,Model model) {
+        log.info("┏┏┏┏┏┏┏┏┏┏ user : {}",user.toString());
+        log.info("┗┗┗┗┗┗┗┗┗┗ projectNo : {}",projectNo);
 
-        model.addAttribute("user",user);
+        ProjectDTO project = service.selectOne(projectNo);
+
+        model.addAttribute("project",project);
 
         return "dashboard/index";
     }

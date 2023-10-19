@@ -18,7 +18,7 @@
     </select>
 
     <!-- 유저 [이메일 중복확인] : email가 이미 존재하면 1 반환/ 아니면 0 반환 -->
-    <select id="isEmailExist" resultType="int">
+    <select id="isEmailExist" resultType="int" parameterType="String">
         select count(*)
         from Users
         where

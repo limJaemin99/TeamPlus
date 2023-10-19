@@ -47,8 +47,8 @@
 
 						<div class="card-body p-4">
 							<div class="text-center mt-2">
-								<h5 class="text-primary">Create New Account</h5>
-								<p class="text-muted">Get your free TeamPlus account now</p>
+								<h3 class="text-primary">Create New Account</h3>
+								<p class="text-muted">TeamPlus 에 오신것을 환영합니다!</p>
 							</div>
 							<div class="p-2 mt-4">
 								<form class="needs-validation" action="/users/signup" method="post">
@@ -57,42 +57,41 @@
 										<label for="Id" class="form-label">ID <span
 												class="text-danger">*</span></label>
 										<input type="text" class="form-control" id="Id" name="id"
-											   placeholder="Enter Id" required>
+											   placeholder="ID를 입력해주세요" required>
 										<div class="invalid-feedback">
-											Please enter Id
+											ID를 입력해주세요
 										</div>
 									</div>
 									<div class="mb-3">
 										<label for="name" class="form-label">Username <span
 												class="text-danger">*</span></label>
 										<input type="text" class="form-control" id="name" name="name"
-											   placeholder="Enter username" required>
+											   placeholder="성함을 입력해주세요" required>
 										<div class="invalid-feedback">
-											Please enter username
+											성함을 입력해주세요
 										</div>
 									</div>
 									<div class="mb-3">
 										<label for="NickName" class="form-label">NickName <span
 												class="text-danger">*</span></label>
 										<input type="text" class="form-control" id="NickName" name="NickName"
-											   placeholder="Enter NickName" required>
+											   placeholder="닉네임을 입력해주세요" required>
 										<div class="invalid-feedback">
-											Please enter NickName
+											닉네임을 입력해주세요
 										</div>
 									</div>
 									<div class="mb-3">
 										<label class="form-label" for="password-input">Password</label>
 										<div class="position-relative auth-pass-inputgroup">
 											<input type="password" class="form-control pe-5 password-input"
-												   onpaste="return false" placeholder="Enter password"
+												   onpaste="return false" placeholder="비밀번호를 입력해주세요"
 												   id="password-input" name="password" aria-describedby="passwordInput"
 												   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
-											<button
-													class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
-													type="button" id="password-addon"><i
-													class="ri-eye-fill align-middle"></i></button>
+											<button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon">
+												<i class="ri-eye-fill align-middle"></i>
+											</button>
 											<div class="invalid-feedback">
-												Please enter password
+												비밀번호를 입력해주세요
 											</div>
 										</div>
 									</div>
@@ -100,38 +99,33 @@
 										<label class="form-label" for="password-input">Password Again</label>
 										<div class="position-relative auth-pass-inputgroup">
 											<input type="password" class="form-control pe-5 password-input"
-												   onpaste="return false" placeholder="Enter password again"
+												   onpaste="return false" placeholder="한번 더 입력해주세요"
 												   id="confirm-password-input" aria-descripbedby="passwordInput">
+											<button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button">
+												<i class="ri-eye-fill align-middle"></i>
+											</button>
+											<div class="invalid-feedback">
+												비밀번호를 한번 더 입력해주세요
+											</div>
 										</div>
 									</div>
-									<!--<div class="mb-3">
-                                       <label class="form-label" for="confirm-password-input">Password Again</label>
-                                       <div class="position-relative auth-pass-inputgroup">
-                                          <input type="password" class="form-control pe-5 password-input"
-                                                onpaste="return false" placeholder="Enter password again"
-                                                id="confirm-password-input" aria-describedby="passwordInput">
 
-                                          <div class="invalid-feedback">
-                                             Please enter password again
-                                          </div>
-                                       </div>
-                                    </div>-->
 
 									<div class="mb-3">
 										<label for="useremail" class="form-label">Email <span
 												class="text-danger">*</span></label>
 										<input type="email" class="form-control" id="useremail" name="email"
-											   placeholder="Enter email address" required>
+											   placeholder="Email을 입력해주세요" required>
 										<div class="invalid-feedback">
-											Please enter email
+											Email을 입력해주세요
 										</div>
 									</div>
 
 									<div class="col-lg-6">
 										<div class="mb-3">
-											<label for="job" class="form-label">Job</label>
-											<select name="job" data-choices
-													data-choices-text-unique-true id="job">
+											<label for="skillsInput" class="form-label">Job</label>
+											<select name="skillsInput" data-choices
+													data-choices-text-unique-true id="skillsInput">
 												<option value="3D 애니메이터">3D 애니메이터</option>
 												<option value="디지털 영상 편집 전문가">디지털 영상 편집 전문가</option>
 												<option value="웹 마스터">웹 마스터</option>
@@ -176,13 +170,6 @@
 												<option value="기타 IT 업종">기타 IT 업종</option>
 											</select>
 										</div>
-									</div>
-
-									<div class="mb-4">
-										<p class="mb-0 fs-12 text-muted fst-italic">By registering you agree to the
-											TeamPlus <a href="#"
-														class="text-primary text-decoration-underline fst-normal fw-medium">Terms
-												of Use</a></p>
 									</div>
 
 									<div id="password-contain" class="p-3 bg-light mb-2 rounded">
@@ -230,8 +217,9 @@
 					<!-- end card -->
 
 					<div class="mt-4 text-center">
-						<p class="mb-0">Already have an account ? <a href="/users/signin"
-																	 class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+						<p class="mb-0"> 이미 회원이신가요?
+							<a href="signin" class="fw-semibold text-primary text-decoration-underline"> 로그인 </a>
+						</p>
 					</div>
 
 				</div>
@@ -269,6 +257,16 @@
 <script src="/assets/js/pages/form-validation.init.js"></script>
 <!-- password create init -->
 <script src="/assets/js/pages/passowrd-create.init.js"></script>
+<!-- profile-setting init js -->
+<script src="/assets/js/pages/profile-setting.init.js"></script>
+<script src="/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+
+<th:block layout:fragment="pagejs">
+
+	<!-- profile-setting init js -->
+	<script src="/assets/js/pages/profile-setting.init.js"></script>
+	<script src="/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+</th:block>
 </body>
 
 </html>

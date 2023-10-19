@@ -47,26 +47,27 @@
 
 						<div class="card-body p-4">
 							<div class="text-center mt-2">
-								<h5 class="text-primary">Create new password</h5>
-								<p class="text-muted">Your new password must be different from previous used
-									password.</p>
+								<h3 class="text-primary">Create new password</h3>
+								<p class="text-muted">변경할 비밀번호를 입력해주세요.</p>
 							</div>
 
 							<div class="p-2">
-								<form action="signin" method="post">
+								<form action="confirmpw" method="post">
+									<input type="hidden" id="email" name="email" th:value="${email}">
 									<div class="mb-3">
 										<label class="form-label" for="password-input">Password</label>
 										<div class="position-relative auth-pass-inputgroup">
 											<input type="password" class="form-control pe-5 password-input"
-												   onpaste="return false" placeholder="Enter password"
-												   id="password-input" aria-describedby="passwordInput"
+												   onpaste="return false" placeholder="비밀번호를 입력해주세요"
+												   id="password-input" name="password" aria-describedby="passwordInput"
 												   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
 											<button
 													class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 													type="button" id="password-addon"><i
 														class="ri-eye-fill align-middle"></i></button>
 											</div>
-											<div id="passwordInput" class="form-text">Must be at least 8 characters.
+											<div id="passwordInput" class="form-text">
+												비밀번호는 영어 대/소문자,숫자,특수문자가 최소 1개 이상이며 총 8글자 이상 작성해주세요.
 											</div>
 										</div>
 
@@ -75,9 +76,9 @@
 											Password</label>
 										<div class="position-relative auth-pass-inputgroup mb-3">
 											<input type="password" class="form-control pe-5 password-input"
-												   onpaste="return false" placeholder="Confirm password"
+												   onpaste="return false" placeholder="한번 더 입력해주세요"
 												   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-												   id="confirm-password-input" required>
+												   id="confirm-password-input" name="confirm" required>
 											<button
 													class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 													type="button"><i
@@ -108,8 +109,7 @@
 					<!-- end card -->
 
 					<div class="mt-4 text-center">
-						<p class="mb-0"> 비밀번호를 알고 계신가요? <a href="/auth-signin-basic"
-														   class="fw-semibold text-primary text-decoration-underline"> 로그인 </a> </p>
+						<p class="mb-0"> 비밀번호를 알고 계신가요? <a href="signin" class="fw-semibold text-primary text-decoration-underline"> 로그인 </a> </p>
 					</div>
 
 				</div>

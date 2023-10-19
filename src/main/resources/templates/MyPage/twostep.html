@@ -56,18 +56,21 @@
 
 								<div class="p-2 mt-4">
 									<div class="text-muted text-center mb-4 mx-lg-3">
-										<h4>Verify Your Email</h4>
-										<p>Please enter the 4 digit code sent to <span
-												class="fw-semibold">example@abc.com</span></p>
+										<h3>Verify Your Email</h3>
+										<p>
+											<span class="fw-semibold">[[${email}]]</span>
+											주소로 전송된<br>인증번호 4자리를 입력해주세요.
+										</p>
 									</div>
 
 									<form action="resetpw" method="post">
+										<input type="hidden" id="email" name="email" th:value="${email}">
 										<input type="hidden" id="code" name="code" th:value="${code}">
 										<div class="row">
 											<div class="col-3">
 												<div class="mb-3">
 													<label for="digit1-input" class="visually-hidden">Digit 1</label>
-													<input type="text"
+													<input type="text" placeholder="1"
 														class="form-control form-control-lg bg-light border-light text-center"
 														onkeyup="moveToNext(1, event)" maxLength="1" id="digit1-input" name="first">
 												</div>
@@ -76,7 +79,7 @@
 											<div class="col-3">
 												<div class="mb-3">
 													<label for="digit2-input" class="visually-hidden">Digit 2</label>
-													<input type="text"
+													<input type="text" placeholder="2"
 														class="form-control form-control-lg bg-light border-light text-center"
 														onkeyup="moveToNext(2, event)" maxLength="1" id="digit2-input" name="second">
 												</div>
@@ -85,7 +88,7 @@
 											<div class="col-3">
 												<div class="mb-3">
 													<label for="digit3-input" class="visually-hidden">Digit 3</label>
-													<input type="text"
+													<input type="text" placeholder="3"
 														class="form-control form-control-lg bg-light border-light text-center"
 														onkeyup="moveToNext(3, event)" maxLength="1" id="digit3-input" name="third">
 												</div>
@@ -94,7 +97,7 @@
 											<div class="col-3">
 												<div class="mb-3">
 													<label for="digit4-input" class="visually-hidden">Digit 4</label>
-													<input type="text"
+													<input type="text" placeholder="4"
 														class="form-control form-control-lg bg-light border-light text-center"
 														onkeyup="moveToNext(4, event)" maxLength="1" id="digit4-input" name="fourth">
 												</div>

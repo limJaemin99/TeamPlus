@@ -81,33 +81,30 @@
 								aria-haspopup="true" aria-expanded="false">
 								<span class="d-flex align-items-center">
 									<img class="rounded-circle header-profile-user"
-										src="assets/images/users/user-dummy-img.jpg" alt="Header Avatar">
+										th:src="${session.user.profileURL}" alt="Header Avatar">
 									<span class="text-start ms-xl-2">
-										<span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna
-											Adame</span>
-										<span
-											class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span>
+										<span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" style="font-weight: bold">
+											[[${session.user.nickName}]]
+										</span>
+										<span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text" style="font-weight: bold">
+											[[${session.user.name}]]
+										</span>
 									</span>
 								</span>
 							</button>
 							<div class="dropdown-menu dropdown-menu-end">
 								<!-- item-->
-								<h6 class="dropdown-header">Welcome Anna!</h6>
-								<a class="dropdown-item" href="/MyPage-profile"><i
+								<a class="dropdown-item" href="../users/profile"><i
 										class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
 										class="align-middle">Profile</span></a>
-								<a class="dropdown-item" href="/TeamPlus-faqs"><i
+								<a class="dropdown-item" href="../info/faq-white"><i
 										class="mdi mdi-lifebuoy text-muted fs-16 align-middle me-1"></i> <span
 										class="align-middle">Help</span></a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="/MyPage-profile-settings"><span
-										class="badge bg-soft-success text-success mt-1 float-end">New</span><i
-										class="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i> <span
-										class="align-middle">Settings</span></a>
-								<a class="dropdown-item" href="/MyPage-lockscreen"><i
+								<a class="dropdown-item" href="../users/lockscreen"><i
 										class="mdi mdi-lock text-muted fs-16 align-middle me-1"></i> <span
 										class="align-middle">Lock screen</span></a>
-								<a class="dropdown-item" href="/MyPage-logout"><i
+								<a class="dropdown-item" href="../users/logout"><i
 										class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
 										class="align-middle" data-key="t-logout">Logout</span></a>
 							</div>

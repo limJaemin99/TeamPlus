@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.teamplus.mvc.dto.MailCodeDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.UsersService;
 import org.teamplus.mvc.util.MailCheck;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Log4j2
 @Controller
@@ -44,7 +43,7 @@ public class UsersController {
         if (user != null) {
             log.info("━━━━━━━━━━ 로그인 성공 ⭕");
             model.addAttribute("user",user);
-            redirect = "redirect:/project/list";
+            redirect = "redirect:/";
         } else {
             log.info("━━━━━━━━━━ 로그인 실패 ❌");
             model.addAttribute("error", "로그인 실패");
@@ -75,26 +74,41 @@ public class UsersController {
     @PostMapping("/auth")
     public String authView(String email, Model model) {
 
+        String redirect = "redirect:";
+
         log.info("━━━━━━━━━━ 입력한 email : {}",email);
 
-        MailCheck mail = new MailCheck();
+        //있는 메일인지 검증
+        int isExist = service.isEmailExist(email);
 
-        String code = mail.random();
-        log.info("━━━━━━━━━━ 생성된 코드 : {}",code);
+        log.info("━━━━━━━━━━ isExist : {}",isExist);
 
-        mail.setCode(code);
-        mail.sendMail(email);
+        if (isExist == 1) { //존재하는 메일
+            MailCheck mail = new MailCheck();
 
-        model.addAttribute("code",code);
+            String code = mail.random();
+            log.info("━━━━━━━━━━ 생성된 코드 : {}", code);
 
-        return "MyPage/twostep";
+            mail.setCode(code);
+            mail.sendMail(email);
+
+            model.addAttribute("code", code);
+            model.addAttribute("email",email);
+
+            redirect = "MyPage/twostep";
+        } else {    //없는 메일
+            log.info("⚠⚠⚠⚠⚠⚠⚠⚠⚠⚠ 없는 메일 입니다 : {}",email);
+            redirect += "/users/sendmail";
+        }
+
+        return redirect;
     }
 
 
 
-    // 비밀번호 재설정 3 (비밀번호 재설정)
+    // 비밀번호 재설정 3 (새로운 비밀번호 입력)
     @PostMapping ("/resetpw")
-    public String resetpwView(MailCodeDTO dto, String code) {
+    public String resetpwView(MailCodeDTO dto,String code,@ModelAttribute("email") String email) {
         String redirect = "";
 
         StringBuilder insertDTOCode = new StringBuilder();
@@ -114,10 +128,72 @@ public class UsersController {
         return redirect;
     }
 
+    // 비밀번호 재설정 4 (비밀번호 재설정)
+    @PostMapping("/confirmpw")
+    public String comfirmpw(String email,String password,String confirm){
+        UsersDTO user = service.selectByEmail(email);
+        String redirect = "redirect:/users/sendmail";
+        log.info("━━━━━━━━━━ email : {}",email);
+        log.info("━━━━━━━━━━ 변경할 user 정보 : {}",user.toString());
+        log.info("━━━━━━━━━━ 입력한 비밀번호 1 : {}",password);
+        log.info("━━━━━━━━━━ 입력한 비밀번호 2 : {}",confirm);
+
+        if(password.equals(confirm)){   //비밀번호 재확인 O
+            user.setPassword(password);
+            int result = service.changePassword(user);
+            log.info("━━━━━━━━━━ 비밀번호 변경 결과 : {}",result);
+            if(result == 1){    //비밀번호 변경 완료
+                log.info("━━━━━━━━━━ 변경 성공 ⭕");
+                redirect = "redirect:/users/signin";
+            } else {    //비밀번호 변경 실패
+                log.info("━━━━━━━━━━ 변경 실패 ❌");
+            }
+        } else {   //비밀번호 재확인 X
+            log.info("━━━━━━━━━━ 비밀번호가 일치하지 않아 변경 실패 ❌");
+        }
+
+
+        return redirect;
+    }
+
+
     // 잠금 모드 (비밀번호 입력시 해제)
     @GetMapping("/lockscreen")
-    public String lockscreen() {
+    public String lockscreen(HttpServletRequest request,Model model) {
+        String referer = request.getHeader("referer");
+
+        if(!referer.equals("http://localhost:8086/users/lockscreen")) {
+            log.info("▶▶▶▶▶▶▶▶▶▶ 이전 URL : {}", referer);
+
+            model.addAttribute("referer", referer);
+
+
+            log.info("▶▶▶▶▶▶▶▶▶▶ model로 보낸 URL : {}", referer);
+        }
+
         return "MyPage/lockscreen";
+    }
+
+    // 잠금 모드 해제 (비밀번호 입력시 해제)
+    @PostMapping("/lockscreen")
+    public String unLockscreen(@SessionAttribute("user") UsersDTO user,String password,String referer,Model model) {
+        log.info("┏┏┏┏┏┏┏┏┏┏ 입력한 password : {}",password);
+        log.info("┗┗┗┗┗┗┗┗┗┗ 사용자의 password : {}",user.getPassword());
+
+        log.info("━━━━━━━━━━ referer 주소 : {}",referer);
+
+        String redirect = "";
+
+        if(password.equals(user.getPassword())){    //비밀번호 일치
+            redirect = "redirect:"+referer.substring(20);
+            log.info("▲▲▲▲▲▲▲▲▲▲ redirect 주소 : {}",redirect);
+        } else {    //비밀번호 불일치
+            redirect = "lockscreen";
+            model.addAttribute("referer",referer);
+            log.info("▲▲▲▲▲▲▲▲▲▲ redirect 주소 : {}",redirect);
+        }
+
+        return redirect;
     }
 
     // 로그아웃

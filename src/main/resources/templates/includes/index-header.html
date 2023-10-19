@@ -61,7 +61,18 @@
             <th:block th:if="${session.user != null}">
                 <div id="goProjectList">
                     <a href="/project/list" class="goProjectList">
-                        프로젝트 리스트 보러 가기
+                        <span>
+                            <img src="/assets/images/users/presentation.gif" height="50">
+                        </span>
+                        프로젝트
+                    </a>
+                </div>
+                <div id="logout">
+                    <a href="/users/logout" class="logout">
+                        <span>
+                            <img src="/assets/images/users/logout.gif" height="50">
+                        </span>
+                        로그아웃
                     </a>
                 </div>
             </th:block>

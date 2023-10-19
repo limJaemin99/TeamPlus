@@ -1,7 +1,6 @@
 package org.teamplus.mvc.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.teamplus.mvc.dao.UsersMapper;
 import org.teamplus.mvc.dto.UsersDTO;
@@ -12,7 +11,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class UsersService {
-    @Autowired
+
     private final UsersMapper dao;
 
     //유저 번호 시퀀스
@@ -26,8 +25,8 @@ public class UsersService {
     }
 
     // 유저 [이메일 중복확인] : email가 이미 존재하면 1 반환/ 아니면 0 반환
-    public int isEmailExist(UsersDTO dto) {
-        return dao.isEmailExist(dto);
+    public int isEmailExist(String email) {
+        return dao.isEmailExist(email);
     }
 
     // 유저 [닉네임 중복확인] : nickName가 이미 존재하면 1 반환/ 아니면 0 반환
@@ -46,17 +45,17 @@ public class UsersService {
     }
 
     // 유저 [회원정보 수정(직업)]
-    int changeJob(UsersDTO dto) {
+    public int changeJob(UsersDTO dto) {
         return dao.changeJob(dto);
     }
 
     // 유저 [회원정보 수정(자기소개)]
-    int changeDescription(UsersDTO dto) {
+    public int changeDescription(UsersDTO dto) {
         return dao.changeDescription(dto);
     }
 
     // 유저 [회원정보 수정(프로필 사진)]
-    int changeProfile(UsersDTO dto) {
+    public int changeProfile(UsersDTO dto) {
         return dao.changeProfile(dto);
     }
 
@@ -85,6 +84,9 @@ public class UsersService {
         return dao.changePassword(dto);
     }
 
+    //[비밀번호 재설정용] email 로 정보 가져오기
+    public UsersDTO selectByEmail(String email){ return dao.selectByEmail(email); }
+
     // 유저 [로그인]
     public UsersDTO signin(UsersDTO dto) {
         UsersDTO user = dao.signin(dto);
@@ -95,9 +97,6 @@ public class UsersService {
             return null; // 사용자를 찾을 수 없거나 비밀번호가 일치하지 않는 경우
         }
     }
-
-    //[비밀번호 재설정용] email 로 정보 가져오기
-    UsersDTO selectByEmail(String email){return dao.selectByEmail(email);}
 
 }
 

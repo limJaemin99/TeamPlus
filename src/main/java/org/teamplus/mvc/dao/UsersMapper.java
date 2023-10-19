@@ -16,7 +16,7 @@ public interface UsersMapper {
     int isIdExist(UsersDTO dto);
 
     // 유저 [이메일 중복확인] : email가 이미 존재하면 1 반환/ 아니면 0 반환
-    int isEmailExist(UsersDTO dto);
+    int isEmailExist(String email);
 
     // 유저 [닉네임 중복확인] : nickName가 이미 존재하면 1 반환/ 아니면 0 반환
     int isNickNameExist(UsersDTO dto);
