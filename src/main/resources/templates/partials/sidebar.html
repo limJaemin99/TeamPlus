@@ -45,7 +45,7 @@
 							<div class="collapse menu-dropdown" id="sidebarDashboards">
 								<ul class="nav nav-sm flex-column">
 									<li class="nav-item">
-										<a href="/home" class="nav-link" data-key="t-ecommerce"> home </a>
+										<a th:href="@{home(projectNo=${project.getProjectNo})}" class="nav-link" data-key="t-ecommerce"> home </a>
 									</li>
 									<li class="nav-item">
 										<a href="/project-index" class="nav-link" data-key="t-projects">

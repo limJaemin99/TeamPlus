@@ -25,7 +25,18 @@
 						<div class="col-12">
 							<div class="d-flex align-items-lg-center flex-lg-row flex-column">
 								<div class="flex-grow-1">
-									<h4 class="fs-16 mb-1">[[${user.getName()}]] 님 환영합니다!</h4>
+									<h3 class="fs-16 mb-1">[[${session.user.name}]] 님 환영합니다!</h3>
+									<h4>Project Info</h4>
+									<ul>
+										<li>프로젝트 번호 : [[${project.getProjectNo()}]]</li>
+										<li>프로젝트명 : [[${project.getTitle()}]]</li>
+										<li>프로젝트 설명 : [[${project.getDescription()}]]</li>
+										<li>시작일 : [[${project.getStartDate()}]]</li>
+										<li>종료 예정일 : [[${project.getDueDate()}]]</li>
+										<li>종료일 : <span th:text="${project.getEndDate()!=null?project.getEndDate():'미정'}"></span></li>
+										<li>비밀번호 : [[${project.getPassword()}]]</li>
+										<li>진행 현황 : <span th:text="${project.getStatus()==0?'진행중':'종료'}"></span></li>
+									</ul>
 								</div>
 								<div class="mt-3 mt-lg-0">
 									<form action="javascript:void(0);">
