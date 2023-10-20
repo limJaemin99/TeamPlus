@@ -1,10 +1,10 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{project-index-layout}">
+	  layout:decorate="~{layout}">
 
 <th:block layout:fragment="pagetitle">
 	<!--page title-->
-	<div th:replace="partials/title-meta :: title-meta('Create Project')"></div>
+	<div th:replace="partials/title-meta :: title-meta('Modify Project')"></div>
 </th:block>
 
 <head>
@@ -15,9 +15,8 @@
 <body>
 <div layout:fragment="content">
 	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
-	<form action="/project/create" method="post" name="project-create-form">
-
-
+	<form action="modify" method="post">
+		<input type="hidden" id="projectNo" name="projectNo" th:value="${projectNo}">
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="card">
@@ -27,11 +26,17 @@
 					<div class="card-body">
 						<div>
 							<label for="choices-privacy-status-input" class="form-label">Status</label>
-							<select class="form-select" data-choices data-choices-search-false
-									id="choices-privacy-status-input">
-								<option value="Private" selected>Private</option>
-								<option value="Team">Team</option>
-							</select>
+								<select class="form-select" data-choices data-choices-search-false
+										id="choices-privacy-status-input" name="status">
+									<th:block th:if="${project.getStatus() == 0}">
+										<option value="0" selected>진행중</option>
+										<option value="1">종료</option>
+									</th:block>
+									<th:block th:if="${project.getStatus() == 1}">
+										<option value="0">진행중</option>
+										<option value="1" selected>종료</option>
+									</th:block>
+								</select>
 						</div>
 					</div>
 					<!-- end card body -->
@@ -42,14 +47,13 @@
 					<div class="card-body">
 						<div class="mb-3">
 							<label class="form-label" for="project-title-input">프로젝트명(Project Title)</label>
-							<input type="text" class="form-control" id="project-title-input" name="title"
-								   placeholder="Enter project title">
+							<input type="text" class="form-control" id="project-title-input" name="title" th:value="${project.getTitle()}">
 						</div>
 
 
 						<div class="mb-3">
 							<label class="form-label">프로젝트 설명(Project Description)</label>
-								<textarea type="text" id="ckeditor-classic" name="description" placeholder="프로젝트 설명을 입력하세요.">
+								<textarea type="text" id="ckeditor-classic" name="description" th:text="${project.getDescription()}">
 								</textarea>
 						</div>
 					</div>
@@ -64,7 +68,7 @@
 								<h5 class="card-title mb-0">프로젝트 시작 예정일 (startDate)</h5>
 							</div>
 							<div class="card-body">
-								<input type="date" name="startDate" class="choices__inner">
+								<input type="date" id="startDateInput" name="startDate" class="choices__inner" th:value="${project.getStartDate()}" onchange="javascript:updateDueDateMin()">
 								<!-- <div class="input-group">
                                      <input type="text" id="event-start-date"
                                             class="form-control flatpickr flatpickr-input"
@@ -81,7 +85,7 @@
 								<h5 class="card-title mb-0">프로젝트 종료 예정일 (DueDate)</h5>
 							</div>
 							<div class="card-body">
-								<input type="date" name="dueDate" class="choices__inner">
+								<input type="date" id="dueDateInput" name="dueDate" class="choices__inner" th:value="${project.getDueDate()}" th:min="${project.getStartDate()}">
 							</div>
 						</div>
 						<!-- end card -->
@@ -94,9 +98,13 @@
 					<div class="card-header">
 						<h5 class="card-title mb-0">프로젝트 비밀번호 (Password)</h5>
 					</div>
-					<div class="card-body">
-						<input type="password" name="password" class="form-control"
-							   placeholder="프로젝트 참가 시 사용할 비밀번호를 입력하세요.">
+					<div class="position-relative auth-pass-inputgroup mb-3">
+						<input type="password" class="form-control pe-3 password-input"
+							   th:value="${project.getPassword()}" id="password-input" name="password">
+						<button
+								class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
+								type="button" id="password-addon"><i
+								class="ri-eye-fill align-middle"></i></button>
 					</div>
 				</div>
 				<!-- end card -->
@@ -104,14 +112,19 @@
 				<div class="text-end mb-4">
 					<!--<button type="submit" class="btn btn-danger w-sm">Delete</button>
                         <button type="submit" class="btn btn-secondary w-sm">Draft</button>-->
-					<button type="submit" class="btn btn-success w-sm">Create</button>
+					<th:block th:if="${isLeader == 0}">
+						<a style="color: red; font-weight: bold; margin-right: 20px;">※ 프로젝트 정보 수정은 팀장만 가능합니다.</a>
+						<button type="submit" class="btn btn-success w-sm" disabled>Update</button>
+					</th:block>
+					<th:block th:if="${isLeader == 1}">
+						<button type="submit" class="btn btn-success w-sm">Update</button>
+					</th:block>
 				</div>
 			</div>
 			<!-- end col -->
 		</div>
 	</form>
 </div>
-
 
 <th:block layout:fragment="modal">
 	<script layout:fragment="script" th:inline="javascript">
@@ -130,6 +143,18 @@
 </th:block>
 
 <th:block layout:fragment="pagejs">
+	<script type="text/javascript">
+		function updateDueDateMin() {
+			const startDateInput = document.getElementById('startDateInput');
+			const dueDateInput = document.getElementById('dueDateInput');
+
+			// 시작일 이후의 날짜를 최소 선택 가능한 날짜로 설정
+			dueDateInput.min = startDateInput.value;
+			
+			if(startDateInput.value > dueDateInput.value)
+				dueDateInput.value = startDateInput.value;
+		}
+	</script>
 
 	<!-- ckeditor -->
 	<script src="/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>

@@ -31,90 +31,75 @@ public class ProjectController {
 
 //━━━━━ [프로젝트 선택 후 화면] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    //프로젝트 홈 (프로젝트 선택 후 나타나는 '해당 프로젝트의 홈화면')
+    // 프로젝트 홈 (프로젝트 진행 현황) 10.20 재민
     @GetMapping("/home")
-    public String home(String projectNo,Model model) {
-        log.info("┗┗┗┗┗┗┗┗┗┗ projectNo : {}",projectNo);
-
-        ProjectDTO project = service.selectOne(projectNo);
-
-        model.addAttribute("project",project);
-
-        return "dashboard/index";
-    }
-
-    //프로젝트 진행 현황
-    @GetMapping("/tracking")
-    public String trackingView() {
+    public String overviewView(@ModelAttribute("projectNo") String projectNo) {
         return "dashboard/projects";
     }
 
-    // 프로젝트 개요
+    //프로젝트 개요
     @GetMapping("/overview")
-    public String overviewView() {
+    public String trackingView(@ModelAttribute("projectNo") String projectNo) {
         return "dashboard/projects-overview";
     }
 
-    // 작업 보드 (Git 의 Project 기능같은 화면)
-    @GetMapping("/taskboard")
-    public String taskboardView() {
-        return "dashboard/tasks-kanban";
+    //프로젝트 수정 View (팀장만 접근 가능)
+    @GetMapping("/modify")
+    public String modifyView(@SessionAttribute("user") UsersDTO user,@ModelAttribute("projectNo") String projectNo,Model model){
+        List<TeamDTO> teamList = service.teamListByProjectNo(projectNo);
+        ProjectDTO project = service.selectOne(projectNo);
+        UsersDTO leader = null;
+        for(TeamDTO team : teamList){
+            if(team.getLeader() == 1){
+                leader = service.selectUserByUserNo(team.getUserNo());
+            }
+        }
+
+        if(leader != null){ //접속한 사용자가 리더 ⭕
+            model.addAttribute("isLeader",1);
+            model.addAttribute("project",project);
+        } else {//접속한 사용자가 리더 ❌
+            model.addAttribute("isLeader",0);
+            model.addAttribute("project",project);
+        }
+
+        return "dashboard/project-modify";
     }
 
-    // 메모 목록 화면
-    @GetMapping("/tasklist")
-    public String tasklistView(Model model, MyNoteDTO vo) {
-        // 로그인 구현 전 TEST로 userno 넣어줌
-        String userno = "test1";
-        model.addAttribute("list",service.selectList(userno));
-/*        model.addAttribute("noteno",vo.getNoteNo());
-        model.addAttribute("password",vo.getPassword());*/
+    //프로젝트 수정 POST (팀장만 접근 가능)
+    @PostMapping("/modify")
+    public String modify(@ModelAttribute("projectNo") String projectNo,ProjectDTO project){
+        log.info("━━━━━ [프로젝트 수정] ━━━━━━━━━━");
+        log.info("┏┏┏┏┏┏┏┏┏┏ projectNo : {}",projectNo);
+        log.info("━━━━━━━━━━ status : {}",project.getStatus());
+        log.info("━━━━━━━━━━ title : {}",project.getTitle());
+        log.info("━━━━━━━━━━ description : {}",project.getDescription());
+        log.info("━━━━━━━━━━ startDate : {}",project.getStartDate());
+        log.info("━━━━━━━━━━ dueDate : {}",project.getDueDate());
+        log.info("┗┗┗┗┗┗┗┗┗┗ password : {}",project.getPassword());
 
-        return "dashboard/tasks-list-view";
+        if(project.getStatus() == 0){
+            project.setEndDate(null);
+        } else {
+            if(service.selectOne(projectNo).getStatus() == 0){  //진행 ▶ 종료 인지 확인 : 현재 날짜 입력
+                project.setEndDate(LocalDate.now());
+            } else {    //종료 ▶ 종료 인지 확인 : 기존 종료일 입력
+                project.setEndDate(service.selectOne(projectNo).getEndDate());
+            }
+        }
+
+        int result = service.update(project);
+
+        if(result == 1){    //업데이트 성공 ⭕
+            log.info("⭕ 업데이트 성공 ⭕");
+
+        } else {    //업데이트 실패 ❌
+            log.info("❌ 업데이트 실패 ❌");
+
+        }
+
+        return "redirect:/project/home";
     }
-
-    // 메모 등록 화면
-    @GetMapping("/taskwrite")
-    public String taskwriteView(Model model) {
-
-        model.addAttribute("noteNo",service.getMynoteSequence());
-        return "dashboard/tasks-list-details";
-    }
-    @PostMapping("/save")
-    public String taskwriteAction(MyNoteDTO vo){
-        int result = service.write(vo);
-        return "redirect:/project/tasklist";
-    }
-
-    //메모 read 화면
-    @GetMapping("/taskread")
-    public String taskread(@RequestParam("noteNo") int noteno,Model model){
-        MyNoteDTO vo = service.selectOne(noteno);
-        model.addAttribute("vo",vo);
-
-        return "dashboard/tasks-read";}
-
-    //메모 수정 화면
-    @GetMapping("/taskmodify")
-    public String tasksmodify(@RequestParam("noteNo")int noteno, Model model){
-        MyNoteDTO vo = service.selectOne(noteno);
-        model.addAttribute("vo",vo);
-
-        return "dashboard/tasks-modify";}
-
-    @PostMapping("/modifysave")
-    public String modifysave(MyNoteDTO vo){
-        service.update(vo);
-        return "redirect:/project/taskread?noteNo="+vo.getNoteNo();
-    }
-
-    @PostMapping("/taskdelete")
-    public String taskdelete(@RequestParam(name = "noteNo", required = false) int noteno) {
-        log.info(">>>>>>>>>>>>> noteNo :{} ",noteno);
-        service.delete(noteno);
-        return "redirect:/project/tasklist";
-    }
-
 
     // 파일 관리자
     @GetMapping("/files")
