@@ -19,12 +19,20 @@ public class InfoController {
 	public void faq() {}
 
 	//[프로젝트 리스트용] 사이트맵
-	@GetMapping("/sitemap-white")
-	public void sitemapWhite() {}
+	@GetMapping("/project-index-sitemap")
+	public void projectIndexSitemap() {}
 
 	//[프로젝트 리스트용] 자주 묻는 질문
-	@GetMapping("/faq-white")
-	public void faqWhite() {}
+	@GetMapping("/project-index-faq")
+	public void projectIndexFaq() {}
+
+	//[프로젝트 리스트용] 사이트맵
+	@GetMapping("/profile-sitemap")
+	public void profileSitemap() {}
+
+	//[프로젝트 리스트용] 자주 묻는 질문
+	@GetMapping("/profile-faq")
+	public void profileFaq() {}
 
 	@GetMapping("/modal")
 	public String model() {return "info/modals";}

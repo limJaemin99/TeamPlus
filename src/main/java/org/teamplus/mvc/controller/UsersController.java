@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @Log4j2
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("users")
+@RequestMapping("/users")
 @SessionAttributes("user")
 public class UsersController {
 
@@ -206,7 +206,7 @@ public class UsersController {
 
 //━━━━━ [프로필 관련] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    // Starter 화면 (아직 내용 없음 10.18 재민)
+    // Starter 화면 todo 사용 안할듯 ❌ 10.20 (재민)
     @GetMapping("/starter")
     public String starter() {
         return "MyPage/starter";
