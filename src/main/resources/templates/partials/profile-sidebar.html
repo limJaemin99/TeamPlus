@@ -37,10 +37,31 @@
 					</div>
 					<ul class="navbar-nav" id="navbar-nav">
 						<li class="menu-title"><span data-key="t-menu">Menu</span></li>
-						<a href="/" class="nav-link" data-key="t-ecommerce"> <i class="ri-home-2-fill"></i> <span data-key="t-dashboards">Home</span> </a>
-						<a href="../project/list" class="nav-link" data-key="t-ecommerce"> <i class="ri-book-2-fill"></i> <span data-key="t-dashboards">Project List</span> </a>
-							<a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-							   aria-expanded="false" aria-controls="sidebarPages">
+							<a href="/" class="nav-link" data-key="t-ecommerce"> <i class="ri-home-2-fill"></i> <span data-key="t-dashboards">Home</span> </a>
+							<a href="../project/list" class="nav-link" data-key="t-ecommerce"> <i class="ri-book-2-fill"></i> <span data-key="t-dashboards">Project List</span> </a>
+						<a class="nav-link menu-link" href="#sidebarPrivate" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
+							<i class="ri-user-2-fill"></i> <span data-key="t-pages">Private</span>
+						</a>
+						<div class="collapse menu-dropdown" id="sidebarPrivate">
+							<ul class="nav nav-sm flex-column">
+								<li class="nav-item">
+									<a href="../private/tasklist" class="nav-link" data-key="t-Lock Screen">
+										메모 목록
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="../private/taskwrite" class="nav-link" data-key="t-Lock Screen">
+										메모 등록
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="../private/privatetodolist" class="nav-link" data-key="t-Logout">
+										TODO
+									</a>
+								</li>
+							</ul>
+						</div>
+							<a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarPages">
 								<i class="ri-pages-line"></i> <span data-key="t-pages">My Page</span>
 							</a>
 							<div class="collapse menu-dropdown" id="sidebarPages">

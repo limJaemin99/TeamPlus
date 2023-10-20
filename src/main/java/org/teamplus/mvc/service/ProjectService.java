@@ -9,6 +9,7 @@ import org.teamplus.mvc.dao.UsersMapper;
 import org.teamplus.mvc.dto.MyNoteDTO;
 import org.teamplus.mvc.dto.ProjectDTO;
 import org.teamplus.mvc.dto.TeamDTO;
+import org.teamplus.mvc.dto.UsersDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -69,5 +70,8 @@ public class ProjectService {
 
     //사용자 + 날짜 지정 노트 글 [수정]
     public int update(MyNoteDTO dto){return mynoteDao.update(dto);}
+
+    //회원 번호로 회원 정보 가져오기
+    public UsersDTO selectUserByUserNo(String userNo){return userDao.selectOne(userNo);}
 
 }
