@@ -159,42 +159,25 @@ public class UsersController {
 
     // 잠금 모드 (비밀번호 입력시 해제)
     @GetMapping("/lockscreen")
-    public String lockscreen(HttpServletRequest request,Model model) {
+    public String lockscreen(@SessionAttribute("user") UsersDTO user,HttpServletRequest request,Model model) {
+        String password = user.getPassword();
+
         String referer = request.getHeader("referer");
 
         if(!referer.equals("http://localhost:8086/users/lockscreen")) {
-            log.info("▶▶▶▶▶▶▶▶▶▶ 이전 URL : {}", referer);
-
             model.addAttribute("referer", referer);
 
-
-            log.info("▶▶▶▶▶▶▶▶▶▶ model로 보낸 URL : {}", referer);
+            log.info("▶▶▶▶▶▶▶▶▶▶ model로 보낸 referer : {}", referer);
         }
+
+        model.addAttribute("password",password);
 
         return "MyPage/lockscreen";
     }
 
     // 잠금 모드 해제 (비밀번호 입력시 해제)
     @PostMapping("/lockscreen")
-    public String unLockscreen(@SessionAttribute("user") UsersDTO user,String password,String referer,Model model) {
-        log.info("┏┏┏┏┏┏┏┏┏┏ 입력한 password : {}",password);
-        log.info("┗┗┗┗┗┗┗┗┗┗ 사용자의 password : {}",user.getPassword());
-
-        log.info("━━━━━━━━━━ referer 주소 : {}",referer);
-
-        String redirect = "";
-
-        if(password.equals(user.getPassword())){    //비밀번호 일치
-            redirect = "redirect:"+referer.substring(20);
-            log.info("▲▲▲▲▲▲▲▲▲▲ redirect 주소 : {}",redirect);
-        } else {    //비밀번호 불일치
-            redirect = "lockscreen";
-            model.addAttribute("referer",referer);
-            log.info("▲▲▲▲▲▲▲▲▲▲ redirect 주소 : {}",redirect);
-        }
-
-        return redirect;
-    }
+    public String unLockscreen(@SessionAttribute("user") UsersDTO user,String password,String referer,Model model) {  return "redirect:"+referer.substring(21); }
 
     // 로그아웃
     @GetMapping("/logout")
