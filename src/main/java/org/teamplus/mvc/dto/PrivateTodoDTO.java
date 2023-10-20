@@ -18,5 +18,6 @@ public class PrivateTodoDTO {
     private String description;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate todoDate;
+    private LocalDate endDate;
     private int status;
 }

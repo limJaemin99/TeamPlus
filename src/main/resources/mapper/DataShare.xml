@@ -11,8 +11,8 @@
     <!-- 파일 공유글 작성 -->
     <insert id="write" parameterType="DataShareDTO">
         INSERT INTO
-            dataShare (shareNo,projectNo,userNo,content,dataURL)
-        values (#{shareNo},#{projectNo},#{userNo},#{content},#{dataURL})
+            dataShare (shareNo,projectNo,userNo,title,content,dataURL)
+        values (#{shareNo},#{projectNo},#{userNo},#{title},#{content},#{dataURL})
     </insert>
 
     <!-- 파일 공유글 리스트 [출력] -->

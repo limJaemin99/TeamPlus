@@ -22,6 +22,33 @@
         WHERE projectNo=#{projectNo}
     </update>
 
+    <!-- 프로젝트 [진행상태 설정]
+    ( 파라미터 타입 : Map<String,object> )
+    예시)
+    Map<String,Objec> map = new HashMap<>();
+    map.put("status",1);
+    map.put("projectNo","project1");
+    setStatus(map);
+    -->
+    <update id="setStatus">
+    update project
+    set
+        Status=#{status}
+    where
+        projectNo=#{projectNo}
+    </update>
+
+    <!-- 프로젝트 [진행여부 : 완료 설정] -->
+    <!-- 시작전 : 0(시작전) / 완료 : 1 / 진행중 : 2 / NEW : 3로 기준 -->
+    <update id="setComplete">
+        update project
+        set
+            EndDate=sysdate,
+            Status=1
+        where
+            projectNo=#{projectNo}
+    </update>
+
     <!-- 프로젝트 [삭제] -->
     <delete id="delete" parameterType="java.util.Map">
         DELETE FROM

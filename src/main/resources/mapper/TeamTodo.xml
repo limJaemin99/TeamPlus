@@ -19,22 +19,6 @@
 
     </insert>
 
-    <!-- 프로젝트 투두리스트 [진행상태 설정] (파라미터 타입 : Map<String,object> _ -->
-    <!--
-    예시)
-    Map<String,Objec> map = new HashMap<>();
-    map.put("status",1);
-    map.put("todoNo","프로젝트명_유저아이디_1");
-    setStatus(map);
-    -->
-    <update id="setStatus">
-        update TeamTodo
-        set
-            Status=#{status}
-        where
-            TodoNo=#{todoNO}
-    </update>
-
     <!-- 프로젝트 투두리스트 [내용 수정] -->
     <update id="update">
         update TeamTodo
@@ -47,13 +31,29 @@
             TodoNo=#{todoNo}
     </update>
 
+    <!-- 프로젝트 투두리스트 [진행상태 설정]
+    ( 파라미터 타입 : Map<String,object> )
+    예시)
+    Map<String,Objec> map = new HashMap<>();
+    map.put("status",1);
+    map.put("todoNo","project1_user1_1");
+    setStatus(map);
+    -->
+    <update id="setStatus">
+        update TeamTodo
+        set
+            Status=#{status}
+        where
+            TodoNo=#{todoNO}
+    </update>
+
     <!-- 프로젝트 투두리스트 [진행여부 : 완료 설정] -->
-    <!-- 시작전 : 0(기본값) / 진행중 : 1 / 완료 : 2 로 기준 -->
+    <!-- 시작전 : 0(시작전) / 완료 : 1 / 진행중 : 2 / new : 3로 기준 -->
     <update id="setComplete">
         update TeamTodo
         set
             EndDate=sysdate,
-            Status=2
+            Status=1
         where
             TodoNO=#{todoNO}
     </update>
