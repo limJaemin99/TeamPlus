@@ -46,7 +46,7 @@
 							<div class="card-body p-4">
 								<div class="text-center mt-2">
 									<h3 class="text-primary">Lock Screen</h3>
-									<p class="text-muted">비밀번호를 입력하여 잠금을 해제하세요!</p>
+									<p class="text-muted">비밀번호를 입력하여 잠금을 해제하세요!<br>올바른 비밀번호를 입력시 버튼이 활성화됩니다.</p>
 								</div>
 								<div class="user-thumb text-center">
 									<img th:src="${session.user.profileURL}"
@@ -56,16 +56,14 @@
 								</div>
 								<div class="p-2 mt-4">
 									<form action="lockscreen" method="post">
-										<input type="hidden" id="referer" name="referer" th:value="${URL}">
-										<a href="">이전 URL : [[${URL}]]</a>
-										<a href="">이전 URL : [[${referer}]]</a>
+										<input type="hidden" id="referer" name="referer" th:value="${referer}">
 										<div class="mb-3">
-											<label class="form-label" for="userpassword">Password</label>
-											<input type="password" class="form-control" id="userpassword" name="password"
+											<label class="form-label" for="password">Password</label>
+											<input type="password" class="form-control" id="password" name="password"
 												placeholder="비밀번호를 입력하세요" required>
 										</div>
 										<div class="mb-2 mt-4">
-											<button class="btn btn-success w-100" type="submit">Unlock</button>
+											<button id="button" class="btn btn-light w-100" type="submit" disabled>Unlock</button>
 										</div>
 									</form><!-- end form -->
 
@@ -76,8 +74,8 @@
 						<!-- end card -->
 
 						<div class="mt-4 text-center">
-							<p class="mb-0">Not you ? return <a href="/MyPage-signin"
-									class="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+							<p class="mb-0">당신의 계정이 아닌가요? <a href="../users/signin"
+									class="fw-semibold text-primary text-decoration-underline"> 로그인 </a> </p>
 						</div>
 
 					</div>
@@ -112,6 +110,19 @@
 	<script src="/assets/libs/particles.js/particles.js"></script>
 	<!-- particles app js -->
 	<script src="/assets/js/pages/particles.app.js"></script>
+	<script type="text/javascript">
+		var password = `[[${password}]]`
+
+		document.querySelector('#password').addEventListener('input',e=>{
+			if(password == document.getElementById('password').value) {
+				document.getElementById('button').disabled = false;
+				document.getElementById('button').classList = "btn btn-success w-100";
+			} else {
+				document.getElementById('button').disabled = true;
+				document.getElementById('button').classList = "btn btn-light w-100";
+			}
+		})
+	</script>
 </body>
 
 </html>
