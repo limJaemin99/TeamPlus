@@ -15,6 +15,7 @@ public class DataShareDTO {
     private String shareNo;
     private String projectNo;
     private String userNo;
+    private String title;
     private String content;
     private String dataURL;
     private int count;

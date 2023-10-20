@@ -37,4 +37,30 @@
         WHERE todoNo=#{todoNo}
     </update>
 
+    <!-- 개인 - 할 일 리스트 [진행상태 설정]
+    ( 파라미터 타입 : Map<String,Object> )
+    예시)
+    Map<String,Objec> map = new HashMap<>();
+    map.put("status",1);
+    map.put("todoNo","user_1");
+    setStatus(map);
+    -->
+    <update id="setStatus">
+        update TeamTodo
+        set
+            status=#{status}
+        where
+            TodoNo=#{todoNO}
+    </update>
+
+    <!-- 개인 - 할 일 리스트 [진행여부 : 완료 설정] -->
+    <!-- 시작전 : 0(시작전) / 완료 : 1 / 진행중 : 2 / new : 3로 기준 -->
+    <update id="setComplete">
+        update PrivateTodo
+        set
+            endDate=sysdate,
+            status=1
+        where
+            todoNo=#{todoNO}
+    </update>
 </mapper>

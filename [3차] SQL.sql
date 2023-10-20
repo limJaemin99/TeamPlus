@@ -38,6 +38,7 @@ CREATE TABLE DataShare
 	ProjectNo varchar2(1000) NOT NULL,
 	-- user1
 	UserNo varchar2(4000) NOT NULL,
+	Title varchar(500) NOT NULL,
 	Content varchar2(4000) NOT NULL,
 	DataURL varchar2(4000) NOT NULL,
 	Count number DEFAULT 0 NOT NULL,
@@ -88,7 +89,8 @@ CREATE TABLE PrivateTodo
 	Title varchar2(4000) NOT NULL,
 	Description varchar2(4000),
 	TodoDate date NOT NULL,
-	Status number(1) DEFAULT 0 NOT NULL,
+	EndDate date,
+	Status number(1) DEFAULT 3 NOT NULL,
 	PRIMARY KEY (TodoNo)
 );
 
@@ -103,7 +105,7 @@ CREATE TABLE Project
 	DueDate date NOT NULL,
 	EndDate date,
 	Password varchar2(4000) NOT NULL,
-	Status number(1) DEFAULT 0 NOT NULL,
+	Status number(1) DEFAULT 3 NOT NULL,
 	PRIMARY KEY (ProjectNo)
 );
 
@@ -162,7 +164,7 @@ CREATE TABLE TeamTodo
 	TodoDate date NOT NULL,
 	DueDate date NOT NULL,
 	EndDate date,
-	Status number(1) DEFAULT 0 NOT NULL,
+	Status number(1) DEFAULT 3 NOT NULL,
 	PRIMARY KEY (TodoNo)
 );
 
