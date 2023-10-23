@@ -19,6 +19,7 @@ public class ProjectService {
     private final UsersMapper userDao;
     private final MyNoteMapper mynoteDao;
     private final PrivateTodoMapper privateTodoMapper;
+    private final TeamTodoMapper teamTodoMapper;
 
     //프로젝트 번호 시퀀스
     public int getSequence(){return projectDao.getSequence();}
@@ -92,6 +93,7 @@ public class ProjectService {
     //status 카운트
     public int statusCount(Map<String, Object> map){return privateTodoMapper.statusCount(map);}
 
-
+    //[팀] To-Do 리스트 출력
+    public List<TeamTodoDTO> getTodoList(String projectNo){return teamTodoMapper.selectList(projectNo);}
 
 }

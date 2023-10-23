@@ -66,8 +66,10 @@
     </delete>
 
     <!-- 프로젝트 투두리스트 [전체 조회] -->
-    <select id="selectList" resultType="TeamTodoDTO">
-        select * from TeamTodo
+    <select id="selectList" resultType="TeamTodoDTO" parameterType="String">
+        select *
+        from TeamTodo
+        where projectNo=#{projectNo}
     </select>
 
     <!-- 프로젝트 투두리스트 [ProjectNo 와 UserNo별 조회]-->

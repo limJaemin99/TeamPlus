@@ -47,8 +47,8 @@ public class TeamTodoService {
     }
 
     // 프로젝트 투두리스트 [전체 출력]
-    public List<TeamTodoDTO> selectList(){
-        return dao.selectList();
+    public List<TeamTodoDTO> selectList(String projectNo){
+        return dao.selectList(projectNo);
     }
 
     // 프로젝트 투두리스트 [ProjectNo 와 UserNo별 조회]

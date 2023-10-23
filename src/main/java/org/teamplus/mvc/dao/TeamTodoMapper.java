@@ -28,7 +28,7 @@ public interface TeamTodoMapper {
     int delete(TeamTodoDTO dto);
 
     // 프로젝트 투두리스트 [전체 출력]
-    List<TeamTodoDTO> selectList();
+    List<TeamTodoDTO> selectList(String projectNo);
 
     // 프로젝트 투두리스트 [ProjectNo 와 UserNo별 조회]
     List<TeamTodoDTO> selectByUserNo(TeamTodoDTO dto);
