@@ -22,7 +22,7 @@
 				<div class="row g-2">
 					<div class="col-lg-3 col-auto">
 						<div class="search-box">
-							<input type="text" class="form-control search" id="search-word" placeholder="검색어를 입력하세요">
+							<input type="text" class="form-control search" id="search-word" placeholder="검색어를 입력하세요" disabled>
 							<i class="ri-search-line search-icon"></i>
 						</div>
 					</div>
@@ -32,7 +32,7 @@
 								<option value="all" selected>전체</option>
 								<option value="title">제목</option>
 								<option value="description">내용</option>
-								<option value="incharge">담당자</option>
+								<option value="incharge">작성자</option>
 							</select>
 						</div>
 					</div>
@@ -42,6 +42,9 @@
 								<i class="ri-search-2-line align-bottom me-1"></i>검색
 							</button>
 						</div>
+					</div>
+					<div class="col-lg-auto" id="searchInfo" style="padding: 10px 0px;">
+
 					</div>
 					<div class="col-auto ms-sm-auto">
 						<div class="avatar-group" id="newMembar">
@@ -80,8 +83,8 @@
 							<label style="height: 0px;" class="form-label"></label>
 							<div class="mb-3">
 								<select name="sort" data-choices data-choices-text-unique-true id="sort">
-									<option value="">담당자 닉네임 오름차순 ↑</option>
-									<option value="">담당자 닉네임 내림차순 ↓</option>
+									<option value="">작성자 닉네임 오름차순 ↑</option>
+									<option value="">작성자 닉네임 내림차순 ↓</option>
 									<option value="">시작일 오름차순 ↑</option>
 									<option value="">시작일 내림차순 ↓</option>
 									<option value="">종료 예정 날짜 오름차순 ↑</option>
@@ -153,59 +156,59 @@
 									<td class="fw-medium">
 										<div class="avatar-group flex-nowrap">
 											<th:block th:if="${session.user.userNo == list.getUserNo()}">
-											<div class="avatar-group-item">
-												<a th:onclick="|javascript:changeStatus(1,${status.count})|" class="d-inline-block">
-													<img src="/assets/images/status/green.png" class="rounded-circle avatar-xxs">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a th:onclick="|javascript:changeStatus(4,${status.count})|" class="d-inline-block">
-													<img src="/assets/images/status/red.png" class="rounded-circle avatar-xxs">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a th:onclick="|javascript:changeStatus(2,${status.count})|" class="d-inline-block">
-													<img src="/assets/images/status/indigo.png" class="rounded-circle avatar-xxs">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a th:onclick="|javascript:changeStatus(0,${status.count})|" class="d-inline-block">
-													<img src="/assets/images/status/blue.png" class="rounded-circle avatar-xxs">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a th:onclick="|javascript:changeStatus(3,${status.count})|" class="d-inline-block">
-													<img src="/assets/images/status/yellow.png" class="rounded-circle avatar-xxs">
-												</a>
-											</div>
+												<div class="avatar-group-item">
+													<a th:onclick="|javascript:changeStatus(1,${status.count})|" class="d-inline-block">
+														<img src="/assets/images/status/green.png" class="rounded-circle avatar-xxs">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a th:onclick="|javascript:changeStatus(4,${status.count})|" class="d-inline-block">
+														<img src="/assets/images/status/red.png" class="rounded-circle avatar-xxs">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a th:onclick="|javascript:changeStatus(2,${status.count})|" class="d-inline-block">
+														<img src="/assets/images/status/indigo.png" class="rounded-circle avatar-xxs">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a th:onclick="|javascript:changeStatus(0,${status.count})|" class="d-inline-block">
+														<img src="/assets/images/status/blue.png" class="rounded-circle avatar-xxs">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a th:onclick="|javascript:changeStatus(3,${status.count})|" class="d-inline-block">
+														<img src="/assets/images/status/yellow.png" class="rounded-circle avatar-xxs">
+													</a>
+												</div>
 											</th:block>
 
 											<th:block th:if="${session.user.userNo != list.getUserNo()}">
-											<div class="avatar-group-item">
-												<a class="d-inline-block">
-													<img src="/assets/images/status/pastelgreen.png" class="rounded-circle avatar-xxs gu-unselectable">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a class="d-inline-block">
-													<img src="/assets/images/status/pastelred.png" class="rounded-circle avatar-xxs gu-unselectable">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a class="d-inline-block">
-													<img src="/assets/images/status/pastelindigo.png" class="rounded-circle avatar-xxs gu-unselectable">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a class="d-inline-block">
-													<img src="/assets/images/status/pastelblue.png" class="rounded-circle avatar-xxs gu-unselectable">
-												</a>
-											</div>
-											<div class="avatar-group-item">
-												<a class="d-inline-block">
-													<img src="/assets/images/status/pastelyellow.png" class="rounded-circle avatar-xxs gu-unselectable">
-												</a>
-											</div>
+												<div class="avatar-group-item">
+													<a class="d-inline-block">
+														<img src="/assets/images/status/pastelgreen.png" class="rounded-circle avatar-xxs gu-unselectable">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a class="d-inline-block">
+														<img src="/assets/images/status/pastelred.png" class="rounded-circle avatar-xxs gu-unselectable">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a class="d-inline-block">
+														<img src="/assets/images/status/pastelindigo.png" class="rounded-circle avatar-xxs gu-unselectable">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a class="d-inline-block">
+														<img src="/assets/images/status/pastelblue.png" class="rounded-circle avatar-xxs gu-unselectable">
+													</a>
+												</div>
+												<div class="avatar-group-item">
+													<a class="d-inline-block">
+														<img src="/assets/images/status/pastelyellow.png" class="rounded-circle avatar-xxs gu-unselectable">
+													</a>
+												</div>
 											</th:block>
 										</div>
 									</td>
@@ -575,6 +578,28 @@
 
 	<th:block layout:fragment="pagejs">
 		<script type="text/javascript">
+			const searchInfo = document.getElementById('searchInfo');
+			const span = document.createElement('span');
+			const searchInput = document.getElementById('search-word');
+			span.style.color = 'red';
+
+
+			document.querySelector('#condition').addEventListener('change', (e) => {
+				console.log(e.target.value)
+				if(e.target.value == 'incharge') {
+					span.textContent = '※ 작성자 [닉네임]을 정확하게 입력하세요.';
+					searchInfo.appendChild(span)
+				} else
+					span.textContent = '';
+
+				if(e.target.value == 'all') {
+					searchInput.value = '';
+					searchInput.disabled =  true;
+				} else
+					searchInput.disabled =  false;
+
+			});
+
 
 			function changeStatus(s,c){
 				var status = document.getElementById('currentStatus'+c)

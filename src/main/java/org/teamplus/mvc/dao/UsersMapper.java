@@ -55,4 +55,7 @@ public interface UsersMapper {
 
     //[비밀번호 재설정용] email 로 정보 가져오기
     UsersDTO selectByEmail(String email);
+
+    //[닉네임] 으로 유저 검색
+    UsersDTO selectByNickName(String nickName);
 }

@@ -36,5 +36,14 @@ public interface TeamTodoMapper {
     // 프로젝트 투두리스트 [진행상태별 출력]
     List<TeamTodoDTO> selectByStatus(TeamTodoDTO dto);
 
+    //프로젝트 To-Do List [제목별 출력]
+    List<TeamTodoDTO> selectListByTitle(TeamTodoDTO dto);
+
+    //프로젝트 To-Do List [설명별 출력]
+    List<TeamTodoDTO> selectListByDescription(TeamTodoDTO dto);
+
+    //프로젝트 To-Do List [작성자별 출력]
+    List<TeamTodoDTO> selectListByUserNo(TeamTodoDTO dto);
+
     // 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가
 }
