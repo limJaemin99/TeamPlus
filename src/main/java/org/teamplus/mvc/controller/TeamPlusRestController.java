@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.teamplus.mvc.dto.PrivateTodoDTO;
+import org.teamplus.mvc.dto.TeamTodoDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.ProjectService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,5 +47,32 @@ public class TeamPlusRestController {
         PrivateTodoDTO vo = service.selectPrivateOne(todoNo);
 
         return vo;
+    }
+
+//━━━━━ [R&R 비동기 컨트롤러] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+    //검색
+    @GetMapping("/project/RnR/search/{projectNo}/{condition}/{word}")
+    public List<TeamTodoDTO> search(@PathVariable String projectNo,@PathVariable String condition,@PathVariable String word){
+        List<TeamTodoDTO> todoList = new ArrayList<>();
+
+        switch (condition){
+            case "all" :
+                todoList = service.getTodoList(projectNo);
+                log.info("all 실행");
+                return todoList;
+//            case "title" :
+//                todoList = null;
+//                return todoList;
+//            case "description" :
+//                todoList = null;
+//                return todoList;
+//            case "incharge" :
+//                todoList = null;
+//                return todoList;
+        }
+
+
+        return todoList;
     }
 }

@@ -14,7 +14,7 @@
 
 <body>
 <div layout:fragment="content">
-	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
+	<div th:replace="partials/page-title :: page-title('Modify Project','Projects')"></div>
 	<form action="modify" method="post">
 		<input type="hidden" id="projectNo" name="projectNo" th:value="${projectNo}">
 		<div class="row">

@@ -1,0 +1,629 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+
+<th:block layout:fragment="pagetitle">
+	<!--page title-->
+	<div th:replace="partials/title-meta :: title-meta('R&R')"></div>
+</th:block>
+
+<head>
+	<!-- Dragula css -->
+	<link rel="stylesheet" href="/assets/libs/dragula/dragula.min.css" />
+</head>
+
+<body>
+	<div layout:fragment="content">
+		<div th:replace="partials/page-title :: page-title('R&R &nbsp;:&nbsp; Roles & Responsibilities','Projects')"></div>
+
+		<input type="hidden" id="projectNo" th:value="${projectNo}">
+		<div class="card">
+			<div class="card-body">
+				<div class="row g-2">
+					<div class="col-lg-3 col-auto">
+						<div class="search-box">
+							<input type="text" class="form-control search" id="search-word" placeholder="검색어를 입력하세요">
+							<i class="ri-search-line search-icon"></i>
+						</div>
+					</div>
+					<div class="col-lg-1">
+						<div class="mb-3">
+							<select id="condition" data-choices data-choices-text-unique-true>
+								<option value="all" selected>전체</option>
+								<option value="title">제목</option>
+								<option value="description">내용</option>
+								<option value="incharge">담당자</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-auto">
+						<div class="hstack gap-2">
+							<button type="button" id="search" class="btn btn-primary">	<!-- Todo 검색 버튼 10.23 (재민) -->
+								<i class="ri-search-2-line align-bottom me-1"></i>검색
+							</button>
+						</div>
+					</div>
+					<div class="col-auto ms-sm-auto">
+						<div class="avatar-group" id="newMembar">
+							<th:block th:each="member : ${teamList}">
+								<a href="javascript: void(0);" class="avatar-group-item" data-bs-toggle="tooltip"
+							   		data-bs-trigger="hover" data-bs-placement="top" th:title="${member.getNickName()}">
+									<img th:src="${member.getProfileURL()}" class="rounded-circle avatar-xs">
+								</a>
+							</th:block>
+							<!-- Todo 팀원 추가 기능 고려 - 10.23 (재민) -->
+<!--							<a href="#addmemberModal" data-bs-toggle="modal" class="avatar-group-item">-->
+<!--								<div class="avatar-xs">-->
+<!--									<div class="avatar-title rounded-circle">-->
+<!--										+-->
+<!--									</div>-->
+<!--								</div>-->
+<!--							</a>-->
+						</div>
+					</div>
+					<!--end col-->
+				</div>
+				<!--end row-->
+			</div>
+			<!--end card-body-->
+		</div>
+		<!--end card-->
+
+		<!-- ★ 수정 시작 ★ -->
+		<div class="row">
+			<div class="col-xl-12">
+				<div class="card">
+					<div class="card-header border-0 align-items-center d-flex" style="padding-bottom: 0px;">
+						<h4 class="card-title flex-grow-1 mb-0">R&R List</h4>
+						<h6 style="margin: 0px; margin-right: 10px;">정렬 기준</h6>
+						<div class="col-lg-2">
+							<label style="height: 0px;" class="form-label"></label>
+							<div class="mb-3">
+								<select name="sort" data-choices data-choices-text-unique-true id="sort">
+									<option value="">담당자 닉네임 오름차순 ↑</option>
+									<option value="">담당자 닉네임 내림차순 ↓</option>
+									<option value="">시작일 오름차순 ↑</option>
+									<option value="">시작일 내림차순 ↓</option>
+									<option value="">종료 예정 날짜 오름차순 ↑</option>
+									<option value="">종료 예정 날짜 내림차순 ↓</option>
+									<option value="">종료일 오름차순 ↑</option>
+									<option value="">종료일 내림차순 ↓</option>
+									<option value="">상태 : 작업 예정</option>
+									<option value="">상태 : 작업중</option>
+									<option value="">상태 : 진행중</option>
+									<option value="">상태 : 검토 요청</option>
+									<option value="">상태 : 작업 완료</option>
+									<option value="">상태 : 오류 수정</option>
+								</select>
+							</div>
+						</div>
+					</div><!-- end cardheader -->
+					<div class="card-body">
+						<div class="">
+							<table class="table table-nowrap table-centered align-middle">
+								<thead class="bg-light text-muted">
+								<tr>
+									<th scope="col">No</th>
+									<th scope="col">Title</th>
+									<th scope="col">Description</th>
+									<th scope="col">Start Date</th>
+									<th scope="col">Due Date</th>
+									<th scope="col">End Date</th>
+									<th scope="col">Incharge</th>
+									<th scope="col">Status</th>
+									<th scope="col">Update</th>
+									<th scope="col">Comments</th>
+								</tr><!-- end tr -->
+								</thead><!-- thead -->
+
+								<!-- 구성 내용은 필요한 데이터에 따라 열 이름 바꿔서 데이터 연동 -->
+								<tbody>
+								<!-- tr 태그 안에 반복문 사용하여 데이터 출력, 반복 시 아래 6개 tr 태그 삭제 -->
+								<th:block th:each="list,status:${todoList}">
+								<tr>	<!-- Todo 비동기로 바로 할지? 고민 10.23 (재민) -->
+									<!-- 프로젝트이름(Project Name) -->
+									<td class="fw-medium" th:text="${status.count}"></td>	<!-- Todo 번호는 타임리프의 status 나 start,end 사용할 예정 -->
+									<td class="fw-medium" th:text="${list.getTitle()}"></td>	<!-- Todo 몇글자 이상일 경우 ... 으로 표시되도록 설정해야함 10.23 (재민) -->
+									<td class="fw-medium" th:text="${list.getDescription()}"></td>
+									<td class="fw-medium" th:text="${list.getTodoDate()}"></td>
+									<td class="fw-medium" th:text="${list.getDueDate()}"></td>
+									<td class="fw-medium" th:text="${list.getEndDate()}"></td>
+									<td class="fw-medium">
+										<img class="rounded-circle header-profile-user"
+											 th:src="${userList.get(__${status.count}__ - 1).getProfileURL}" alt="Header Avatar">
+										[[${userList.get(__${status.count}__ - 1).getNickName()}]]
+									</td>
+									<td class="fw-medium">
+										<th:block th:if="${list.getStatus() == 0}">
+											<span class="badge badge-soft-info" th:id="currentStatus+${status.count}">진행중</span>
+										</th:block>
+										<th:block th:if="${list.getStatus() == 1}">
+											<span class="badge badge-soft-success" th:id="currentStatus+${status.count}">작업 완료</span>
+										</th:block>
+										<th:block th:if="${list.getStatus() == 2}">
+											<span class="badge badge-soft-primary" th:id="currentStatus+${status.count}">작업 예정</span>
+										</th:block>
+										<th:block th:if="${list.getStatus() == 3}">
+											<span class="badge badge-soft-warning" th:id="currentStatus+${status.count}">검토 요청</span>
+										</th:block>
+										<th:block th:if="${list.getStatus() == 4}">
+											<span class="badge badge-soft-danger" th:id="currentStatus+${status.count}">오류 수정</span>
+										</th:block>
+									</td>
+									<td class="fw-medium">
+										<div class="avatar-group flex-nowrap">
+											<th:block th:if="${session.user.userNo == list.getUserNo()}">
+											<div class="avatar-group-item">
+												<a th:onclick="|javascript:changeStatus(1,${status.count})|" class="d-inline-block">
+													<img src="/assets/images/status/green.png" class="rounded-circle avatar-xxs">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a th:onclick="|javascript:changeStatus(4,${status.count})|" class="d-inline-block">
+													<img src="/assets/images/status/red.png" class="rounded-circle avatar-xxs">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a th:onclick="|javascript:changeStatus(2,${status.count})|" class="d-inline-block">
+													<img src="/assets/images/status/indigo.png" class="rounded-circle avatar-xxs">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a th:onclick="|javascript:changeStatus(0,${status.count})|" class="d-inline-block">
+													<img src="/assets/images/status/blue.png" class="rounded-circle avatar-xxs">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a th:onclick="|javascript:changeStatus(3,${status.count})|" class="d-inline-block">
+													<img src="/assets/images/status/yellow.png" class="rounded-circle avatar-xxs">
+												</a>
+											</div>
+											</th:block>
+
+											<th:block th:if="${session.user.userNo != list.getUserNo()}">
+											<div class="avatar-group-item">
+												<a class="d-inline-block">
+													<img src="/assets/images/status/pastelgreen.png" class="rounded-circle avatar-xxs gu-unselectable">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a class="d-inline-block">
+													<img src="/assets/images/status/pastelred.png" class="rounded-circle avatar-xxs gu-unselectable">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a class="d-inline-block">
+													<img src="/assets/images/status/pastelindigo.png" class="rounded-circle avatar-xxs gu-unselectable">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a class="d-inline-block">
+													<img src="/assets/images/status/pastelblue.png" class="rounded-circle avatar-xxs gu-unselectable">
+												</a>
+											</div>
+											<div class="avatar-group-item">
+												<a class="d-inline-block">
+													<img src="/assets/images/status/pastelyellow.png" class="rounded-circle avatar-xxs gu-unselectable">
+												</a>
+											</div>
+											</th:block>
+										</div>
+									</td>
+									<td class="fw-medium">
+										<ul class="pagination pagination-separated pagination-sm mb-0">
+											<li class="page-item">
+												<a href="#" class="page-link">
+													댓글
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+								</th:block>
+								</tbody>
+							</table>
+					</div><!-- end card body -->
+				</div><!-- end card -->
+			</div><!-- end col -->
+		</div><!-- end row -->
+		<!-- ★ 수정 종료 ★ -->
+
+		<div class="modal fade" id="addmemberModal" tabindex="-1" aria-labelledby="addmemberModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content border-0">
+					<div class="modal-header p-3 bg-soft-warning">
+						<h5 class="modal-title" id="addmemberModalLabel">Add Member</h5>
+						<button type="button" class="btn-close" id="btn-close-member" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="row g-3">
+								<div class="col-lg-12">
+									<label for="submissionidInput" class="form-label">Submission ID</label>
+									<input type="number" class="form-control" id="submissionidInput"
+										placeholder="Submission ID">
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="profileimgInput" class="form-label">Profile Images</label>
+									<input class="form-control" type="file" id="profileimgInput">
+								</div>
+								<!--end col-->
+								<div class="col-lg-6">
+									<label for="firstnameInput" class="form-label">First Name</label>
+									<input type="text" class="form-control" id="firstnameInput"
+										placeholder="Enter firstname">
+								</div>
+								<!--end col-->
+								<div class="col-lg-6">
+									<label for="lastnameInput" class="form-label">Last Name</label>
+									<input type="text" class="form-control" id="lastnameInput"
+										placeholder="Enter lastname">
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="designationInput" class="form-label">Designation</label>
+									<input type="text" class="form-control" id="designationInput"
+										placeholder="Designation">
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="titleInput" class="form-label">Title</label>
+									<input type="text" class="form-control" id="titleInput" placeholder="Title">
+								</div>
+								<!--end col-->
+								<div class="col-lg-6">
+									<label for="numberInput" class="form-label">Phone Number</label>
+									<input type="text" class="form-control" id="numberInput" placeholder="Phone number">
+								</div>
+								<!--end col-->
+								<div class="col-lg-6">
+									<label for="joiningdateInput" class="form-label">Joining Date</label>
+									<input type="text" class="form-control" id="joiningdateInput"
+										data-provider="flatpickr" placeholder="Select date">
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="emailInput" class="form-label">Email ID</label>
+									<input type="email" class="form-control" id="emailInput" placeholder="Email">
+								</div>
+								<!--end col-->
+							</div>
+							<!--end row-->
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-light" data-bs-dismiss="modal"><i
+								class="ri-close-line align-bottom me-1"></i> Close</button>
+						<button type="button" class="btn btn-success" id="addMember">Add Member</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end add member modal-->
+
+		<div class="modal fade" id="createboardModal" tabindex="-1" aria-labelledby="createboardModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content border-0">
+					<div class="modal-header p-3 bg-soft-info">
+						<h5 class="modal-title" id="createboardModalLabel">Add Board</h5>
+						<button type="button" class="btn-close" id="addBoardBtn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form action="#">
+							<div class="row">
+								<div class="col-lg-12">
+									<label for="boardName" class="form-label">Board Name</label>
+									<input type="text" class="form-control" id="boardName"
+										placeholder="Enter board name">
+								</div>
+								<div class="mt-4">
+									<div class="hstack gap-2 justify-content-end">
+										<button type="button" class="btn btn-light"
+											data-bs-dismiss="modal">Close</button>
+										<button type="button" class="btn btn-success" id="addNewBoard">Add
+											Board</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end add board modal-->
+
+		<div class="modal fade" id="creatertaskModal" tabindex="-1" aria-labelledby="creatertaskModalLabel"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg">
+				<div class="modal-content border-0">
+					<div class="modal-header p-3 bg-soft-info">
+						<h5 class="modal-title" id="creatertaskModalLabel">Create New Task</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<form action="#">
+							<div class="row g-3">
+								<div class="col-lg-12">
+									<label for="projectName" class="form-label">Project Name</label>
+									<input type="text" class="form-control" id="projectName"
+										placeholder="Enter project name">
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="sub-tasks" class="form-label">Task Title</label>
+									<input type="text" class="form-control" id="sub-tasks" placeholder="Task title">
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="task-description" class="form-label">Task Description</label>
+									<textarea class="form-control" id="task-description" rows="3"
+										placeholder="Task description"></textarea>
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="formFile" class="form-label">Tasks Images</label>
+									<input class="form-control" type="file" id="formFile">
+								</div>
+								<!--end col-->
+								<div class="col-lg-12">
+									<label for="tasks-progress" class="form-label">Add Team Member</label>
+									<div data-simplebar style="height: 95px;">
+										<ul class="list-unstyled vstack gap-2 mb-0">
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="anna-adame">
+													<label class="form-check-label d-flex align-items-center"
+														for="anna-adame">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Anna Adame
+														</span>
+													</label>
+												</div>
+											</li>
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="frank-hook">
+													<label class="form-check-label d-flex align-items-center"
+														for="frank-hook">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Frank Hook
+														</span>
+													</label>
+												</div>
+											</li>
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="alexis-clarke">
+													<label class="form-check-label d-flex align-items-center"
+														for="alexis-clarke">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Alexis Clarke
+														</span>
+													</label>
+												</div>
+											</li>
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="herbert-stokes">
+													<label class="form-check-label d-flex align-items-center"
+														for="herbert-stokes">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Herbert Stokes
+														</span>
+													</label>
+												</div>
+											</li>
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="michael-morris">
+													<label class="form-check-label d-flex align-items-center"
+														for="michael-morris">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Michael Morris
+														</span>
+													</label>
+												</div>
+											</li>
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="nancy-martino">
+													<label class="form-check-label d-flex align-items-center"
+														for="nancy-martino">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Nancy Martino
+														</span>
+													</label>
+												</div>
+											</li>
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="thomas-taylor">
+													<label class="form-check-label d-flex align-items-center"
+														for="thomas-taylor">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Thomas Taylor
+														</span>
+													</label>
+												</div>
+											</li>
+											<li>
+												<div class="form-check d-flex align-items-center">
+													<input class="form-check-input me-3" type="checkbox" value=""
+														id="tonya-noble">
+													<label class="form-check-label d-flex align-items-center"
+														for="tonya-noble">
+														<span class="flex-shrink-0">
+															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
+																class="avatar-xxs rounded-circle" />
+														</span>
+														<span class="flex-grow-1 ms-2">
+															Tonya Noble
+														</span>
+													</label>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<!--end col-->
+								<div class="col-lg-4">
+									<label for="due-date" class="form-label">Due Date</label>
+									<input type="text" class="form-control" id="due-date" data-provider="flatpickr"
+										placeholder="Select date">
+								</div>
+								<!--end col-->
+								<div class="col-lg-4">
+									<label for="categories" class="form-label">Tags</label>
+									<input type="text" class="form-control" id="categories" placeholder="Enter tag">
+								</div>
+								<!--end col-->
+								<div class="col-lg-4">
+									<label for="tasks-progress" class="form-label">Tasks Progress</label>
+									<input type="text" class="form-control" maxlength="3" id="tasks-progress"
+										placeholder="Enter progress">
+								</div>
+								<!--end col-->
+								<div class="mt-4">
+									<div class="hstack gap-2 justify-content-end">
+										<button type="button" class="btn btn-light"
+											data-bs-dismiss="modal">Close</button>
+										<button type="button" class="btn btn-success">Add Task</button>
+									</div>
+								</div>
+								<!--end col-->
+							</div>
+							<!--end row-->
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end add board modal-->
+
+		<div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+							id="delete-btn-close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="mt-2 text-center">
+							<lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+								colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+							<div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+								<h4>Are you sure ?</h4>
+								<p class="text-muted mx-4 mb-0">Are you sure you want to remove this tasks ?</p>
+							</div>
+						</div>
+						<div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+							<button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+							<button type="button" class="btn w-sm btn-danger" id="delete-record">Yes, Delete
+								It!</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end modal -->
+	</div>
+	</div>
+
+	<th:block layout:fragment="modal">
+
+	</th:block>
+
+	<th:block layout:fragment="pagejs">
+		<script type="text/javascript">
+
+			function changeStatus(s,c){
+				var status = document.getElementById('currentStatus'+c)
+
+				switch (s){
+					case 0 :
+						status.classList = 'badge badge-soft-info';
+						status.textContent = '진행중';
+						return;
+					case 1:
+						status.classList = 'badge badge-soft-success';
+						status.textContent = '작업 완료';
+						return;
+					case 2:
+						status.classList = 'badge badge-soft-primary';
+						status.textContent = '작업 예정';
+						return;
+					case 3:
+						status.classList = 'badge badge-soft-warning';
+						status.textContent = '검토 요청';
+						return;
+					case 4:
+						status.classList = 'badge badge-soft-danger';
+						status.textContent = '오류 수정';
+						return;
+				}
+
+			}
+		</script>
+
+		<!-- Dashboard init -->
+		<script src="/assets/js/pages/dashboard-projects.init.js"></script>
+
+		<!-- RnR Custom js -->
+		<script type="text/javascript" src="/js/RnR.js"></script>
+
+		<!-- dragula init js -->
+		<script src="/assets/libs/dragula/dragula.min.js"></script>
+
+		<!-- dom autoscroll -->
+		<script src="/assets/libs/dom-autoscroller/dom-autoscroller.min.js"></script>
+
+		<!--taks-kanban-->
+		<script src="/assets/js/pages/tasks-kanban.init.js"></script>
+
+		<!-- profile-setting init js -->
+		<script src="/assets/js/pages/profile-setting.init.js"></script>
+		<script src="/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+	</th:block>
+</body>
+
+</html>

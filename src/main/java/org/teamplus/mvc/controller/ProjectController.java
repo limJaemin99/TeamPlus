@@ -5,17 +5,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.teamplus.mvc.dto.MyNoteDTO;
 import org.teamplus.mvc.dto.ProjectDTO;
 import org.teamplus.mvc.dto.TeamDTO;
+import org.teamplus.mvc.dto.TeamTodoDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.ProjectService;
-import org.teamplus.mvc.service.TeamService;
-import org.teamplus.mvc.service.UsersService;
 
-import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -218,6 +214,32 @@ public class ProjectController {
         }
 
         return "redirect:/project/list" ;
+    }
+
+    //R&R View
+    @GetMapping("/RnR")
+    public String RnRView(@ModelAttribute("projectNo") String projectNo,Model model){
+        List<TeamTodoDTO> todoList = service.getTodoList(projectNo);
+        //To-Do 작성자 정보
+        List<UsersDTO> userList = new ArrayList<>();
+        //프로젝트 팀 정보
+        List<TeamDTO> team = service.teamListByProjectNo(projectNo);
+        //팀원 정보 리스트
+        List<UsersDTO> teamList = new ArrayList<>();
+
+        for(TeamTodoDTO list : todoList){
+            userList.add(service.selectUserByUserNo(list.getUserNo()));
+        }
+
+        for(TeamDTO list : team){
+            teamList.add(service.selectUserByUserNo(list.getUserNo()));
+        }
+
+        model.addAttribute("todoList",todoList);
+        model.addAttribute("userList",userList);
+        model.addAttribute("teamList",teamList);
+
+        return "dashboard/RnR";
     }
 
 }
