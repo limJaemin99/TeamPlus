@@ -2,8 +2,10 @@ package org.teamplus.mvc.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -16,8 +18,9 @@ public class PrivateTodoDTO {
     private String userNo;
     private String title;
     private String description;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate todoDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime todoDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private int status;
 }

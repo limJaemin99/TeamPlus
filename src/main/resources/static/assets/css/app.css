@@ -15461,10 +15461,12 @@ span.flatpickr-weekday {
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;
+  padding-bottom: 100px;
 }
 .tasks-board .tasks-list {
-  min-width: 300px;
+  min-width: 340px;
   margin-right: 24px;
+  padding-bottom: 100px;
 }
 .tasks-board::-webkit-scrollbar {
   -webkit-appearance: none;
@@ -15500,7 +15502,7 @@ span.flatpickr-weekday {
 }
 
 .tasks-wrapper {
-  max-height: calc(100vh - 418px);
+  max-height: calc(100vh - 200px);
 }
 
 .tasks {

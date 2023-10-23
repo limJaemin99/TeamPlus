@@ -1,18 +1,14 @@
 package org.teamplus.mvc.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.teamplus.mvc.dao.MyNoteMapper;
-import org.teamplus.mvc.dao.ProjectMapper;
-import org.teamplus.mvc.dao.TeamMapper;
-import org.teamplus.mvc.dao.UsersMapper;
-import org.teamplus.mvc.dto.MyNoteDTO;
-import org.teamplus.mvc.dto.ProjectDTO;
-import org.teamplus.mvc.dto.TeamDTO;
-import org.teamplus.mvc.dto.UsersDTO;
+import org.teamplus.mvc.dao.*;
+import org.teamplus.mvc.dto.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +18,7 @@ public class ProjectService {
     private final TeamMapper teamDao;
     private final UsersMapper userDao;
     private final MyNoteMapper mynoteDao;
+    private final PrivateTodoMapper privateTodoMapper;
 
     //프로젝트 번호 시퀀스
     public int getSequence(){return projectDao.getSequence();}
@@ -73,5 +70,28 @@ public class ProjectService {
 
     //회원 번호로 회원 정보 가져오기
     public UsersDTO selectUserByUserNo(String userNo){return userDao.selectOne(userNo);}
+
+    //개인 - 할 일 리스트 시퀀스
+    public int getPrivateSequence(){return privateTodoMapper.getSequence();}
+
+    //개인 - 할 일 리스트 [작성]
+    public int write(PrivateTodoDTO dto){return privateTodoMapper.write(dto);}
+
+    //개인 - 할 일 리스트 [출력]
+    public List<PrivateTodoDTO> selectPrivateList(Map<String,Object> map){return privateTodoMapper.selectList(map);}
+
+    //개인 - 할 일 리스트 [출력]
+    public PrivateTodoDTO selectPrivateOne(String todoNo){return privateTodoMapper.selectOne(todoNo);}
+
+    //개인 - 할 일 리스트 [삭제]
+    public int delete(String todoNo){return privateTodoMapper.delete(todoNo);}
+
+    //개인 - 할 일 리스트 [수정]
+    public int update(PrivateTodoDTO dto){return privateTodoMapper.update(dto);}
+
+    //status 카운트
+    public int statusCount(Map<String, Object> map){return privateTodoMapper.statusCount(map);}
+
+
 
 }

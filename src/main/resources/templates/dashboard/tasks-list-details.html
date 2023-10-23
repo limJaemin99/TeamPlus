@@ -10,14 +10,14 @@
 <head>
 	<!-- Plugins css -->
 	<link href="/assets/libs/dropzone/dropzone.css" rel="stylesheet" type="text/css" />
+	<script src="https://cdn.ckeditor.com/ckeditor5/40.0.0/classic/ckeditor.js"></script>
 </head>
 
 <body>
 <div layout:fragment="content">
 	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
-<form action="/project/save" method="post">
-	<input type="hidden" value="test1" name="userNo">
-	<input type="hidden" name="noteNo" th:value="${noteNo}+1">
+<form action="/private/save" method="post">
+	<input type="hidden" name="userNo">
 	<div class="row">
 		<div class="col-lg-8">
 			<div class="card">
@@ -30,11 +30,9 @@
 
 
 					<div class="mb-3">
-						<label class="form-label">메모</label>
-						<!--<div id="ckeditor-classic">-->
-							<textarea type="text" name="content" id="ckeditor-classic">
-							</textarea>
-						<!--</div>-->
+						<div class="centered">
+								<textarea id="editor" name="content"></textarea>
+						</div>
 					</div>
 				</div>
 				<!-- end card body -->
@@ -106,6 +104,33 @@
 	<!-- ckeditor -->
 	<script src="/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
 
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			ClassicEditor
+					.create(document.querySelector('#editor'), {
+						// CKEditor 옵션 설정
+					})
+					.then(editor => {
+						window.editor = editor;
+					})
+					.catch(err => {
+						console.error(err.stack);
+					});
+
+			// 폼 제출 이벤트 리스너
+			document.getElementById('editorForm').addEventListener('submit', function (e) {
+				e.preventDefault(); // 폼의 기본 제출 동작을 중지합니다.
+
+				// 에디터의 내용을 폼 필드에 설정
+				const contentValue = window.editor.getData();
+				document.querySelector('textarea[name="content"]').value = contentValue;
+
+				// 폼을 서버로 제출
+				this.submit();
+			});
+		});
+	</script>
+
 	<!-- dropzone js -->
 	<script src="/assets/libs/dropzone/dropzone-min.js"></script>
 	<!-- project-create init -->
@@ -122,6 +147,7 @@
 
 	<!-- flatpickr min js -->
 	<script src="/assets/libs/flatpickr/flatpickr.min.js"></script>
+
 </th:block>
 </body>
 

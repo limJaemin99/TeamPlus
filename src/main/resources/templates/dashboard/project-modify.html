@@ -53,8 +53,9 @@
 
 						<div class="mb-3">
 							<label class="form-label">프로젝트 설명(Project Description)</label>
-								<textarea type="text" id="ckeditor-classic" name="description" th:text="${project.getDescription()}">
-								</textarea>
+							<div class="centered">
+								<textarea id="editor" name="description" th:utext="${project.getDescription()}"></textarea>
+							</div>
 						</div>
 					</div>
 					<!-- end card body -->
@@ -143,6 +144,32 @@
 </th:block>
 
 <th:block layout:fragment="pagejs">
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			ClassicEditor
+					.create(document.querySelector('#editor'), {
+						// CKEditor 옵션 설정
+					})
+					.then(editor => {
+						window.editor = editor;
+					})
+					.catch(err => {
+						console.error(err.stack);
+					});
+
+			// 폼 제출 이벤트 리스너
+			document.getElementById('editorForm').addEventListener('submit', function (e) {
+				e.preventDefault(); // 폼의 기본 제출 동작을 중지합니다.
+
+				// 에디터의 내용을 폼 필드에 설정
+				const contentValue = window.editor.getData();
+				document.querySelector('textarea[name="description"]').value = contentValue;
+
+				// 폼을 서버로 제출
+				this.submit();
+			});
+		});
+	</script>
 	<script type="text/javascript">
 		function updateDueDateMin() {
 			const startDateInput = document.getElementById('startDateInput');
