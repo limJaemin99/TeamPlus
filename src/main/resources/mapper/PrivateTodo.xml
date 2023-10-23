@@ -9,17 +9,17 @@
     </select>
 
     <!-- 개인 - 할 일 리스트 [작성] -->
-    <insert id="write" parameterType="PrivateTodoDTO">
+    <insert id="write" parameterType="PrivateTodoDTO" useGeneratedKeys="true" keyProperty="todoNo">
         INSERT INTO
-            privateTodo (todoNo,userNo,title,description,todoDate)
-        VALUES (#{todoNo},#{userNo},#{title},#{description},#{todoDate})
+            privateTodo (todoNo,userNo,title,description,todoDate,status)
+        VALUES (#{todoNo},#{userNo},#{title},#{description},sysdate,3)
     </insert>
 
     <!-- 개인 - 할 일 리스트 [출력] -->
-    <select id="selectList" parameterType="String" resultType="PrivateTodoDTO">
+    <select id="selectList" parameterType="java.util.Map" resultType="PrivateTodoDTO">
         SELECT *
         FROM privateTodo
-        WHERE userNo=#{userNo}
+        WHERE userNo=#{userNo} AND status=#{status}
         ORDER BY todoDate
     </select>
 
@@ -37,6 +37,12 @@
         WHERE todoNo=#{todoNo}
     </update>
 
+    <select id="selectOne" parameterType="String" resultType="PrivateTodoDTO">
+        SELECT *
+        FROM PrivateTodo
+        WHERE todoNo=#{todoNo}
+    </select>
+
     <!-- 개인 - 할 일 리스트 [진행상태 설정]
     ( 파라미터 타입 : Map<String,Object> )
     예시)
@@ -45,13 +51,20 @@
     map.put("todoNo","user_1");
     setStatus(map);
     -->
-    <update id="setStatus">
-        update TeamTodo
+
+    <!-- AutoUpdate.java(자동업데이트)에서 자동으로 실행해줬음 -->
+    <update id="setStatus" parameterType="String">
+        update PrivateTodo
         set
-            status=#{status}
+            status=0
         where
-            TodoNo=#{todoNO}
+            todoNo=#{todoNo}
     </update>
+
+    <select id="statusCount" resultType="int" parameterType="java.util.Map">
+        SELECT count(*) FROM PRIVATETODO
+        WHERE status=#{status} AND USERNO=#{userNo}
+    </select>
 
     <!-- 개인 - 할 일 리스트 [진행여부 : 완료 설정] -->
     <!-- 시작전 : 0(시작전) / 완료 : 1 / 진행중 : 2 / new : 3로 기준 -->
@@ -61,6 +74,6 @@
             endDate=sysdate,
             status=1
         where
-            todoNo=#{todoNO}
+            todoNo=#{todoNo}
     </update>
 </mapper>
