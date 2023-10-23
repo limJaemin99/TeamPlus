@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.teamplus.mvc.dto.PrivateTodoDTO;
+import org.teamplus.mvc.dto.SearchDTO;
 import org.teamplus.mvc.dto.TeamTodoDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.ProjectService;
@@ -53,26 +54,64 @@ public class TeamPlusRestController {
 
     //검색
     @GetMapping("/project/RnR/search/{projectNo}/{condition}/{word}")
-    public List<TeamTodoDTO> search(@PathVariable String projectNo,@PathVariable String condition,@PathVariable String word){
-        List<TeamTodoDTO> todoList = new ArrayList<>();
+    public SearchDTO search(@PathVariable String projectNo,@PathVariable String condition,@PathVariable String word){
+        SearchDTO searchDTO = new SearchDTO();
+        TeamTodoDTO teamTodoDTO = TeamTodoDTO.builder().projectNo(projectNo).description(word).title(word).build();
+        List<UsersDTO> inchagerList = new ArrayList<>();
 
         switch (condition){
             case "all" :
-                todoList = service.getTodoList(projectNo);
-                log.info("all 실행");
-                return todoList;
 //            case "title" :
-//                todoList = null;
-//                return todoList;
-//            case "description" :
-//                todoList = null;
-//                return todoList;
-//            case "incharge" :
-//                todoList = null;
-//                return todoList;
+                searchDTO.setTeamTodoList(service.getTodoList(projectNo));
+                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
+                for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
+                    inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
+                }
+                searchDTO.setUsersList(inchagerList);
+                log.info("‼ 전체 검색 실행 완료 ‼");
+                return searchDTO;
+            case "title" :
+                searchDTO.setTeamTodoList(service.getTodoListByTitle(teamTodoDTO));
+                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
+                for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
+                    inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
+                }
+                searchDTO.setUsersList(inchagerList);
+                log.info("‼ 제목 검색 실행 완료 ‼");
+                return searchDTO;
+            case "description" :
+                searchDTO.setTeamTodoList(service.getTodoListByDescription(teamTodoDTO));
+                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
+                for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
+                    inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
+                }
+                searchDTO.setUsersList(inchagerList);
+                log.info("‼ 설명 검색 실행 완료 ‼");
+                return searchDTO;
+            case "incharge" :
+                String userNo = service.selectUserByNickName(word).getUserNo();
+                teamTodoDTO.setUserNo(userNo);
+                searchDTO.setTeamTodoList(service.getTodoListByUserNo(teamTodoDTO));
+                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
+                for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
+                    inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
+                }
+                searchDTO.setUsersList(inchagerList);
+                log.info("‼ 작성자 검색 실행 완료 ‼");
+                return searchDTO;
         }
 
-
-        return todoList;
+        return searchDTO;
     }
+
+    //서버 세션을 비동기 js 로 넘기기
+    @GetMapping("/getsession")
+    public UsersDTO getSessionData(@SessionAttribute("user") UsersDTO user) {
+        // 세션 데이터를 가져오는 코드를 작성합니다.
+        UsersDTO session = user;
+
+        return session;
+    }
+
+
 }

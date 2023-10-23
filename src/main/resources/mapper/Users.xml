@@ -128,4 +128,11 @@
         WHERE email=#{email}
     </select>
 
+    <!-- [닉네임] 으로 유저 검색 -->
+    <select id="selectByNickName" parameterType="String" resultType="UsersDTO">
+        SELECT *
+        FROM users
+        WHERE nickName=#{nickName}
+    </select>
+
 </mapper>

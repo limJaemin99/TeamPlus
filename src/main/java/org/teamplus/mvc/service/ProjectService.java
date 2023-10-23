@@ -96,4 +96,15 @@ public class ProjectService {
     //[팀] To-Do 리스트 출력
     public List<TeamTodoDTO> getTodoList(String projectNo){return teamTodoMapper.selectList(projectNo);}
 
+    //프로젝트 To-Do 리스트 [제목별 출력]
+    public List<TeamTodoDTO> getTodoListByTitle(TeamTodoDTO dto){return teamTodoMapper.selectListByTitle(dto);}
+
+    //프로젝트 To-Do List [설명별 출력]
+    public List<TeamTodoDTO> getTodoListByDescription(TeamTodoDTO dto){return teamTodoMapper.selectListByDescription(dto);}
+
+    //프로젝트 To-Do List [작성자별 출력]
+    public List<TeamTodoDTO> getTodoListByUserNo(TeamTodoDTO dto){return teamTodoMapper.selectListByUserNo(dto);}
+
+    //[닉네임] 으로 유저 검색
+    public UsersDTO selectUserByNickName(String nickName){return userDao.selectByNickName(nickName);}
 }

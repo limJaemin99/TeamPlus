@@ -89,6 +89,27 @@
             Status=#{status}
     </select>
 
+    <!-- 프로젝트 To-Do List [제목별 출력] -->
+    <select id="selectListByTitle" parameterType="TeamTodoDTO" resultType="TeamTodoDTO">
+        SELECT *
+        FROM TeamTodo
+        WHERE projectNo=#{projectNo} AND title LIKE '%' || #{title} || '%'
+    </select>
+
+    <!-- 프로젝트 To-Do List [설명별 출력] -->
+    <select id="selectListByDescription" parameterType="TeamTodoDTO" resultType="TeamTodoDTO">
+        SELECT *
+        FROM TeamTodo
+        WHERE projectNo=#{projectNo} AND description LIKE '%' || #{description} || '%'
+    </select>
+
+    <!-- 프로젝트 To-Do List [작성자별 출력] -->
+    <select id="selectListByUserNo" parameterType="TeamTodoDTO" resultType="TeamTodoDTO">
+        SELECT *
+        FROM TeamTodo
+        WHERE projectNo=#{projectNo} AND userNo LIKE '%' || #{userNo} || '%'
+    </select>
+
     <!-- 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가 -->
 
 
