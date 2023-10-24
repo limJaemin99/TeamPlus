@@ -19,7 +19,7 @@ public class PrivateTodoDTO {
     private String title;
     private String description;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime todoDate;
+    private LocalDate todoDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private int status;
