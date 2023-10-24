@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,26 +36,7 @@ public class AutoUpdate {
                     .executeUpdate();
         }
     }
-    @Scheduled(fixedRate = 6000)       //1초마다 실행
-    @Transactional
-    public void EndupdateDatabase() {
-        /* 현재 시간 기준 개인 할일 완료됬을때 바로 endDate 가 현재시간으로 update  */
-        LocalDateTime now_day = LocalDateTime.now();    // 현재 시간
 
-        List<Object[]> list = entity.createNativeQuery(
-                        "SELECT * FROM PrivateTodo WHERE status = 4 AND todoDate <= :now_day")
-                .setParameter("now_day", now_day)
-                .getResultList();
-
-        for (Object[] result : list) {
-            String todoNo = (String) result[0];
-
-            String updateSql = "UPDATE PrivateTodo SET endDate = sysdate WHERE todoNo = :todoNo";
-            entity.createNativeQuery(updateSql)
-                    .setParameter("todoNo", todoNo)
-                    .executeUpdate();
-        }
-    }
 
     @Scheduled(fixedRate = 6000)       //1초마다 실행
     @Transactional

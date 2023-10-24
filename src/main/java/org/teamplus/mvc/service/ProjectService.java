@@ -58,13 +58,14 @@ public class ProjectService {
     public int write(MyNoteDTO dto){return mynoteDao.write(dto);}
 
     //사용자 + 날짜 지정 노트 글 리스트 [출력]
-    public List<MyNoteDTO> selectList(String userno){return mynoteDao.selectList(userno);}
+    public List<MyNoteDTO> selectList(String userNo){
+        List<MyNoteDTO> list = mynoteDao.selectList(userNo);
+
+        return list;
+    }
 
     //노트 내용 출력
     public MyNoteDTO selectOne(int noteno){return mynoteDao.selectOne(noteno);}
-
-    // 노트 패스워드 입력
-    public int NoteIsExist(MyNoteDTO dto){return mynoteDao.NoteIsExist(dto);}
 
     //사용자 + 날짜 지정 노트 글 [삭제]
     public int delete(int noteno){return mynoteDao.delete(noteno);}

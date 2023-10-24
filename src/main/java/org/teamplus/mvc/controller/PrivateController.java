@@ -73,21 +73,21 @@ public class PrivateController {
         return "redirect:/private/tasklist";
     }
 
-   /* //메모 read 화면
+    //메모 read 화면
     @GetMapping("/taskread")
     public String taskread(@RequestParam("noteNo") int noteno, Model model){
         MyNoteDTO vo = service.selectOne(noteno);
         model.addAttribute("vo",vo);
 
-        return "dashboard/tasks-read";}*/
+        return "dashboard/tasks-read";}
 
-  /*  //메모 수정 화면
+    //메모 수정 화면
     @GetMapping("/taskmodify")
     public String tasksmodify(@SessionAttribute("user") UsersDTO user,@RequestParam("noteNo")int noteno, Model model){
         MyNoteDTO vo = service.selectOne(noteno);
         model.addAttribute("vo",vo);
 
-        return "dashboard/tasks-modify";}*/
+        return "dashboard/tasks-modify";}
 
     @PostMapping("/modifysave")
     public String modifysave(MyNoteDTO vo){
