@@ -42,6 +42,13 @@
         WHERE noteNo=#{noteNo}
     </select>
 
+    <!-- 노트 패스워드 로그인용 -->
+    <select id="NoteIsExist" parameterType="MyNoteDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM myNote
+        WHERE noteNo=#{noteNO} AND password=#{password}
+    </select>
+
     <!-- 사용자 + 날짜 지정 노트 글 [삭제] -->
     <delete id="delete" parameterType="int">
         DELETE FROM

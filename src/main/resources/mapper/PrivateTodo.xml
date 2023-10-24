@@ -33,7 +33,7 @@
     <!-- 개인 - 할 일 리스트 [수정] -->
     <update id="update" parameterType="PrivateTodoDTO">
         UPDATE PrivateTodo
-        SET title=#{title},description=#{description},status=#{status}
+        SET title=#{title},description=#{description},status=#{status},todoDate=sysdate
         WHERE todoNo=#{todoNo}
     </update>
 

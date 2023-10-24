@@ -215,12 +215,12 @@
 					<div class="flex-grow-1">
 						<input type="hidden" name="status" value="1">
 						<h6 class="fs-14 text-uppercase fw-semibold mb-0">완료 <small
-								class="badge bg-danger align-bottom ms-1 totaltask-badge">[[${count1}]]</small></h6>
+								class="badge bg-danger align-bottom ms-1 totaltask-badge">[[${count4}]]</small></h6>
 					</div>
 				</div>
 				<div data-simplebar class="tasks-wrapper px-3 mx-n3" style="max-height: calc(100vh - 300px)">
 					<div id="reviews-task" class="tasks">
-						<div class="card tasks-box" th:each="vo : ${list1}">
+						<div class="card tasks-box" th:each="vo : ${list4}">
 							<input type="hidden" name="todoNo" th:value="${vo.todoNo}">
 							<div class="card-body">
 								<div class="d-flex mb-2">
@@ -260,6 +260,66 @@
 									</div>
 									<div class="progress rounded-3 progress-sm">
 										<div class="progress-bar bg-danger" role="progressbar" style="width: 100%"
+											 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+								</div>
+							</div>
+							<!--end card-body-->
+						</div>
+					</div>
+					<!--end tasks-->
+				</div>
+			</div>
+			<div class="tasks-list">
+				<div class="d-flex mb-3">
+					<div class="flex-grow-1">
+						<input type="hidden" name="status" value="1">
+						<h6 class="fs-14 text-uppercase fw-semibold mb-0">지난 TODO<small
+								class="badge bg-dark align-bottom ms-1 totaltask-badge">[[${count1}]]</small></h6>
+					</div>
+				</div>
+				<div data-simplebar class="tasks-wrapper px-3 mx-n3" style="max-height: calc(100vh - 300px)">
+					<div id="new-task" class="tasks">
+						<div class="card tasks-box" th:each="vo : ${list1}">
+							<input type="hidden" name="todoNo" th:value="${vo.todoNo}">
+							<div class="card-body">
+								<div class="d-flex mb-2">
+									<h6 class="fs-15 mb-0 flex-grow-1 text-truncate task-title"><a
+											href="/apps-tasks-details" class="d-block" th:value="${vo.title}">[[${vo.title}]]</a>
+									</h6>
+									<div class="dropdown">
+										<a href="javascript:void(0);" class="text-muted" id="dropdownMenuLink2"
+										   data-bs-toggle="dropdown" aria-expanded="false"><i
+												class="ri-more-fill"></i></a>
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink1">
+											<li><a class="dropdown-item" data-bs-toggle="modal" th:attr="data-todono=${vo.todoNo}"
+												   href="#todotaskModal"><i
+													class="ri-eye-fill align-bottom me-2 text-muted"></i> View</a>
+											</li>
+											<li><a class="dropdown-item" data-bs-toggle="modal" th:attr="data-todono=${vo.todoNo}"
+												   href="#todotaskModal"><i
+													class="ri-edit-2-line align-bottom me-2 text-muted"></i>
+												Edit</a></li>
+											<li><a class="dropdown-item" data-bs-toggle="modal" th:attr="data-todono=${vo.todoNo}"
+												   href="#deleteRecordModal"><i
+													class="ri-delete-bin-5-line align-bottom me-2 text-muted"></i>
+												Delete</a></li>
+										</ul>
+									</div>
+								</div>
+								<p class="text-muted" th:value="${vo.description}">[[${vo.description}]]</p>
+								<div class="mb-3">
+									<div class="d-flex mb-1">
+										<div class="flex-grow-1">
+											<h6 class="text-muted mb-0"><span class="text-secondary">100%</span> of 100%
+											</h6>
+										</div>
+										<div class="flex-shrink-0">
+											<span class="text-muted" th:value="${vo.endDate}">[[${vo.endDate}]]</span>
+										</div>
+									</div>
+									<div class="progress rounded-3 progress-sm">
+										<div class="progress-bar bg-dark" role="progressbar" style="width: 100%"
 											 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
 									</div>
 								</div>
@@ -345,7 +405,7 @@
 												id="choices-privacy-status-input" name="status">
 											<option value="0">진행전</option>
 											<option value="2">진행중</option>
-											<option value="1">완료</option>
+											<option value="4">완료</option>
 										</select>
 									</div>
 									<!--end col-->
@@ -398,7 +458,7 @@
 	<th:block layout:fragment="modal">
 
 	</th:block>
-	/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 	<th:block layout:fragment="pagejs">
 		<script>
