@@ -4,7 +4,7 @@
 
 <th:block layout:fragment="pagetitle">
 	<!--page title-->
-	<div th:replace="partials/title-meta :: title-meta('Create Project')"></div>
+	<div th:replace="partials/title-meta :: title-meta('Create Todo')"></div>
 </th:block>
 
 <head>
@@ -14,23 +14,24 @@
 
 <body>
 <div layout:fragment="content">
-	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
-	<form action="/project/create" method="post" name="project-create-form">
-
-
+	<div th:replace="partials/page-title :: page-title('Create Todo','Todo')"></div>
+	<form action="todo-create" method="post" name="todo-create-form">
+		<!-- todo : 유저아이디와 프로젝트 타이틀 사용-->
+		<input name="projectNo" type="hidden" th:value="${projectNo}">
+		<!--<input name="userID" type="hidden" value="">-->
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="card">
 					<div class="card-body">
 						<div class="mb-3">
-							<label class="form-label" for="project-title-input">프로젝트명(Project Title)</label>
-							<input type="text" class="form-control" id="project-title-input" name="title"
-								   placeholder="Enter project title">
+							<label class="form-label" for="todo-title-input">제목(Title)</label>
+							<input type="text" class="form-control" id="todo-title-input" name="title"
+								   placeholder="Enter To Do title">
 						</div>
 
 
 						<div class="mb-3">
-							<label class="form-label">프로젝트 설명(Project Description)</label>
+							<label class="form-label">내용(Description)</label>
 							<div class="centered">
 								<textarea id="editor" name="description"></textarea>
 							</div>
@@ -43,10 +44,10 @@
 					<div class="col-md-6">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title mb-0">프로젝트 시작 예정일 (startDate)</h5>
+								<h5 class="card-title mb-0">TodoDate)</h5>
 							</div>
 							<div class="card-body">
-								<input type="date" name="startDate" class="choices__inner">
+								<input type="date" name="todoDate" class="choices__inner">
 								<!-- <div class="input-group">
                                      <input type="text" id="event-start-date"
                                             class="form-control flatpickr flatpickr-input"
@@ -60,7 +61,7 @@
 					<div class="col-md-6">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title mb-0">프로젝트 종료 예정일 (DueDate)</h5>
+								<h5 class="card-title mb-0">종료 예정일 (DueDate)</h5>
 							</div>
 							<div class="card-body">
 								<input type="date" name="dueDate" class="choices__inner">
@@ -71,17 +72,6 @@
 					<!-- end col -->
 				</div>
 				<!-- end row -->
-
-				<div class="card">
-					<div class="card-header">
-						<h5 class="card-title mb-0">프로젝트 비밀번호 (Password)</h5>
-					</div>
-					<div class="card-body">
-						<input type="password" name="password" class="form-control"
-							   placeholder="프로젝트 참가 시 사용할 비밀번호를 입력하세요.">
-					</div>
-				</div>
-				<!-- end card -->
 
 				<div class="text-end mb-4">
 					<!--<button type="submit" class="btn btn-danger w-sm">Delete</button>
