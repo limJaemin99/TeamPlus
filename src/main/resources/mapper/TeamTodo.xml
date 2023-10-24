@@ -70,6 +70,7 @@
         select *
         from TeamTodo
         where projectNo=#{projectNo}
+        ORDER BY todoDate DESC
     </select>
 
     <!-- 프로젝트 투두리스트 [ProjectNo 와 UserNo별 조회]-->
@@ -82,11 +83,12 @@
 
     <!--프로젝트 투두리스트 [진행상태별 출력]-->
 
-    <select id="selectByStatus" resultType="TeamTodoDTO">
+    <select id="selectByStatus" parameterType="TeamTodoDTO" resultType="TeamTodoDTO">
         select *
         from TeamTodo
         where
-            Status=#{status}
+            projectNo=#{projectNo} AND Status=#{status}
+        ORDER BY todoDate DESC
     </select>
 
     <!-- 프로젝트 To-Do List [제목별 출력] -->
@@ -94,6 +96,7 @@
         SELECT *
         FROM TeamTodo
         WHERE projectNo=#{projectNo} AND title LIKE '%' || #{title} || '%'
+        ORDER BY todoDate DESC
     </select>
 
     <!-- 프로젝트 To-Do List [설명별 출력] -->
@@ -101,6 +104,7 @@
         SELECT *
         FROM TeamTodo
         WHERE projectNo=#{projectNo} AND description LIKE '%' || #{description} || '%'
+        ORDER BY todoDate DESC
     </select>
 
     <!-- 프로젝트 To-Do List [작성자별 출력] -->
@@ -108,9 +112,23 @@
         SELECT *
         FROM TeamTodo
         WHERE projectNo=#{projectNo} AND userNo LIKE '%' || #{userNo} || '%'
+        ORDER BY todoDate DESC
     </select>
 
-    <!-- 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가 -->
+    <!-- To-Do status 상태 [todoNO]로 변경 -->
+    <update id="updateStatus" parameterType="TeamTodoDTO">
+        UPDATE TeamTodo
+        SET status=#{status}
+        WHERE todoNo=#{todoNo}
+    </update>
 
+    <!-- To-Do 리스트 [마감 임박(3일)] 출력 -->
+    <select id="selectListImminent" resultType="TeamTodoDTO">
+        SELECT *
+        FROM TEAMTODO
+        WHERE dueDate BETWEEN SYSDATE AND SYSDATE+4
+        ORDER BY todoDate DESC
+    </select>
+    <!-- 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가 -->
 
 </mapper>

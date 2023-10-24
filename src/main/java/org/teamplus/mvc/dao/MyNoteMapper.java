@@ -27,4 +27,7 @@ public interface MyNoteMapper {
 
     //사용자 + 날짜 지정 노트 글 [수정]
     int update(MyNoteDTO dto);
+
+    //노트 번호 + 패스워드
+    int NoteIsExist(MyNoteDTO dto);
 }

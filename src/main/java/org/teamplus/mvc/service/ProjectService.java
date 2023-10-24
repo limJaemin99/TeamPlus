@@ -63,6 +63,9 @@ public class ProjectService {
     //노트 내용 출력
     public MyNoteDTO selectOne(int noteno){return mynoteDao.selectOne(noteno);}
 
+    // 노트 패스워드 입력
+    public int NoteIsExist(MyNoteDTO dto){return mynoteDao.NoteIsExist(dto);}
+
     //사용자 + 날짜 지정 노트 글 [삭제]
     public int delete(int noteno){return mynoteDao.delete(noteno);}
 
@@ -114,4 +117,13 @@ public class ProjectService {
 
     //[닉네임] 으로 유저 검색
     public UsersDTO selectUserByNickName(String nickName){return userDao.selectByNickName(nickName);}
+
+    //To-Do status 상태 [todoNO]로 변경
+    public int updateStatus(TeamTodoDTO dto){return teamTodoMapper.updateStatus(dto);}
+
+    //Status 기준 검색
+    public List<TeamTodoDTO> getTodoListByStatus(TeamTodoDTO dto){return teamTodoMapper.selectByStatus(dto);}
+
+    //To-Do 리스트 [마감 임박(3일)] 출력
+    public List<TeamTodoDTO> getTodoListImminent(){return teamTodoMapper.selectListImminent();}
 }

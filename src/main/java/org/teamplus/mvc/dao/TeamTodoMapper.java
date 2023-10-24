@@ -45,5 +45,11 @@ public interface TeamTodoMapper {
     //프로젝트 To-Do List [작성자별 출력]
     List<TeamTodoDTO> selectListByUserNo(TeamTodoDTO dto);
 
+    //To-Do status 상태 [todoNO]로 변경
+    int updateStatus(TeamTodoDTO dto);
+
+    //To-Do 리스트 [마감 임박(3일)] 출력
+    List<TeamTodoDTO> selectListImminent();
+
     // 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가
 }
