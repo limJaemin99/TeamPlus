@@ -149,7 +149,7 @@
 									<!-- 프로젝트이름(Project Name) -->
 									<td class="fw-medium" th:text="${status.count}"></td>	<!-- Todo 번호는 타임리프의 status 나 start,end 사용할 예정 -->
 									<td class="fw-medium" th:text="${list.getTitle()}"></td>	<!-- Todo 몇글자 이상일 경우 ... 으로 표시되도록 설정해야함 10.23 (재민) -->
-									<td class="fw-medium" th:text="${list.getDescription()}"></td>
+									<td class="fw-medium" th:utext="${list.getDescription()}"></td>
 									<td class="fw-medium" th:text="${list.getTodoDate()}"></td>
 									<td class="fw-medium" th:text="${list.getDueDate()}"></td>
 									<td class="fw-medium" th:text="${list.getEndDate()}"></td>
