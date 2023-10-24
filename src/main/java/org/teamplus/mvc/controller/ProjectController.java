@@ -35,7 +35,19 @@ public class ProjectController {
 
     //프로젝트 개요
     @GetMapping("/overview")
-    public String trackingView(@ModelAttribute("projectNo") String projectNo) {
+    public String trackingView(@ModelAttribute("projectNo") String projectNo,Model model) {
+        ProjectDTO project = service.selectOne(projectNo);
+        //팀 정보
+        List<TeamDTO> team = service.teamListByProjectNo(projectNo);
+        //팀원 정보 리스트
+        List<UsersDTO> teamList = new ArrayList<>();
+
+        for(TeamDTO list : team){
+            teamList.add(service.selectUserByUserNo(list.getUserNo()));
+        }
+        model.addAttribute("project",project);
+        model.addAttribute("teamList",teamList);
+
         return "dashboard/projects-overview";
     }
 

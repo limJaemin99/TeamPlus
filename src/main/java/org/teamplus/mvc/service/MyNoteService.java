@@ -31,8 +31,4 @@ public class MyNoteService {
 
     //사용자 + 날짜 지정 노트 글 [수정]
     public int update(MyNoteDTO dto){return dao.update(dto);}
-
-    // 노트 패스워드 입력
-    public int NoteIsExist(MyNoteDTO dto){return dao.NoteIsExist(dto);}
-
 }
