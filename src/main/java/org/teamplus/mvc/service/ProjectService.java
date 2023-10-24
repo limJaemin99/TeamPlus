@@ -105,6 +105,13 @@ public class ProjectService {
     //프로젝트 To-Do List [작성자별 출력]
     public List<TeamTodoDTO> getTodoListByUserNo(TeamTodoDTO dto){return teamTodoMapper.selectListByUserNo(dto);}
 
+    // 프로젝트 To-Do [시퀀스 출력]
+    public int getTeamTodoSeq(){return teamTodoMapper.getSequence();}
+
+    //프로젝트 To-Do [생성]
+    public int newTeamTodo(TeamTodoDTO todoDTO){return teamTodoMapper.newTeamTodo(todoDTO);}
+
+
     //[닉네임] 으로 유저 검색
     public UsersDTO selectUserByNickName(String nickName){return userDao.selectByNickName(nickName);}
 }

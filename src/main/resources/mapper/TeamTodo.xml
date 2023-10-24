@@ -13,9 +13,9 @@
     <insert id="newTeamTodo">
         insert
         into
-            TeamTodo(TodoNO,ProjectNo,UserNO,Title,Description,TodoDate,DueDate)
+            TeamTodo(TodoNo,ProjectNo,UserNo,Title,Description,TodoDate,DueDate)
         values
-            (#{todoNo},#{projectNo},#{userNO},#{title},#{description},#{todoDate},#{dueDate})
+            (#{todoNo},#{projectNo},#{userNo},#{title},#{description},#{todoDate},#{dueDate})
 
     </insert>
 
@@ -44,7 +44,7 @@
         set
             Status=#{status}
         where
-            TodoNo=#{todoNO}
+            TodoNo=#{todoNo}
     </update>
 
     <!-- 프로젝트 투두리스트 [진행여부 : 완료 설정] -->
@@ -55,14 +55,14 @@
             EndDate=sysdate,
             Status=1
         where
-            TodoNO=#{todoNO}
+            TodoNo=#{todoNo}
     </update>
 
     <!-- T프로젝트 투두리스트 [삭제] -->
     <delete id="delete">
         delete
         from TeamTodo
-        where TodoNo=#{todoNO}
+        where TodoNo=#{todoNo}
     </delete>
 
     <!-- 프로젝트 투두리스트 [전체 조회] -->
@@ -77,7 +77,7 @@
         select *
         from TeamTodo
         where
-            ProjectNo=#{projectNo} AND UserNo=#{userNO}
+            ProjectNo=#{projectNo} AND UserNo=#{userNo}
     </select>
 
     <!--프로젝트 투두리스트 [진행상태별 출력]-->

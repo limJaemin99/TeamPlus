@@ -5,6 +5,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.teamplus.mvc.dto.ProjectDTO;
 import org.teamplus.mvc.dto.TeamDTO;
 import org.teamplus.mvc.dto.TeamTodoDTO;
@@ -170,12 +171,23 @@ public class ProjectController {
     public String createView() { return "dashboard/project-create"; }
 
     @PostMapping("/create")
-    public String createAction(ProjectDTO dto){
+    public String createAction(ProjectDTO dto, RedirectAttributes redirectAttributes){
         String projectNo="project"+service.getSequence();
         log.info(">>>>> 생성된 프로젝트번호 : {}",projectNo);
         dto.setProjectNo(projectNo);
-        service.newProject(dto);
-        return "redirect:/project/list";
+        int result=service.newProject(dto);
+        if(result==1) {
+            redirectAttributes.addFlashAttribute("message","프로젝트 생성 성공");
+            redirectAttributes.addFlashAttribute("title","Success");
+            log.info(">>>>> 프로젝트 생성 성공 여부(성공:1/실패:0) : {}",result);
+//            return "redirect:/project/create";
+        }else {
+            redirectAttributes.addFlashAttribute("message","프로젝트 생성 실패");
+            redirectAttributes.addFlashAttribute("title","Fail");
+            log.info(">>>>> 프로젝트 생성 성공 여부(성공:1/실패:0) : {}",result);
+        }
+        redirectAttributes.addFlashAttribute("result",result);
+        return "redirect:/project/create";
     }
 
     //프로젝트 참가 화면
@@ -242,4 +254,25 @@ public class ProjectController {
         return "dashboard/RnR";
     }
 
+    // 할 일 생성 화면
+    @GetMapping("/todo-create")
+    public String createTodoView(@SessionAttribute("user")UsersDTO user,
+                                 @ModelAttribute("projectNo") String projectNo) {
+        return "dashboard/team-todo-create";
+    }
+
+    @PostMapping("/todo-create")
+    public String createTodoAction(TeamTodoDTO dto,@SessionAttribute("user")UsersDTO user,
+                                   @ModelAttribute("projectNo") String projectNo){
+        // TODO 현재 임의값으로 테스트 완료, 결로 설정 후 테스트 필요
+        log.info(">>>> projectNo : {}",projectNo);
+        String todoNo = service.selectOne(projectNo).getTitle()+"_"+user.getId()+"_"+service.getTeamTodoSeq();
+        log.info("::::::: 팀할일번호: {}",todoNo);
+        dto.setTodoNo(todoNo);
+        dto.setUserNo(user.getUserNo());
+        int result = service.newTeamTodo(dto);
+        log.info("할일생성 성공 여부 : {}",result);
+        return "redirect:/project/home";
+
+    }
 }
