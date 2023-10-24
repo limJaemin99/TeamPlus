@@ -17,7 +17,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("org.iclass.rest.controller"))
+                .apis(RequestHandlerSelectors.basePackage("org.teamplus"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());

@@ -52,6 +52,15 @@ public class TeamPlusRestController {
 
 //━━━━━ [R&R 비동기 컨트롤러] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
 
+    //서버 세션을 비동기 js 로 넘기기
+    @GetMapping("/getsession")
+    public UsersDTO getSessionData(@SessionAttribute("user") UsersDTO user) {
+        // 세션 데이터를 가져오는 코드를 작성합니다.
+        UsersDTO session = user;
+
+        return session;
+    }
+
     //검색
     @GetMapping("/project/RnR/search/{projectNo}/{condition}/{word}")
     public SearchDTO search(@PathVariable String projectNo,@PathVariable String condition,@PathVariable String word){
@@ -61,9 +70,7 @@ public class TeamPlusRestController {
 
         switch (condition){
             case "all" :
-//            case "title" :
                 searchDTO.setTeamTodoList(service.getTodoList(projectNo));
-                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
                 for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
                     inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
                 }
@@ -72,7 +79,6 @@ public class TeamPlusRestController {
                 return searchDTO;
             case "title" :
                 searchDTO.setTeamTodoList(service.getTodoListByTitle(teamTodoDTO));
-                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
                 for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
                     inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
                 }
@@ -81,7 +87,6 @@ public class TeamPlusRestController {
                 return searchDTO;
             case "description" :
                 searchDTO.setTeamTodoList(service.getTodoListByDescription(teamTodoDTO));
-                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
                 for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
                     inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
                 }
@@ -92,26 +97,50 @@ public class TeamPlusRestController {
                 String userNo = service.selectUserByNickName(word).getUserNo();
                 teamTodoDTO.setUserNo(userNo);
                 searchDTO.setTeamTodoList(service.getTodoListByUserNo(teamTodoDTO));
-                log.info("━━━━━━━━━━ todo 리스트 : {}",searchDTO.getTeamTodoList());
                 for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
                     inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
                 }
                 searchDTO.setUsersList(inchagerList);
                 log.info("‼ 작성자 검색 실행 완료 ‼");
                 return searchDTO;
+            case "imminent" :
+                searchDTO.setTeamTodoList(service.getTodoListImminent());
+                for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
+                    inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
+                }
+                searchDTO.setUsersList(inchagerList);
+                log.info("‼ 마감 임박 검색 실행 완료 ‼");
+                return searchDTO;
         }
 
         return searchDTO;
     }
 
-    //서버 세션을 비동기 js 로 넘기기
-    @GetMapping("/getsession")
-    public UsersDTO getSessionData(@SessionAttribute("user") UsersDTO user) {
-        // 세션 데이터를 가져오는 코드를 작성합니다.
-        UsersDTO session = user;
+    //Status 1개씩 변경
+    @PatchMapping("/project/RnR/update")
+    public Map<String,Object> changeStatus(@RequestBody @Valid TeamTodoDTO teamTodoDTO){
+        log.info("━━━━━━━━━━ dto : {}",teamTodoDTO);
+        Map<String,Object> map = new HashMap<>();
+        int count = service.updateStatus(teamTodoDTO);
+        map.put("count",count);
 
-        return session;
+        return map;
     }
 
+    //Status 기준 검색
+    @GetMapping("/project/RnR/search/{projectNo}/{status}")
+    public SearchDTO searchByStatus(@PathVariable String projectNo,@PathVariable int status){
+        TeamTodoDTO teamTodoDTO = TeamTodoDTO.builder().projectNo(projectNo).status(status).build();
+        SearchDTO searchDTO = new SearchDTO();
+        List<UsersDTO> inchagerList = new ArrayList<>();
 
+        searchDTO.setTeamTodoList(service.getTodoListByStatus(teamTodoDTO));
+        for(TeamTodoDTO dto : searchDTO.getTeamTodoList()){
+            inchagerList.add(service.selectUserByUserNo(dto.getUserNo()));
+        }
+        searchDTO.setUsersList(inchagerList);
+        log.info("‼ Status 검색 실행 완료 ‼");
+
+        return searchDTO;
+    }
 }

@@ -19,7 +19,9 @@ function getSession(){
     }
 }
 window.addEventListener('load', getSession);
+
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
 //검색 버튼
 const search = function(){
     const xhr = new XMLHttpRequest();   //비동기 통신 객체 생성
@@ -29,7 +31,7 @@ const search = function(){
     console.log('현재 선택된 검색 조건 : '+condition)
     let word = document.getElementById('search-word').value;
     console.log(word)
-    if(condition != 'all') {
+    if(condition != 'all' && condition != 'imminent') {
         if (word.trim().length == 0) {
             alert("검색어를 1글자 이상 입력해주세요.\n※ 검색어는 공백이 될 수 없습니다.")
             return;
@@ -46,13 +48,17 @@ const search = function(){
             const teamTodoList = searchDTO.teamTodoList;
             const usersList = searchDTO.usersList;
 
-            console.log(teamTodoList)
-            console.log(usersList)
-
-            makeList(teamTodoList,usersList)  //makeList 함수는 아래에 있음
+            if(teamTodoList.length == 0)
+                nullList()
+            else
+                makeList(teamTodoList,usersList)
         } else {
-            console.error('오류1',xhr.status)
-            console.error('오류2',xhr.response)
+            if(xhr.status === 500 && condition == 'incharge')
+                nullList()
+            else {
+                console.error('오류1', xhr.status)
+                console.error('오류2', xhr.response)
+            }
         }
     }
 }
@@ -81,32 +87,35 @@ const makeList = function (teamTodoList,usersList){
             status = `<span class="badge badge-soft-danger" id="currentStatus${count}">오류 수정</span>`;
 
         let statusButton;
+        let todo = item.todoNo;
+        console.log("▶▶▶▶▶ Todo : "+todo)
         if(item.userNo == currentSession.userNo)
             statusButton = "<div class='avatar-group-item'>\n" +
-                `    <a href='javascript:changeStatus(1,${count})' class='d-inline-block'>\n` +
+                `    <a href=\'javascript:changeStatus(1,${count},${todo})\' class='d-inline-block'>\n` +
                 "        <img src='/assets/images/status/green.png' class='rounded-circle avatar-xxs'>\n" +
                 "    </a>\n" +
                 "</div>\n" +
                 "<div class='avatar-group-item'>\n" +
-                `    <a href='javascript:changeStatus(4,${count})' class='d-inline-block'>\n` +
+                `    <a href='javascript:changeStatus(4,${count},${item.todoNo})' class='d-inline-block'>\n` +
                 "        <img src='/assets/images/status/red.png' class='rounded-circle avatar-xxs'>\n" +
                 "    </a>\n" +
                 "</div>\n" +
                 "<div class='avatar-group-item'>\n" +
-                `    <a href='javascript:changeStatus(2,${count})' class='d-inline-block'>\n` +
+                `    <a href='javascript:changeStatus(2,${count},${item.todoNo})' class='d-inline-block'>\n` +
                 "        <img src='/assets/images/status/indigo.png' class='rounded-circle avatar-xxs'>\n" +
                 "    </a>\n" +
                 "</div>\n" +
                 "<div class='avatar-group-item'>\n" +
-                `    <a href='javascript:changeStatus(0,${count})' class='d-inline-block'>\n` +
+                `    <a href='javascript:changeStatus(0,${count},${item.todoNo})' class='d-inline-block'>\n` +
                 "        <img src='/assets/images/status/blue.png' class='rounded-circle avatar-xxs'>\n" +
                 "    </a>\n" +
                 "</div>\n" +
                 "<div class='avatar-group-item'>\n" +
-                `    <a href='javascript:changeStatus(3,${count})' class='d-inline-block'>\n` +
+                `    <a href='javascript:changeStatus(3,${count},${item.todoNo})' class='d-inline-block'>\n` +
                 "        <img src='/assets/images/status/yellow.png' class='rounded-circle avatar-xxs'>\n" +
                 "    </a>\n" +
-                "</div>";
+                "</div>\n" +
+                `<div id='success${count}' style='margin-left: 10px;'></div>`;
         else
             statusButton = "<div class='avatar-group-item'>\n" +
                 "    <a class='d-inline-block'>\n" +
@@ -167,30 +176,114 @@ const makeList = function (teamTodoList,usersList){
     });
 }
 
+//검색 결과 출력할 내용이 없을 경우
+const nullList = function() {
+    document.querySelector('tbody').innerHTML =''
+    const $tr = document.createElement("tr");
+    const $temp =
+        `<td colspan="10" class="fw-medium" style="text-align: center;">
+            <img src="/assets/images/util/searchFail.png" width="100px;" style="margin: 30px;">
+            <h1>검색 결과가 없습니다</h1>
+         </td>`
+    $tr.innerHTML=$temp;
+    document.querySelector('tbody').appendChild($tr);
+}
+
 //status 변경하는 함수
-function changeStatus(s,c){
+function changeStatus(s,c,todoNo){
     var status = document.getElementById('currentStatus'+c)
+
+    function update() {
+        let success = 'success'+c
+        const successDiv = document.getElementById(success)
+        const img = document.createElement('img')
+        img.src = '/assets/images/util/success.gif'
+        img.classList = 'rounded-circle avatar-xxs gu-unselectable'
+
+        let isExist = (successDiv.innerHTML.trim().length == 0)
+
+        const jsObj = {
+            todoNo: todoNo,
+            status: s
+        }
+
+        const jsStr = JSON.stringify(jsObj)
+
+        const xhr = new XMLHttpRequest()
+        xhr.open('PATCH', '/project/RnR/update')
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.send(jsStr)
+        xhr.onload = function () {
+            const result = JSON.parse(xhr.response)
+            if (xhr.status === 200 || xhr.status === 201) {
+                if(isExist) {
+                    if (result.count == 1) {
+                        successDiv.appendChild(img)
+                        setTimeout(()=>{document.getElementById(success).innerHTML = ''}, 1500)
+                    } else {
+                        img.src = '/assets/images/util/fail.gif'
+                        successDiv.appendChild(img)
+                        setTimeout(()=>{document.getElementById(success).innerHTML = ''}, 1500)
+                    }
+                }
+            }
+        }
+    }
 
     switch (s){
         case 0 :
             status.classList = 'badge badge-soft-info';
             status.textContent = '진행중';
+            update();
             return;
         case 1:
             status.classList = 'badge badge-soft-success';
             status.textContent = '작업 완료';
+            update();
             return;
         case 2:
             status.classList = 'badge badge-soft-primary';
             status.textContent = '작업 예정';
+            update();
             return;
         case 3:
             status.classList = 'badge badge-soft-warning';
             status.textContent = '검토 요청';
+            update();
             return;
         case 4:
             status.classList = 'badge badge-soft-danger';
             status.textContent = '오류 수정';
+            update();
             return;
     }
 }
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+//Status 기준 검색
+const statusSearch = function() {
+    const xhr = new XMLHttpRequest();
+    var projectNo = document.getElementById('projectNo').value
+    let status = document.getElementById('statusSelect').value
+
+    xhr.open('GET','/project/RnR/search/'+projectNo+'/'+status)
+    xhr.send()
+    xhr.onload = function() {
+        if(xhr.status === 200 || xhr.status === 201){
+            const searchDTO = JSON.parse(xhr.response)
+
+            const teamTodoList = searchDTO.teamTodoList;
+            const usersList = searchDTO.usersList;
+            if(teamTodoList.length == 0)
+                nullList()
+            else
+                makeList(teamTodoList,usersList)
+        } else {
+            console.error('오류1',xhr.status)
+            console.error('오류2',xhr.response)
+        }
+    }
+}
+
+document.querySelector('#statusSearch').addEventListener('click',statusSearch)

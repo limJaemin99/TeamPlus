@@ -26,13 +26,14 @@
 							<i class="ri-search-line search-icon"></i>
 						</div>
 					</div>
-					<div class="col-lg-1">
+					<div class="col-lg-2" style="width: 160px;">
 						<div class="mb-3">
 							<select id="condition" data-choices data-choices-text-unique-true>
 								<option value="all" selected>전체</option>
 								<option value="title">제목</option>
 								<option value="description">내용</option>
 								<option value="incharge">작성자</option>
+								<option value="imminent">마감 임박</option>
 							</select>
 						</div>
 					</div>
@@ -43,8 +44,29 @@
 							</button>
 						</div>
 					</div>
-					<div class="col-lg-auto" id="searchInfo" style="padding: 10px 0px;">
+					<div class="col-lg-auto" id="searchInfo" style="padding: 10px;">
 
+					</div>
+					<div class="col-lg-auto" style="padding-top: 5px; padding-right: 20px;">
+							<h3 style="margin: 0px;">OR</h3>
+					</div>
+					<div class="col-lg-2" style="width: 210px;">
+						<div class="mb-3">
+							<select id="statusSelect" data-choices data-choices-text-unique-true>
+								<option value="0">Status : 진행중</option>
+								<option value="1">Status : 작업 완료</option>
+								<option value="2">Status : 작업 예정</option>
+								<option value="3" selected>Status : 검토 요청</option>
+								<option value="4">Status : 오류 수정</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-lg-auto">
+						<div class="hstack gap-2">
+							<button type="button" id="statusSearch" class="btn btn-primary">	<!-- Todo 검색 버튼 10.23 (재민) -->
+								<i class="ri-search-2-line align-bottom me-1"></i>검색
+							</button>
+						</div>
 					</div>
 					<div class="col-auto ms-sm-auto">
 						<div class="avatar-group" id="newMembar">
@@ -154,32 +176,34 @@
 										</th:block>
 									</td>
 									<td class="fw-medium">
-										<div class="avatar-group flex-nowrap">
+										<div class="avatar-group flex-nowrap" style="width: 50px;">
 											<th:block th:if="${session.user.userNo == list.getUserNo()}">
 												<div class="avatar-group-item">
-													<a th:onclick="|javascript:changeStatus(1,${status.count})|" class="d-inline-block">
+													<a th:href="|javascript:changeStatus(1,${status.count},${list.getTodoNo()})|" class="d-inline-block">
 														<img src="/assets/images/status/green.png" class="rounded-circle avatar-xxs">
 													</a>
 												</div>
 												<div class="avatar-group-item">
-													<a th:onclick="|javascript:changeStatus(4,${status.count})|" class="d-inline-block">
+													<a th:href="|javascript:changeStatus(4,${status.count},${list.getTodoNo()})|" class="d-inline-block">
 														<img src="/assets/images/status/red.png" class="rounded-circle avatar-xxs">
 													</a>
 												</div>
 												<div class="avatar-group-item">
-													<a th:onclick="|javascript:changeStatus(2,${status.count})|" class="d-inline-block">
+													<a th:href="|javascript:changeStatus(2,${status.count},${list.getTodoNo()})|" class="d-inline-block">
 														<img src="/assets/images/status/indigo.png" class="rounded-circle avatar-xxs">
 													</a>
 												</div>
 												<div class="avatar-group-item">
-													<a th:onclick="|javascript:changeStatus(0,${status.count})|" class="d-inline-block">
+													<a th:href="|javascript:changeStatus(0,${status.count},${list.getTodoNo()})|" class="d-inline-block">
 														<img src="/assets/images/status/blue.png" class="rounded-circle avatar-xxs">
 													</a>
 												</div>
 												<div class="avatar-group-item">
-													<a th:onclick="|javascript:changeStatus(3,${status.count})|" class="d-inline-block">
+													<a th:href="|javascript:changeStatus(3,${status.count},${list.getTodoNo()})|" class="d-inline-block">
 														<img src="/assets/images/status/yellow.png" class="rounded-circle avatar-xxs">
 													</a>
+												</div>
+												<div th:id="success+${status.count}" style="margin-left: 10px;">
 												</div>
 											</th:block>
 
@@ -578,6 +602,8 @@
 
 	<th:block layout:fragment="pagejs">
 		<script type="text/javascript">
+
+			//[작성자] 선택시 경고문 입력 함수 + [전체] 선택시 input 초기화 및 disabled
 			const searchInfo = document.getElementById('searchInfo');
 			const span = document.createElement('span');
 			const searchInput = document.getElementById('search-word');
@@ -592,42 +618,13 @@
 				} else
 					span.textContent = '';
 
-				if(e.target.value == 'all') {
+				if(e.target.value == 'all' || e.target.value == 'imminent') {
 					searchInput.value = '';
 					searchInput.disabled =  true;
 				} else
 					searchInput.disabled =  false;
 
 			});
-
-
-			function changeStatus(s,c){
-				var status = document.getElementById('currentStatus'+c)
-
-				switch (s){
-					case 0 :
-						status.classList = 'badge badge-soft-info';
-						status.textContent = '진행중';
-						return;
-					case 1:
-						status.classList = 'badge badge-soft-success';
-						status.textContent = '작업 완료';
-						return;
-					case 2:
-						status.classList = 'badge badge-soft-primary';
-						status.textContent = '작업 예정';
-						return;
-					case 3:
-						status.classList = 'badge badge-soft-warning';
-						status.textContent = '검토 요청';
-						return;
-					case 4:
-						status.classList = 'badge badge-soft-danger';
-						status.textContent = '오류 수정';
-						return;
-				}
-
-			}
 		</script>
 
 		<!-- Dashboard init -->
