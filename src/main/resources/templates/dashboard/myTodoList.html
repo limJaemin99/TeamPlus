@@ -1,0 +1,141 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{project-index-layout}">
+
+<th:block layout:fragment="pagetitle">
+    <!--page title-->
+    <div th:replace="partials/title-meta :: title-meta('My TodoList')"></div>
+</th:block>
+
+<head>
+    <!-- jsvectormap css -->
+    <link href="/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css"/>
+
+    <!--Swiper slider css2-->
+    <link href="/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- swiper css -->
+    <link rel="stylesheet" href="/assets/libs/swiper/swiper-bundle.min.css">
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col">
+
+            <div class="h-100">
+                <div class="row mb-3 pb-1">
+                    <div class="col-12">
+                        <div class="d-flex align-items-lg-center flex-lg-row flex-column">
+                            <div class="flex-grow-1">
+                                <!-- ▶▶▶ 사용자의 투두 리스트 ◀◀◀ -->
+                                <th:block th:each="todo,status:${list}">
+                                    <div class="col-xxl-3 col-sm-6">
+                                        <div th:class="${status.count%5==0?'card profile-project-card shadow-none profile-project-primary'
+														:(status.count%4==0?'card profile-project-card shadow-none profile-project-info'
+														:(status.count%3==0?'card profile-project-card shadow-none profile-project-success'
+														:(status.count%2==0?'card profile-project-card shadow-none profile-project-warning'
+														:'card profile-project-card shadow-none profile-project-danger')))}">
+                                            <div class="card-body p-8">
+                                                <div class="d-flex">
+                                                    <div class="flex-grow-1 text-muted overflow-hidden">
+                                                        <h5 class="fs-14 text-truncate">
+                                                            <!-- todo ★ 여기에 할일 링크 해야함 10.24 (일도) _ th:href 사용 -->
+                                                            <a href="#" class="fw-semibold text-dark"
+                                                               th:text="${todo.getTitle()}"></a>
+                                                        </h5>
+                                                        <p class="text-muted text-truncate mb-0">
+                                                            <span class="text-dark"
+                                                                  th:text="${todo.getDescription()}"></span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="flex-shrink-0 ms-2">
+                                                        <th:block th:if="${todo.getStatus() == 0}">
+                                                            <div class="badge badge-soft-warning fs-10">진행중</div>
+                                                        </th:block>
+                                                        <th:block th:if="${todo.getStatus() == 1}">
+                                                            <div class="badge badge-soft-success fs-10">완료</div>
+                                                        </th:block>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex mt-4">
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            <!--<div>
+                                                                <h5 class="fs-12 text-muted mb-0">Members :</h5>
+                                                            </div>
+                                                            <div class="avatar-group">
+                                                                <th:block th:each="member,status: ${members.get(list.getProjectNo())}">
+                                                                    <span th:if="${status.count <= 3}">
+                                                                        <div class="avatar-group-item">
+                                                                            <div class="avatar-xs">
+                                                                                <div class="avatar-title rounded-circle bg-light text-primary" th:text="${member.charAt(0)}"></div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </span>
+                                                                    <span th:if="${status.count == 4}">
+                                                                        <div class="avatar-group-item">
+                                                                            <div class="avatar-xs">
+                                                                                <div class="avatar-title rounded-circle bg-primary">+[[${status.size-3}]]</div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </span>
+                                                                </th:block>
+                                                            </div>-->
+                                                            <div class="flex-grow-1 text-muted overflow-hidden"
+                                                                 style="text-align: right;">
+                                                                <th:block th:if="${todo.getEndDate() == null}">
+                                                                    <h4 style="padding-top: 10px;">
+                                                                        <a href="" style="font-weight: bold">종료 예정일</a>
+                                                                        <br>
+                                                                        <a href="" th:text="${todo.getDueDate()}"></a>
+                                                                    </h4>
+                                                                </th:block>
+                                                                <th:block th:if="${todo.getEndDate() != null}">
+                                                                    <h4 style="padding-top: 10px;">
+                                                                        <a style="color: darkgrey; font-weight: bold;">종료일</a>
+                                                                        <br>
+                                                                        <a style="color: darkgrey"
+                                                                           th:text="${todo.getEndDate()}"></a>
+                                                                    </h4>
+                                                                </th:block>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- end card body -->
+                                        </div>
+                                        <!-- end card -->
+                                    </div>
+                                </th:block>
+                                <!-- Project List End -->
+                            </div>
+                        </div><!-- end card header -->
+                    </div>
+                    <!--end col-->
+                </div>
+                <!--end row-->
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="pagejs">
+
+    <!-- apexcharts -->
+    <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <!-- Vector map-->
+    <script src="/assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
+    <script src="/assets/libs/jsvectormap/maps/world-merc.js"></script>
+
+    <!--Swiper slider js-->
+    <script src="/assets/libs/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Dashboard init -->
+    <script src="/assets/js/pages/dashboard-ecommerce.init.js"></script>
+</th:block>
+</body>
+
+</html>
