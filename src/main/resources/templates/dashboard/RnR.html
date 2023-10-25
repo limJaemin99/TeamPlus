@@ -240,7 +240,7 @@
 									<td class="fw-medium">
 										<ul class="pagination pagination-separated pagination-sm mb-0">
 											<li class="page-item">
-												<a href="#" class="page-link">
+												<a th:href="|javascript:comments(${status.count},${list.getTodoNo()})|" class="page-link" th:id="comments+${status.count}">
 													댓글
 												</a>
 											</li>

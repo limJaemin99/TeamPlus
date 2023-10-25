@@ -20,7 +20,8 @@
     <select id="selectByCommentNo" resultType="SubCommentsDTO">
         select *
         from SubComments
-        where CommentNo=#{commentNO}
+        where CommentNo=#{commentNo}
+        ORDER BY regDate
     </select>
 
 

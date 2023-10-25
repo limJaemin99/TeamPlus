@@ -10,11 +10,11 @@
     </insert>
 
     <!-- 댓글 리스트 [출력] -->
-    <select id="selectList" parameterType="String" resultType="CommentsDTO">
+    <select id="selectList" resultType="CommentsDTO">
         SELECT *
         FROM comments
         WHERE todoNo=#{todoNo}
-        ORDER BY regDate DESC
+        ORDER BY regDate
     </select>
 
 </mapper>

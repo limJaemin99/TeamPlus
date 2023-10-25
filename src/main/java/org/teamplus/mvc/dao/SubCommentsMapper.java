@@ -14,5 +14,5 @@ public interface SubCommentsMapper {
     List<SubCommentsDTO> selectList();
 
     // 대댓글 [댓글별 조회]
-    SubCommentsDTO selectByCommentNo(int commentNo);
+    List<SubCommentsDTO> selectByCommentNo(int commentNo);
 }

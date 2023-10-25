@@ -18,12 +18,12 @@ public class SubCommentsService {
     }
 
     // 대댓글 [전체 출력]
-    public List<SubCommentsDTO> selectList(){
+    public List<SubCommentsDTO> selectList(int commentNo){
         return dao.selectList();
     }
 
     // 대댓글 [댓글별 조회]
-    public SubCommentsDTO selectByCommentNo(int commentNo){
+    public List<SubCommentsDTO> selectByCommentNo(int commentNo){
         return dao.selectByCommentNo(commentNo);
     }
 

@@ -22,6 +22,8 @@ public class ProjectService {
     private final MyNoteMapper mynoteDao;
     private final PrivateTodoMapper privateTodoMapper;
     private final TeamTodoMapper teamTodoMapper;
+    private final CommentsMapper commentsMapper;
+    private final SubCommentsMapper subCommentsMapper;
 
     //프로젝트 번호 시퀀스
     public int getSequence(){return projectDao.getSequence();}
@@ -171,4 +173,10 @@ public class ProjectService {
 
         return pageResponseDTO;
     }
+
+    //[댓글] 리스트 출력
+    public List<CommentsDTO> getCommentsList(String todoNo){return commentsMapper.selectList(todoNo);}
+
+    //[대댓글] 리스트 출력
+    public List<SubCommentsDTO> getSubCommentsList(int commentNo){return subCommentsMapper.selectByCommentNo(commentNo);}
 }
