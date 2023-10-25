@@ -129,6 +129,59 @@
         WHERE dueDate BETWEEN SYSDATE AND SYSDATE+4
         ORDER BY todoDate DESC
     </select>
+
+    <!-- 페이지네이션 -->
+    <select id="getPageList" resultType="TeamTodoDTO">
+        SELECT *
+        FROM
+            (SELECT rownum r , f.*
+             FROM
+                 (SELECT *
+                  FROM TeamTodo
+                  WHERE projectNo=#{projectNo} <include refid="search"/>
+                  ORDER BY todoDate DESC) f)
+        WHERE r BETWEEN #{start} AND #{end}
+    </select>
+
+    <!-- 페이지네이션 [Status 검색] -->
+    <select id="getPageListByStatus" resultType="TeamTodoDTO">
+        SELECT *
+        FROM
+            (SELECT rownum r , f.*
+             FROM
+                 (SELECT *
+                  FROM TeamTodo
+                  WHERE projectNo=#{projectNo} AND status=#{status}
+                  ORDER BY todoDate DESC) f)
+        WHERE r BETWEEN #{start} AND #{end}
+    </select>
+
+    <!-- [페이지네이션] 페이지 수를 계산하기 위한 쿼리 -->
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM TeamTodo
+        WHERE projectNo=#{projectNo} <include refid="search"/>
+    </select>
+
+    <!-- [페이지네이션] 페이지 수를 계산하기 위한 쿼리 [Status 검색용] -->
+    <select id="countByStatus" resultType="int">
+        SELECT COUNT(*)
+        FROM TeamTodo
+        WHERE projectNo=#{projectNo} AND status=#{status}
+    </select>
+
+    <!-- 일반 검색 -->
+    <sql id="search">
+            <if test="type != null and type.length > 0">
+                <trim prefix="and">
+                        <if	test="type=='title'.toString()"> title like '%' || #{keyword} || '%' </if>
+                        <if	test="type=='description'.toString()"> description like '%' || #{keyword} || '%' </if>
+                        <if	test="type=='incharge'.toString()"> userNo like '%' || #{userNo} || '%' </if>
+                        <if	test="type=='imminent'.toString()"> dueDate BETWEEN SYSDATE AND SYSDATE+4 </if>
+                </trim>
+            </if>
+    </sql>
+
     <!-- 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가 -->
 
 </mapper>

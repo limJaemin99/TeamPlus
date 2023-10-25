@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import org.teamplus.mvc.dto.MailCodeDTO;
+import org.teamplus.mvc.util.MailCodeDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.UsersService;
 import org.teamplus.mvc.util.MailCheck;

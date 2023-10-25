@@ -1,4 +1,4 @@
-package org.teamplus.mvc.dto;
+package org.teamplus.mvc.util;
 
 import lombok.*;
 

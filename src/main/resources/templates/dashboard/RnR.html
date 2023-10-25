@@ -17,6 +17,7 @@
 		<div th:replace="partials/page-title :: page-title('R&R &nbsp;:&nbsp; Roles & Responsibilities','Projects')"></div>
 
 		<input type="hidden" id="projectNo" th:value="${projectNo}">
+		<input type="hidden" id="page" th:value="${page}">
 		<div class="card">
 			<div class="card-body">
 				<div class="row g-2">
@@ -124,7 +125,7 @@
 						</div>
 					</div><!-- end cardheader -->
 					<div class="card-body">
-						<div class="">
+
 							<table class="table table-nowrap table-centered align-middle">
 								<thead class="bg-light text-muted">
 								<tr>
@@ -145,9 +146,9 @@
 								<tbody>
 								<!-- tr 태그 안에 반복문 사용하여 데이터 출력, 반복 시 아래 6개 tr 태그 삭제 -->
 								<th:block th:each="list,status:${todoList}">
-								<tr>	<!-- Todo 비동기로 바로 할지? 고민 10.23 (재민) -->
+								<tr>
 									<!-- 프로젝트이름(Project Name) -->
-									<td class="fw-medium" th:text="${status.count}"></td>	<!-- Todo 번호는 타임리프의 status 나 start,end 사용할 예정 -->
+									<td class="fw-medium" th:text="${(page -1)*10+status.count}"></td>	<!-- Todo 번호는 타임리프의 status 나 start,end 사용할 예정 -->
 									<td class="fw-medium" th:text="${list.getTitle()}"></td>	<!-- Todo 몇글자 이상일 경우 ... 으로 표시되도록 설정해야함 10.23 (재민) -->
 									<td class="fw-medium" th:utext="${list.getDescription()}"></td>
 									<td class="fw-medium" th:text="${list.getTodoDate()}"></td>
@@ -249,6 +250,74 @@
 								</th:block>
 								</tbody>
 							</table>
+						<div id="mainDiv">
+							<ul class="pagination pagination-wrap pagination-sm mb-0" id="main">
+								<li class="page-item" style="margin-right: auto"> ※ 전체 글 개수 : [[${ paging.totalCount }]] </li>
+								<th:block th:with="start=${paging.startPage},last=${paging.endPage}" id="pagination">
+									<!-- 이전 글 버튼 -->
+									<th:block th:if="${paging.startPage == 1}">
+										<!-- 페이지 시작 번호가 1인 경우 -->
+										<li class="page-item disabled">
+											<a th:href="@{RnR(projectNo=${projectNo},page=1)}" th:data-num="1" class="page-link" style="background-color: #EFEFEF"><<</a>
+										</li>
+										<span th:if="${page == 1}">
+														<li class="page-item disabled">
+															<a th:href="@{RnR(projectNo=${projectNo},page=${page -1})}" th:data-num="${page -1}" class="page-link" style="background-color: #EFEFEF"><</a>
+														</li>
+													</span>
+										<span th:if="${page != 1}">
+														<li class="page-item">
+															<a th:href="@{RnR(projectNo=${projectNo},page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
+														</li>
+													</span>
+									</th:block>
+									<th:block th:if="${paging.startPage != 1}">
+										<!-- 페이지 시작 번호가 1이 아닐 경우 -->
+										<li class="page-item">
+											<a th:href="@{RnR(projectNo=${projectNo},page=1)}" th:data-num="1" class="page-link"><<</a>
+										</li>
+										<li class="page-item">
+											<a th:href="@{RnR(projectNo=${projectNo},page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
+										</li>
+									</th:block>
+
+									<!-- 페이지 번호 -->
+									<th:block th:each="i:${#numbers.sequence(start,last)}">
+										<li class="page-item">
+											<a th:href="@{RnR(projectNo=${projectNo},page=${i})}"
+											   th:text="${i}" th:data-num="${i}"
+											   th:class="${i==page}?'page-link active':'page-link'"></a>
+										</li>
+									</th:block>
+
+									<!-- 다음 글 버튼 -->
+									<th:block th:if="${paging.endPage == paging.totalPage}">
+										<!-- 현재 페이지가 마지막 페이지인 경우 -->
+										<span th:if="${page == paging.totalPage}">
+														<li class="page-item disabled">
+															<a th:href="@{RnR(projectNo=${projectNo},page=${page +1})}" th:data-num="${page +1}" class="page-link" style="background-color: #EFEFEF">></a>
+														</li>
+													</span>
+										<span th:if="${page != paging.totalPage}">
+														<li class="page-item">
+															<a th:href="@{RnR(projectNo=${projectNo},page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
+														</li>
+													</span>
+										<li class="page-item disabled">
+											<a th:href="@{RnR(projectNo=${projectNo},page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link" style="background-color: #EFEFEF">>></a>
+										</li>
+									</th:block>
+									<th:block th:if="${paging.endPage != paging.totalPage}">
+										<!-- 현재 페이지가 마지막 페이지가 아닌 경우 -->
+										<li class="page-item">
+											<a th:href="@{RnR(projectNo=${projectNo},page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
+										</li>
+										<li class="page-item">
+											<a th:href="@{RnR(projectNo=${projectNo},page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link">>></a>
+										</li>
+									</th:block>
+								</th:block>
+							</ul>
 					</div><!-- end card body -->
 				</div><!-- end card -->
 			</div><!-- end col -->
