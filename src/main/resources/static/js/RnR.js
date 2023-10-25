@@ -165,7 +165,7 @@ const makeList = function (searchDTO){
              <td class="fw-medium">
                 <ul class="pagination pagination-separated pagination-sm mb-0">
                     <li class="page-item">
-                        <a href="#" class="page-link">
+                        <a href="javascript:comments(${(searchDTO.page -1)*10+count+1},${item.todoNo})" id="comments${(searchDTO.page -1)*10+count+1}" class="page-link">
                             댓글
                         </a>
                     </li>
@@ -377,7 +377,7 @@ document.querySelector('#statusSearch').addEventListener('click',statusSearch)
 
 //[페이지 이동] - 첫번째 페이지
 const movePage = function(pageNum){
-    const xhr = new XMLHttpRequest();   //비동기 통신 객체 생성
+    const xhr = new XMLHttpRequest();
     const projectNo = document.getElementById('projectNo').value
     let condition = document.getElementById('condition').value
     let word = document.getElementById('search-word').value;
@@ -423,3 +423,197 @@ document.querySelector('#mainDiv').addEventListener('click', e => {
         }
     }
 });
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+//● 댓글 버튼 (누르면 댓글창 생성/삭제)
+let $tr;
+let current$tr;
+function comments(c,todoNo) {
+    const id = 'comments'+c
+    console.log('id = '+id)
+    console.log('todoNo = '+todoNo)
+
+
+    let count;
+    if(c%10 == 0)
+        count = 10
+    else
+        count = c%10
+
+    if ($tr)
+        $tr.remove();
+
+    if(current$tr == count) {
+        $tr = null
+        current$tr = null
+        return;
+    }
+
+
+    console.log(c + '번째 글의 댓글 버튼 클릭');
+    // ● 댓글창 행 추가
+    $tr = document.createElement("tr");
+    const $td = document.createElement("td");
+        $td.classList = 'fw-medium';
+        $td.colSpan = 10;
+        // $td.style = 'background-color:lightgray';
+    const $div1 = document.createElement("div");
+        $div1.classList = 'card';
+    const $div2 = document.createElement('div');
+        $div2.classList = 'card-body';
+    const $div3 = document.createElement('div');
+        $div3.classList.add('row', 'g-2');
+    const $div4 = document.createElement('div');
+        $div4.classList = 'card';
+
+    // ● 댓글창 제목
+    const $div5 = document.createElement('div');
+        $div5.classList.add('card-header', 'align-items-center', 'd-flex');
+        $div5.style = 'background-color:#405189';
+    const $h = document.createElement('h4');
+        $h.classList.add('card-title', 'mb-0', 'flex-grow-1');
+        $h.textContent = 'Comments';
+        $h.style = 'color: white; font-weight: bold;';
+
+    // ● 댓글창
+    const $div6 = document.createElement('div');
+        $div6.classList = 'card-body';
+    const $div7 = document.createElement('div');
+        $div7.setAttribute('data-simplebar', '');
+        $div7.style = 'height: 300px;';
+        $div7.classList.add('px-3', 'mx-n3', 'mb-2');
+        $div7.id = 'CommentsDiv';
+
+    // ● 댓글 입력창
+    const $div8 = document.createElement('div');
+        $div8.classList.add('row', 'g-3');
+    const $div9 = document.createElement('div');
+        $div9.classList = 'col-12';
+    const $label = document.createElement('label');
+        $label.for = 'exampleFormControlTextarea';
+        $label.classList.add('form-label', 'text-body');
+        $label.textContent = '댓글 남기기';
+    const $textarea = document.createElement('textarea');
+        $textarea.classList.add('form-control', 'bg-light', 'border-light');
+        $textarea.id = 'exampleFormControlTextarea';
+        $textarea.rows = 3;
+        $textarea.placeholder = '댓글을 입력해주세요';
+        $textarea.style = 'resize: none;';
+
+    // ● 댓글 입력 버튼
+    const $div10 = document.createElement('div');
+        $div10.classList.add('col-12', 'text-end');
+    const $button = document.createElement('button');
+        $button.type = 'button';
+        $button.classList.add('btn', 'btn-ghost-secondary', 'btn-icon', 'waves-effect', 'me-1');
+    const $i = document.createElement('i');
+        $i.classList.add('ri-attachment-line', 'fs-16');
+    const $a = document.createElement('a');
+        $a.href = 'javascript:void(0)';
+        // $a.classList.add('btn', 'btn-info');
+        $a.classList = 'btn';
+        $a.textContent = '작성';
+        $a.style = 'background-color:#405189; color: white; font-weight: bold;';
+
+    // const $temp =
+    // 내용을 비동기로 받아와서 출력 10.25 저녁 (재민)
+
+    getComments(todoNo);
+    $div10.appendChild($button);
+    $div10.appendChild($a);
+    $div9.appendChild($label);
+    $div9.appendChild($textarea);
+    $div8.appendChild($div9);
+    $div8.appendChild($div10);
+    $div6.appendChild($div7);
+    $div6.appendChild($div8);
+    $div5.appendChild($h);
+    $div4.appendChild($div5);
+    $div4.appendChild($div6);
+    $div3.appendChild($div4);
+    $div2.appendChild($div3);
+    $div1.appendChild($div2);
+    $td.appendChild($div1);
+
+    $tr.appendChild($td);
+
+    const $target = document.querySelectorAll('tr')[count]; // c번째 tr 요소 선택
+    if ($target) {
+        $target.insertAdjacentElement('afterend', $tr); // $tr을 선택한 tr 바로 다음에 삽입
+    } else {
+        // 선택한 tr 요소를 찾지 못했을 때에 대한 처리
+        console.error('c번째 tr을 찾을 수 없습니다.');
+    }
+
+    current$tr = count;
+}
+
+const getComments = function(todoNo) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET','/project/RnR/comments/'+todoNo);
+    xhr.send();
+    xhr.onload = function() {
+        if(xhr.status === 200 || xhr.status === 201){
+            const commentsDTO = JSON.parse(xhr.response)
+
+            if(commentsDTO.commentsList.length == 0)
+                noComments();
+            else {
+                makeComments(); //Todo 만들어야함 10.25 밤 (재민)
+            }
+        } else {
+            console.error('오류1', xhr.status)
+            console.error('오류2', xhr.response)
+        }
+    }
+}
+
+const noComments = function() {
+    const date = new Date();
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+
+    const currentDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+    const temp =
+        `<div class="d-flex mb-4">
+            <div class="flex-shrink-0">
+                <img src="/assets/images/profile/boy1.png" alt="" class="avatar-xs rounded-circle" />
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h5 class="fs-13">댓글이 없어요!<small class="text-muted ms-2">${currentDate}</small></h5>
+                <p class="text-muted">첫번째 댓글의 주인공이 되어보세요!</p>    
+                <a href="javascript: void(0);" class="badge text-muted bg-light">
+                    <i class="mdi mdi-reply"></i> Reply</a>
+            </div>
+         </div>
+         <div class="d-flex mb-4">
+            <div class="flex-shrink-0">
+                <img src="/assets/images/profile/girl.png" alt="" class="avatar-xs rounded-circle" />
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h5 class="fs-13">댓글로 소통해보세요!<small class="text-muted ms-2">${currentDate}</small></h5>
+                <p class="text-muted">댓글로 소통하면 더 나은 결과가 나올거에요!</p>    
+                <a href="javascript: void(0);" class="badge text-muted bg-light">
+                    <i class="mdi mdi-reply"></i> Reply</a>
+                <div class="d-flex mt-4">
+                    <div class="flex-shrink-0">
+                        <img src="/assets/images/profile/mustache.png" alt="" class="avatar-xs rounded-circle" />
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h5 class="fs-13">댓글에 댓글을 한번 더 작성할 수 있어요!<small class="text-muted ms-2">${currentDate}</small></h5>
+                        <p class="text-muted">댓글에 대해 조금 더 대화를 나눠보세요!</p>    
+                    </div>
+                </div>     
+            </div>
+         </div>`;
+
+    document.querySelector('#CommentsDiv').innerHTML = temp;
+
+}

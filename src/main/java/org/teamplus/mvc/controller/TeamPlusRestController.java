@@ -3,11 +3,9 @@ package org.teamplus.mvc.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import org.teamplus.mvc.dto.PrivateTodoDTO;
-import org.teamplus.mvc.dto.TeamDTO;
+import org.teamplus.mvc.dto.*;
+import org.teamplus.mvc.util.CommentsListDTO;
 import org.teamplus.mvc.util.SearchDTO;
-import org.teamplus.mvc.dto.TeamTodoDTO;
-import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.ProjectService;
 import org.teamplus.mvc.util.PageRequestDTO;
 import org.teamplus.mvc.util.PageResponseDTO;
@@ -184,4 +182,26 @@ public class TeamPlusRestController {
 
         return searchDTO;
     }
+
+    //댓글 정보 불러오기
+    @GetMapping("/project/RnR/comments/{todoNo}")
+    public CommentsListDTO getComments(@PathVariable String todoNo){
+        CommentsListDTO commentsListDTO = new CommentsListDTO();
+
+        List<CommentsDTO> commentsList = service.getCommentsList(todoNo);
+        Map<String,Object> subCommentsMap = new HashMap<>();
+
+        for(CommentsDTO dto : commentsList){
+            List<SubCommentsDTO> list = service.getSubCommentsList(dto.getCommentNo());
+            for(SubCommentsDTO subdto : list){
+                subCommentsMap.put(String.valueOf(subdto.getCommentNo()),subdto);
+            }
+        }
+
+        commentsListDTO.setCommentsList(commentsList);
+        commentsListDTO.setSubCommentsMap(subCommentsMap);
+
+        return commentsListDTO;
+    }
+
 }
