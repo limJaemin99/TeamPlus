@@ -138,7 +138,7 @@ public class ProjectService {
         return teamTodoMapper.getPageList(pageRequestDTO);
     }
 
-    //[페이지네이션] 페이지 수를 계산하기 위한 메소드
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드 [일반 검색 / 리스트 출력]
     public PageResponseDTO listWithSearch(PageRequestDTO pageRequestDTO){
         //페이지 목록과 글 목록을 저장하는 DTO 를 리턴타입으로 한다.
         pageRequestDTO.setSize(10);
@@ -151,4 +151,24 @@ public class ProjectService {
         return pageResponseDTO;
     }
 
+    //페이지네이션 [Status 검색]
+    public List<TeamTodoDTO> getPageListByStatus(PageRequestDTO pageRequestDTO){
+        pageRequestDTO.setSize(10);	//한 페이지에 보이는 글의 갯수 설정
+        pageRequestDTO.setDatas();	//start 와 end 계산
+
+        return teamTodoMapper.getPageListByStatus(pageRequestDTO);
+    }
+
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드 [Status 검색]
+    public PageResponseDTO listWithSearchByStatus(PageRequestDTO pageRequestDTO){
+        //페이지 목록과 글 목록을 저장하는 DTO 를 리턴타입으로 한다.
+        pageRequestDTO.setSize(10);
+        pageRequestDTO.setDatas();
+        List<TeamTodoDTO> list = teamTodoMapper.getPageListByStatus(pageRequestDTO);
+
+        PageResponseDTO pageResponseDTO = PageResponseDTO.of(pageRequestDTO,teamTodoMapper.countByStatus(pageRequestDTO),10);
+        pageResponseDTO.setList(list);
+
+        return pageResponseDTO;
+    }
 }

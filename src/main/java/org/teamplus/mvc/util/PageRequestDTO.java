@@ -17,6 +17,8 @@ import java.time.LocalDate;
 public class PageRequestDTO {
 
 	private String projectNo;
+	private String userNo;
+	private int status;
 
 	//page,size 는 start,end 계산에 필요한 값
 	private int page = 1;	//현재 페이지 번호
