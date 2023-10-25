@@ -33,6 +33,9 @@ public class Dashboard {
 	@GetMapping("/dashboard-tasks-details2")
 	public String apps_tasks_list_details2() {
 		return "dashboard/tasks-list-details2";
+	}@GetMapping("/dashboard-file-manager")
+	public String apps_tasks_list_detai() {
+		return "dashboard/file-manager";
 	}
 	
 
