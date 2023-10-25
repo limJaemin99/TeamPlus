@@ -2,6 +2,7 @@ package org.teamplus.mvc.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.teamplus.mvc.dto.TeamTodoDTO;
+import org.teamplus.mvc.util.PageRequestDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,12 @@ public interface TeamTodoMapper {
 
     //To-Do 리스트 [마감 임박(3일)] 출력
     List<TeamTodoDTO> selectListImminent();
+
+    //페이지네이션
+    List<TeamTodoDTO> getPageList(PageRequestDTO pageRequestDTO);
+
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드 - 검색 조건에 맞는 글 갯수
+    int count(PageRequestDTO pageRequestDTO);
 
     // 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가
 }

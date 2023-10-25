@@ -287,3 +287,7 @@ const statusSearch = function() {
 }
 
 document.querySelector('#statusSearch').addEventListener('click',statusSearch)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
+
+//[페이지 이동] - 첫번째 페이지

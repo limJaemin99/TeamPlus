@@ -11,6 +11,8 @@ import org.teamplus.mvc.dto.TeamDTO;
 import org.teamplus.mvc.dto.TeamTodoDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.ProjectService;
+import org.teamplus.mvc.util.PageRequestDTO;
+import org.teamplus.mvc.util.PageResponseDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -242,12 +244,20 @@ public class ProjectController {
 
     //R&R View
     @GetMapping("/RnR")
-    public String RnRView(@ModelAttribute("projectNo") String projectNo,Model model){
-        List<TeamTodoDTO> todoList = service.getTodoList(projectNo);
+    public String RnRView(@ModelAttribute("projectNo") String projectNo, PageRequestDTO pageRequestDTO, Model model){
+        pageRequestDTO.setProjectNo(projectNo);
+        PageResponseDTO responseDTO = service.listWithSearch(pageRequestDTO);
+        List<TeamTodoDTO> todoList = service.getPageList(pageRequestDTO);
+        model.addAttribute("todoList",todoList);
+        model.addAttribute("paging",responseDTO);
+        model.addAttribute("page",pageRequestDTO.getPage());
+
         //To-Do 작성자 정보
         List<UsersDTO> userList = new ArrayList<>();
+
         //프로젝트 팀 정보
         List<TeamDTO> team = service.teamListByProjectNo(projectNo);
+
         //팀원 정보 리스트
         List<UsersDTO> teamList = new ArrayList<>();
 
@@ -259,7 +269,6 @@ public class ProjectController {
             teamList.add(service.selectUserByUserNo(list.getUserNo()));
         }
 
-        model.addAttribute("todoList",todoList);
         model.addAttribute("userList",userList);
         model.addAttribute("teamList",teamList);
 

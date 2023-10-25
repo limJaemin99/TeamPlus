@@ -5,6 +5,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.teamplus.mvc.dao.*;
 import org.teamplus.mvc.dto.*;
+import org.teamplus.mvc.util.PageRequestDTO;
+import org.teamplus.mvc.util.PageResponseDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -127,4 +129,26 @@ public class ProjectService {
 
     //To-Do 리스트 [마감 임박(3일)] 출력
     public List<TeamTodoDTO> getTodoListImminent(){return teamTodoMapper.selectListImminent();}
+
+    //페이지네이션
+    public List<TeamTodoDTO> getPageList(PageRequestDTO pageRequestDTO){
+        pageRequestDTO.setSize(10);	//한 페이지에 보이는 글의 갯수 설정
+        pageRequestDTO.setDatas();	//start 와 end 계산
+
+        return teamTodoMapper.getPageList(pageRequestDTO);
+    }
+
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드
+    public PageResponseDTO listWithSearch(PageRequestDTO pageRequestDTO){
+        //페이지 목록과 글 목록을 저장하는 DTO 를 리턴타입으로 한다.
+        pageRequestDTO.setSize(10);
+        pageRequestDTO.setDatas();
+        List<TeamTodoDTO> list = teamTodoMapper.getPageList(pageRequestDTO);
+
+        PageResponseDTO pageResponseDTO = PageResponseDTO.of(pageRequestDTO,teamTodoMapper.count(pageRequestDTO),10);
+        pageResponseDTO.setList(list);
+
+        return pageResponseDTO;
+    }
+
 }
