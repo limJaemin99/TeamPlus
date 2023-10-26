@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface SubCommentsMapper {
     // 대댓글 [등록]
-    int newSubComments(SubCommentsDTO dto);
+    int write(SubCommentsDTO dto);
 
     // 대댓글 [전체 출력]
     List<SubCommentsDTO> selectList();

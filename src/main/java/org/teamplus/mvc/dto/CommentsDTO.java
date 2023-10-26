@@ -16,7 +16,7 @@ public class CommentsDTO {
     private int commentNo;
     private String todoNo;
     private String userNo;
-    private String Content;
+    private String content;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate regDate;
 }

@@ -10,12 +10,14 @@
 <head>
 	<!-- Dragula css -->
 	<link rel="stylesheet" href="/assets/libs/dragula/dragula.min.css" />
+	<!-- simplebar css -->
+<!--	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplebar/5.3.5/simplebar.min.css">-->
 </head>
 
 <body>
 	<div layout:fragment="content">
 		<div th:replace="partials/page-title :: page-title('R&R &nbsp;:&nbsp; Roles & Responsibilities','Projects')"></div>
-
+		<input type="hidden" id="userNo" th:value="${session.user.userNo}">
 		<input type="hidden" id="projectNo" th:value="${projectNo}">
 		<input type="hidden" id="page" th:value="${page}">
 		<div class="card">
@@ -105,21 +107,9 @@
 						<div class="col-lg-2">
 							<label style="height: 0px;" class="form-label"></label>
 							<div class="mb-3">
-								<select name="sort" data-choices data-choices-text-unique-true id="sort">
-									<option value="">작성자 닉네임 오름차순 ↑</option>
-									<option value="">작성자 닉네임 내림차순 ↓</option>
-									<option value="">시작일 오름차순 ↑</option>
-									<option value="">시작일 내림차순 ↓</option>
-									<option value="">종료 예정 날짜 오름차순 ↑</option>
-									<option value="">종료 예정 날짜 내림차순 ↓</option>
-									<option value="">종료일 오름차순 ↑</option>
-									<option value="">종료일 내림차순 ↓</option>
-									<option value="">상태 : 작업 예정</option>
-									<option value="">상태 : 작업중</option>
-									<option value="">상태 : 진행중</option>
-									<option value="">상태 : 검토 요청</option>
-									<option value="">상태 : 작업 완료</option>
-									<option value="">상태 : 오류 수정</option>
+								<select name="sort" id="sort" data-choices data-choices-text-unique-true>
+									<option value="">시작 날짜 ↑</option>
+									<option value="">시작 날짜 ↓</option>
 								</select>
 							</div>
 						</div>
@@ -714,6 +704,9 @@
 		<!-- profile-setting init js -->
 		<script src="/assets/js/pages/profile-setting.init.js"></script>
 		<script src="/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+
+		<!-- simplebar js -->
+<!--		<script src="https://cdnjs.cloudflare.com/ajax/libs/simplebar/5.3.5/simplebar.min.js"></script>-->
 	</th:block>
 </body>
 

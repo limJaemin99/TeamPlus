@@ -2,6 +2,7 @@ package org.teamplus.mvc.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -17,5 +18,6 @@ public class SubCommentsDTO {
     private int commentNo;
     private String subContent;
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate regDate;
 }
