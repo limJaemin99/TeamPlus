@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 public class MyNoteDTO {
+    private int r;
     private String userNo;
     private int noteNo;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

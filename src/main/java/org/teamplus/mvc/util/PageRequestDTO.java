@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.teamplus.mvc.dto.UsersDTO;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -18,6 +19,7 @@ public class PageRequestDTO {
 
 	private String projectNo;
 	private String userNo;
+	private int noteNo;
 	private int status;
 
 	//page,size 는 start,end 계산에 필요한 값

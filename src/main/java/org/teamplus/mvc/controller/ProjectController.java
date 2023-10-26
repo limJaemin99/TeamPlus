@@ -6,10 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.teamplus.mvc.dto.ProjectDTO;
-import org.teamplus.mvc.dto.TeamDTO;
-import org.teamplus.mvc.dto.TeamTodoDTO;
-import org.teamplus.mvc.dto.UsersDTO;
+import org.teamplus.mvc.dto.*;
 import org.teamplus.mvc.service.ProjectService;
 import org.teamplus.mvc.util.PageRequestDTO;
 import org.teamplus.mvc.util.PageResponseDTO;
@@ -44,12 +41,15 @@ public class ProjectController {
         List<TeamDTO> team = service.teamListByProjectNo(projectNo);
         //팀원 정보 리스트
         List<UsersDTO> teamList = new ArrayList<>();
+        List<UsersDTO> upload = new ArrayList<>();
+        List<DataShareDTO> dataShareList = service.DataselectList(projectNo);
 
         for(TeamDTO list : team){
             teamList.add(service.selectUserByUserNo(list.getUserNo()));
         }
         model.addAttribute("project",project);
         model.addAttribute("teamList",teamList);
+        model.addAttribute("dataList",dataShareList);
 
         return "dashboard/projects-overview";
     }
