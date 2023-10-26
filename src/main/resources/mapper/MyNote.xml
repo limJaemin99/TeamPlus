@@ -70,17 +70,42 @@
         SET title=#{title},content=#{content},password=#{password}
         WHERE noteNo=#{noteNo}
     </update>
-    <sql id="search">
-            <if test="types != null and types.length > 0">
-                <foreach collection="types" item="type" open="(" close=")" separator=" OR ">
-                    <if test="type=='t'.toString()"> title like '%' || #{keyword} || '%' </if>
-                </foreach>
-            </if>
-            <if test="from != null and to != null">
-                <trim prefix="and">
-                    noteDate BETWEEN #{from} AND #{to}
-                </trim>
-            </if>
-    </sql>
 
+
+    <!-- 페이지네이션 -->
+    <select id="getPageList" resultType="MyNoteDTO">
+        SELECT *
+        FROM
+        (SELECT rownum r , f.*
+        FROM
+        (SELECT *
+        FROM MyNote
+        WHERE userNo=#{userNo} <include refid="search"/>
+        ORDER BY noteNo DESC) f)
+        WHERE r BETWEEN #{start} AND #{end}
+    </select>
+
+    <!-- [페이지네이션] 페이지 수를 계산하기 위한 쿼리 -->
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM MyNote
+        WHERE noteNo=#{noteNo} <include refid="search"/>
+    </select>
+
+    <!-- [페이지네이션] 페이지 수를 계산하기 위한 쿼리  -->
+    <select id="countByUserNo" resultType="int">
+        SELECT COUNT(*)
+        FROM MyNote
+        WHERE userNo=#{userNo} <include refid="search"/>
+    </select>
+
+    <!-- 일반 검색 -->
+    <sql id="search">
+        <if test="type != null and type.length > 0">
+            <trim prefix="and">
+                <if	test="type=='title'.toString()"> title like '%' || #{keyword} || '%' </if>
+                <if	test="type=='content'.toString()"> content like '%' || #{keyword} || '%' </if>
+            </trim>
+        </if>
+    </sql>
 </mapper>

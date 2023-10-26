@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.teamplus.mvc.dto.MyNoteDTO;
 import org.teamplus.mvc.dto.TeamTodoDTO;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public class PageResponseDTO {
     private int endPage;
     private List<TeamTodoDTO> list;   //서비스에서 처리할 때 PageResponseDTO에 글 목록을 포함시키면 리턴타입 정하기가 간단하고
                                         //View 에 전달도 한번에 가능하다.
+
+    private List<MyNoteDTO> noteList;
 
     public static PageResponseDTO of(PageRequestDTO dto , int totalCount , int pageSize){
         int totalPage = (int) Math.ceil((double) totalCount/dto.getSize());  //ceil 은 올림입니다.

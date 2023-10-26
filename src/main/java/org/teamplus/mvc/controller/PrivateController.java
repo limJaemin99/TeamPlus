@@ -10,8 +10,11 @@ import org.teamplus.mvc.dto.MyNoteDTO;
 import org.teamplus.mvc.dto.PrivateTodoDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.ProjectService;
+import org.teamplus.mvc.util.PageRequestDTO;
+import org.teamplus.mvc.util.PageResponseDTO;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -53,8 +56,13 @@ public class PrivateController {
     //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     // 메모 목록 화면
     @GetMapping("/tasklist")
-    public String tasklistView(@SessionAttribute("user") UsersDTO user, Model model, MyNoteDTO vo) {
-        model.addAttribute("list",service.selectList(user.getUserNo()));
+    public String tasklistView(@SessionAttribute("user") UsersDTO user, PageRequestDTO pageRequestDTO, Model model) {
+        pageRequestDTO.setUserNo(user.getUserNo());
+        PageResponseDTO responseDTO = service.listWithSearchByUserNo(pageRequestDTO);
+        List<MyNoteDTO> list = service.UsergetPageList(pageRequestDTO);
+        model.addAttribute("list",list);
+        model.addAttribute("paging",responseDTO);
+        model.addAttribute("page",pageRequestDTO.getPage());
 
         return "dashboard/tasks-list-view";
     }

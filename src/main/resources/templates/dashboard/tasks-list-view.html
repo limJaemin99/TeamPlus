@@ -12,12 +12,16 @@
 	<link href="/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 	<!-- jQuery 로드 -->
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<!-- Dragula css -->
+	<link rel="stylesheet" href="/assets/libs/dragula/dragula.min.css" />
 </head>
 
 <body>
 	<div layout:fragment="content">
 		<div th:replace="partials/page-title :: page-title('메모 리스트','메모')"></div>
 
+		<input type="hidden" id="userNo" th:value="${session.user.userNo}">
+		<input type="hidden" id="page" th:value="${page}">
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="card" id="tasksList">
@@ -39,38 +43,26 @@
 							<div class="row g-3">
 								<div class="col-xxl-5 col-sm-12">
 									<div class="search-box">
-										<input type="text" class="form-control search bg-light border-light"
-											placeholder="Search for tasks or something...">
+										<input type="text" class="form-control search"
+											   id="search-word" placeholder="검색어를 입력하세요">
 										<i class="ri-search-line search-icon"></i>
 									</div>
 								</div>
 								<!--end col-->
 
 								<div class="col-xxl-3 col-sm-4">
-									<input type="text" class="form-control bg-light border-light" id="demo-datepicker"
-										data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true"
-										placeholder="Select date range">
-								</div>
-								<!--end col-->
-
-								<div class="col-xxl-3 col-sm-4">
 									<div class="input-light">
-										<select class="form-control" data-choices data-choices-search-false
-											name="choices-single-default" id="idStatus">
-											<option value="">Status</option>
-											<option value="all" selected>All</option>
-											<option value="New">New</option>
-											<option value="Pending">Pending</option>
-											<option value="Inprogress">Inprogress</option>
-											<option value="Completed">Completed</option>
+										<select class="userCondition" id="userCondition" data-choices data-choices-text-unique-true>
+											<option value="all" selected>전체</option>
+											<option value="title">제목</option>
+											<option value="content">내용</option>
 										</select>
 									</div>
 								</div>
 								<!--end col-->
 								<div class="col-xxl-1 col-sm-4">
-									<button type="button" class="btn btn-primary w-100" onclick="SearchData();"> <i
-											class="ri-equalizer-fill me-1 align-bottom"></i>
-										Filters
+									<button type="button" id="search" class="btn btn-primary">
+										<i class="ri-search-2-line align-bottom me-1"></i>검색
 									</button>
 								</div>
 								<!--end col-->
@@ -93,7 +85,7 @@
 								</thead>
 								<tbody class="list form-check-all" th:each="vo : ${list}">
 									<tr>
-										<td class="id" name="noteNo" id="noteNo" th:value="${vo.noteNo}">[[${vo.noteNo}]]</td>
+										<td class="id" name="noteNo" id="noteNo" th:value="${vo.r}">[[${vo.r}]]</td>
 										<td class="project_name"  name="title" th:text="${vo.title}">[[${vo.title}]]</td>
 										<td class="id" name="content">
 											<span class="password-hidden" th:utext="${vo.password}" id="password"></span>
@@ -123,17 +115,74 @@
 								</tbody>
 							</table>
 						</div>
-						<div class="d-flex justify-content-end mt-2">
-							<div class="pagination-wrap hstack gap-2">
-								<a class="page-item pagination-prev disabled" href="#">
-									Previous
-								</a>
-								<ul class="pagination listjs-pagination mb-0"></ul>
-								<a class="page-item pagination-next" href="#">
-									Next
-								</a>
-							</div>
-						</div>
+						<div id="mainDiv">
+							<ul class="pagination pagination-wrap pagination-sm mb-0" id="main">
+								<li class="page-item" style="margin-right: auto"> ※ 전체 글 개수 : [[${ paging.totalCount }]] </li>
+								<th:block th:with="start=${paging.startPage},last=${paging.endPage}" id="pagination">
+									<!-- 이전 글 버튼 -->
+									<th:block th:if="${paging.startPage == 1}">
+										<!-- 페이지 시작 번호가 1인 경우 -->
+										<li class="page-item disabled">
+											<a th:href="@{private(userNo=${session.user.userNo},page=1)}" th:data-num="1" class="page-link" style="background-color: #EFEFEF"><<</a>
+										</li>
+										<span th:if="${page == 1}">
+														<li class="page-item disabled">
+															<a th:href="@{private(userNo=${session.user.userNo},page=${page -1})}" th:data-num="${page -1}" class="page-link" style="background-color: #EFEFEF"><</a>
+														</li>
+													</span>
+										<span th:if="${page != 1}">
+														<li class="page-item">
+															<a th:href="@{private(userNo=${session.user.userNo},page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
+														</li>
+													</span>
+									</th:block>
+									<th:block th:if="${paging.startPage != 1}">
+										<!-- 페이지 시작 번호가 1이 아닐 경우 -->
+										<li class="page-item">
+											<a th:href="@{private(userNo=${session.user.userNo},page=1)}" th:data-num="1" class="page-link"><<</a>
+										</li>
+										<li class="page-item">
+											<a th:href="@{private(userNo=${session.user.userNo},page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
+										</li>
+									</th:block>
+
+									<!-- 페이지 번호 -->
+									<th:block th:each="i:${#numbers.sequence(start,last)}">
+										<li class="page-item">
+											<a th:href="@{private(userNo=${session.user.userNo},page=${i})}"
+											   th:text="${i}" th:data-num="${i}"
+											   th:class="${i==page}?'page-link active':'page-link'"></a>
+										</li>
+									</th:block>
+
+									<!-- 다음 글 버튼 -->
+									<th:block th:if="${paging.endPage == paging.totalPage}">
+										<!-- 현재 페이지가 마지막 페이지인 경우 -->
+										<span th:if="${page == paging.totalPage}">
+														<li class="page-item disabled">
+															<a th:href="@{private(userNo=${session.user.userNo},page=${page +1})}" th:data-num="${page +1}" class="page-link" style="background-color: #EFEFEF">></a>
+														</li>
+													</span>
+										<span th:if="${page != paging.totalPage}">
+														<li class="page-item">
+															<a th:href="@{private(userNo=${session.user.userNo},page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
+														</li>
+													</span>
+										<li class="page-item disabled">
+											<a th:href="@{private(userNo=${session.user.userNo},page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link" style="background-color: #EFEFEF">>></a>
+										</li>
+									</th:block>
+									<th:block th:if="${paging.endPage != paging.totalPage}">
+										<!-- 현재 페이지가 마지막 페이지가 아닌 경우 -->
+										<li class="page-item">
+											<a th:href="@{private(userNo=${session.user.userNo},page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
+										</li>
+										<li class="page-item">
+											<a th:href="@{private(userNo=${session.user.userNo},page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link">>></a>
+										</li>
+									</th:block>
+								</th:block>
+							</ul>
 					</div>
 					<!--end card-body-->
 				</div>
@@ -205,12 +254,14 @@
 		<!--end delete modal -->
 	</div>
 
-
+	</div>
 	<th:block layout:fragment="modal">
 
 	</th:block>
 
 	<th:block layout:fragment="pagejs">
+
+		<script src="/js/MyNote.js" type="text/javascript"></script>
 
 		<!-- list.js min js -->
     <script src="/assets/libs/list.js/list.min.js"></script>
@@ -218,12 +269,29 @@
     <!--list pagination js-->
     <script src="/assets/libs/list.pagination.js/list.pagination.min.js"></script>
 
-    <!-- titcket init js -->
-    <script src="/assets/js/pages/tasks-list.init.js"></script>
+<!--    &lt;!&ndash; titcket init js &ndash;&gt;-->
+<!--    <script src="/assets/js/pages/tasks-list.init.js"></script>-->
 
     <!-- Sweet Alerts js -->
     <script src="/assets/libs/sweetalert2/sweetalert2.min.js"></script>
+
+		<!-- Dashboard init -->
+		<script src="/assets/js/pages/dashboard-projects.init.js"></script>
+
+		<!-- dragula init js -->
+		<script src="/assets/libs/dragula/dragula.min.js"></script>
+
+		<!-- dom autoscroll -->
+		<script src="/assets/libs/dom-autoscroller/dom-autoscroller.min.js"></script>
+
+		<!--taks-kanban-->
+		<script src="/assets/js/pages/tasks-kanban.init.js"></script>
+
+		<!-- profile-setting init js -->
+		<script src="/assets/js/pages/profile-setting.init.js"></script>
+		<script src="/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
 	</th:block>
+
 </body>
 
 </html>

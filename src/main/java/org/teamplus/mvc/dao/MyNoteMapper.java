@@ -2,6 +2,8 @@ package org.teamplus.mvc.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.teamplus.mvc.dto.MyNoteDTO;
+import org.teamplus.mvc.dto.TeamTodoDTO;
+import org.teamplus.mvc.util.PageRequestDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +29,14 @@ public interface MyNoteMapper {
 
     //사용자 + 날짜 지정 노트 글 [수정]
     int update(MyNoteDTO dto);
+
+    //페이지네이션
+    List<MyNoteDTO> getPageList(PageRequestDTO pageRequestDTO);
+
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드 - 검색 조건에 맞는 글 갯수
+    int count(PageRequestDTO pageRequestDTO);
+
+
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드 - 검색 조건에 맞는 글 갯수 (userNo)
+    int countByUserNo(PageRequestDTO pageRequestDTO);
 }

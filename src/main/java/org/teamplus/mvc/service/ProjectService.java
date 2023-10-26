@@ -24,6 +24,7 @@ public class ProjectService {
     private final TeamTodoMapper teamTodoMapper;
     private final CommentsMapper commentsMapper;
     private final SubCommentsMapper subCommentsMapper;
+    private final DataShareMapper dataShareMapper;
 
     //프로젝트 번호 시퀀스
     public int getSequence(){return projectDao.getSequence();}
@@ -76,6 +77,40 @@ public class ProjectService {
 
     //사용자 + 날짜 지정 노트 글 [수정]
     public int update(MyNoteDTO dto){return mynoteDao.update(dto);}
+
+    //페이지네이션
+    public List<MyNoteDTO> UsergetPageList(PageRequestDTO pageRequestDTO){
+        pageRequestDTO.setSize(10);	//한 페이지에 보이는 글의 갯수 설정
+        pageRequestDTO.setDatas();	//start 와 end 계산
+
+        return mynoteDao.getPageList(pageRequestDTO);
+    }
+
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드
+    public PageResponseDTO UserlistWithSearch(PageRequestDTO pageRequestDTO){
+        //페이지 목록과 글 목록을 저장하는 DTO 를 리턴타입으로 한다.
+        pageRequestDTO.setSize(10);
+        pageRequestDTO.setDatas();
+        List<MyNoteDTO> list = mynoteDao.getPageList(pageRequestDTO);
+
+        PageResponseDTO pageResponseDTO = PageResponseDTO.of(pageRequestDTO,mynoteDao.count(pageRequestDTO),10);
+        pageResponseDTO.setNoteList(list);
+
+        return pageResponseDTO;
+    }
+
+    //[페이지네이션] 페이지 수를 계산하기 위한 메소드
+    public PageResponseDTO listWithSearchByUserNo(PageRequestDTO pageRequestDTO){
+        //페이지 목록과 글 목록을 저장하는 DTO 를 리턴타입으로 한다.
+        pageRequestDTO.setSize(10);
+        pageRequestDTO.setDatas();
+        List<MyNoteDTO> list = mynoteDao.getPageList(pageRequestDTO);
+
+        PageResponseDTO pageResponseDTO = PageResponseDTO.of(pageRequestDTO,mynoteDao.countByUserNo(pageRequestDTO),10);
+        pageResponseDTO.setNoteList(list);
+
+        return pageResponseDTO;
+    }
 
     //회원 번호로 회원 정보 가져오기
     public UsersDTO selectUserByUserNo(String userNo){return userDao.selectOne(userNo);}
@@ -179,4 +214,16 @@ public class ProjectService {
 
     //[대댓글] 리스트 출력
     public List<SubCommentsDTO> getSubCommentsList(int commentNo){return subCommentsMapper.selectByCommentNo(commentNo);}
+
+
+
+    //파일 공유 번호 시퀀스
+    public int DatagetSequence(){return dataShareMapper.getSequence();}
+
+    //파일 공유글 작성
+    public int Datawrite(DataShareDTO dto){return dataShareMapper.write(dto);}
+
+    //파일 공유글 리스트 [출력]
+    public List<DataShareDTO> DataselectList(String projectNo){return dataShareMapper.selectList(projectNo);}
+
 }

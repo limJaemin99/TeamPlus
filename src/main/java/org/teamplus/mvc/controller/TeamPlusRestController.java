@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.teamplus.mvc.dto.*;
-import org.teamplus.mvc.util.CommentsListDTO;
-import org.teamplus.mvc.util.SearchDTO;
+import org.teamplus.mvc.util.*;
 import org.teamplus.mvc.service.ProjectService;
-import org.teamplus.mvc.util.PageRequestDTO;
-import org.teamplus.mvc.util.PageResponseDTO;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -49,6 +46,38 @@ public class TeamPlusRestController {
         PrivateTodoDTO vo = service.selectPrivateOne(todoNo);
 
         return vo;
+    }
+
+    //개인 메모 검색
+    @GetMapping("/private/tasklist/userSearch/{userNo}/{page}/{condition}/{word}")
+    public UserSearchDTO userSearch(@PathVariable String userNo, @PathVariable int page,
+                                    @PathVariable String condition, @PathVariable String word){
+        UserSearchDTO userSearchDTO = new UserSearchDTO();
+
+        PageRequestDTO requestDTO = PageRequestDTO.builder()
+                .userNo(userNo)
+                .page(page)
+                .type(condition)
+                .keyword(word)
+                .build();
+
+
+        PageResponseDTO responseDTO = service.listWithSearchByUserNo(requestDTO);
+        List<MyNoteDTO> mynoteDto = service.UsergetPageList(requestDTO);
+        List<UsersDTO> usersList = new ArrayList<>();
+
+        for(MyNoteDTO list : mynoteDto){
+            usersList.add(service.selectUserByUserNo(list.getUserNo()));
+        }
+
+
+        userSearchDTO.setMyNoteList(mynoteDto);
+        userSearchDTO.setUsersList(usersList);
+        userSearchDTO.setPageResponseDTO(responseDTO);
+        userSearchDTO.setPage(requestDTO.getPage());
+
+
+        return userSearchDTO;
     }
 
 //━━━━━ [R&R 비동기 컨트롤러] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
