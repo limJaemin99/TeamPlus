@@ -13,8 +13,8 @@ public class SubCommentsService {
     private final SubCommentsMapper dao;
 
     // 대댓글 [등록]
-    public int newSubComments(SubCommentsDTO dto){
-        return dao.newSubComments(dto);
+    public int write(SubCommentsDTO dto){
+        return dao.write(dto);
     }
 
     // 대댓글 [전체 출력]

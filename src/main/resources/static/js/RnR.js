@@ -475,13 +475,17 @@ function comments(c,todoNo) {
         $h.classList.add('card-title', 'mb-0', 'flex-grow-1');
         $h.textContent = 'Comments';
         $h.style = 'color: white; font-weight: bold;';
-
+    const $h2 = document.createElement('h4');
+        $h2.classList.add('card-title', 'mb-0', 'flex-grow-1');
+        $h2.style = 'color: white; font-weight: bold; text-align: right;';
+        $h2.id = 'count';
     // ● 댓글창
     const $div6 = document.createElement('div');
         $div6.classList = 'card-body';
+        $div6.style = 'padding-top: 0px;'
     const $div7 = document.createElement('div');
-        $div7.setAttribute('data-simplebar', '');
-        $div7.style = 'height: 300px;';
+        $div7.setAttribute('data-simplebar',"");
+        $div7.style = 'max-height: 300px; overflow: hidden scroll;';
         $div7.classList.add('px-3', 'mx-n3', 'mb-2');
         $div7.id = 'CommentsDiv';
 
@@ -492,6 +496,7 @@ function comments(c,todoNo) {
         $div9.classList = 'col-12';
     const $label = document.createElement('label');
         $label.for = 'exampleFormControlTextarea';
+        $label.id = 'commentLabel';
         $label.classList.add('form-label', 'text-body');
         $label.textContent = '댓글 남기기';
     const $textarea = document.createElement('textarea');
@@ -504,14 +509,19 @@ function comments(c,todoNo) {
     // ● 댓글 입력 버튼
     const $div10 = document.createElement('div');
         $div10.classList.add('col-12', 'text-end');
-    const $button = document.createElement('button');
-        $button.type = 'button';
-        $button.classList.add('btn', 'btn-ghost-secondary', 'btn-icon', 'waves-effect', 'me-1');
+        $div10.style.display = 'flex';
+        $div10.style.justifyContent = 'space-between';
+    // const $button = document.createElement('button');
+    //     $button.type = 'button';
+    //     $button.classList.add('btn', 'btn-ghost-secondary', 'btn-icon', 'waves-effect', 'me-1');
+    const $h6 = document.createElement('h6');
+        $h6.id = 'isSuccess';
     const $i = document.createElement('i');
         $i.classList.add('ri-attachment-line', 'fs-16');
     const $a = document.createElement('a');
-        $a.href = 'javascript:void(0)';
+        $a.href = `javascript:write(${todoNo},0,0)`;
         // $a.classList.add('btn', 'btn-info');
+        $a.id = 'writeBtn';
         $a.classList = 'btn';
         $a.textContent = '작성';
         $a.style = 'background-color:#405189; color: white; font-weight: bold;';
@@ -520,7 +530,8 @@ function comments(c,todoNo) {
     // 내용을 비동기로 받아와서 출력 10.25 저녁 (재민)
 
     getComments(todoNo);
-    $div10.appendChild($button);
+    // $div10.appendChild($button);
+    $div10.appendChild($h6);
     $div10.appendChild($a);
     $div9.appendChild($label);
     $div9.appendChild($textarea);
@@ -529,6 +540,7 @@ function comments(c,todoNo) {
     $div6.appendChild($div7);
     $div6.appendChild($div8);
     $div5.appendChild($h);
+    $div5.appendChild($h2);
     $div4.appendChild($div5);
     $div4.appendChild($div6);
     $div3.appendChild($div4);
@@ -549,6 +561,7 @@ function comments(c,todoNo) {
     current$tr = count;
 }
 
+// ● 댓글 출력
 const getComments = function(todoNo) {
     const xhr = new XMLHttpRequest();
     xhr.open('GET','/project/RnR/comments/'+todoNo);
@@ -560,7 +573,7 @@ const getComments = function(todoNo) {
             if(commentsDTO.commentsList.length == 0)
                 noComments();
             else {
-                makeComments(); //Todo 만들어야함 10.25 밤 (재민)
+                makeComments(commentsDTO);
             }
         } else {
             console.error('오류1', xhr.status)
@@ -569,6 +582,7 @@ const getComments = function(todoNo) {
     }
 }
 
+// ● 댓글 없을때
 const noComments = function() {
     const date = new Date();
 
@@ -582,7 +596,7 @@ const noComments = function() {
     const currentDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
     const temp =
-        `<div class="d-flex mb-4">
+        `<div class="d-flex mb-4" style="margin-top: 16px;">
             <div class="flex-shrink-0">
                 <img src="/assets/images/profile/boy1.png" alt="" class="avatar-xs rounded-circle" />
             </div>
@@ -615,5 +629,192 @@ const noComments = function() {
          </div>`;
 
     document.querySelector('#CommentsDiv').innerHTML = temp;
-
+    document.getElementById('count').innerHTML = "댓글 수 : 0";
 }
+
+// ● 댓글 있을때
+const makeComments = function(commentsDTO) {
+    const comments = commentsDTO.commentsList;
+
+    const commentsCount = commentsDTO.commentsList.length + commentsDTO.subCommentsList.length;
+
+    document.querySelector('#CommentsDiv').innerHTML = '';
+    let count = 0;
+    let count2 = 0;
+    let $comment = '';
+    comments.forEach(item => {
+        console.log('현재 count : '+count);
+        console.log('현재 멤버 : ')
+        console.log(commentsDTO.memberList[count])
+        $comment +=
+            `<div class="d-flex mb-4" style="margin-top: 16px;">
+                <div class="flex-shrink-0">
+                    <img src="${commentsDTO.memberList[count].profileURL}" alt="" class="avatar-xs rounded-circle" />
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <h5 class="fs-13">${commentsDTO.memberList[count].nickName}<small class="text-muted ms-2">${item.regDate}</small></h5>
+                    <p class="text-muted">${item.content}</p>
+                    <a href="javascript: reply(${item.commentNo},'${commentsDTO.memberList[count].nickName}',${item.todoNo});" class="badge text-muted bg-light">
+                        <i class="mdi mdi-reply"></i> Reply</a>
+                </div>
+             </div>`;
+
+        // console.log('━━━━━━━━━━━━━━━━━━━━')
+        // console.log(commentsDTO.subCommentsList[count])
+        // console.log(commentsDTO.subCommentsList[count].commentNo)
+        // console.log('━━━━━━━━━━━━━━━━━━━━')
+        let subNo;
+        if (commentsDTO.subCommentsList && commentsDTO.subCommentsList[count2]) {
+            subNo = commentsDTO.subCommentsList[count2].commentNo;
+            // subNo를 사용한 나머지 코드
+        } else {
+            console.error('해당 요소는 존재하지 않습니다.');
+        }
+        const itemNo = item.commentNo;
+
+        if(subNo == itemNo){
+            console.log('대댓글 있음 ⭕')
+            while(true) {
+                $comment +=
+                    `<div class="d-flex mt-4" style="padding-left: 50px; border-left: 1px solid lightgrey;">
+                    <div class="flex-shrink-0" style="height: 40px;">
+                        <img src="${commentsDTO.subMemberList[count2].profileURL}" alt="" class="avatar-xs rounded-circle" />
+                    </div>
+                    <div class="flex-grow-1 ms-3" style="height: 40px;">
+                        <h5 class="fs-13">${commentsDTO.subMemberList[count2].nickName}<small class="text-muted ms-2">${commentsDTO.subCommentsList[count2].regDate}</small></h5>
+                        <p class="text-muted">${commentsDTO.subCommentsList[count2].subContent}</p>
+                    </div>
+                 </div>`;
+                count2++;
+                let subNo2;
+                if (commentsDTO.subCommentsList && commentsDTO.subCommentsList[count2]) {
+                    subNo2 = commentsDTO.subCommentsList[count2].commentNo;
+                    // subNo를 사용한 나머지 코드
+                } else {
+                    console.error('해당 요소는 존재하지 않습니다.');
+                }
+                if(subNo2 != itemNo)
+                    return;
+            }
+
+        } else {
+            console.log('대댓글 없음 ❌')
+        }
+
+        count++;
+    })
+    document.querySelector('#CommentsDiv').innerHTML = $comment;
+    document.getElementById('count').innerHTML = '댓글 수 : '+commentsCount;
+}
+
+// ● 댓글 작성 + 비동기 재출력
+const write = function(todoNo,where,commentNo) {
+    const text = document.getElementById('exampleFormControlTextarea').value
+    const textarea = document.getElementById('exampleFormControlTextarea')
+    const userNo = document.getElementById('userNo').value
+
+    if(text == null || text == '' || text.length == 0){
+        alert('댓글 내용을 작성해주세요.')
+        return;
+    }
+
+    const isSuccess = document.getElementById('isSuccess')
+
+    const xhr = new XMLHttpRequest();
+    if(where == 0 && todoNo != 0){ //일반 댓글
+        console.log('일반 댓글 입니다. ❗')
+        const jsObj = {
+            todoNo:todoNo,
+            userNo:userNo,
+            content:text
+        }
+        const jsStr = JSON.stringify(jsObj);
+
+        xhr.open('PATCH','/project/RnR/comments/comment');
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.send(jsStr);
+        console.log(jsStr)
+        xhr.onload = function() {
+            const result = JSON.parse(xhr.response)
+            if(xhr.status === 200 || xhr.status === 201){
+                if(result.result == 1){    // ● 댓글 작성 성공
+                    isSuccess.innerHTML =
+                        `<p style="color: green; margin: 0px;"><img src="/assets/images/util/success.png" style="width: 20px; white-space: nowrap; margin-right: 10px;">댓글이 작성되었습니다.</p>`;
+                    getComments(todoNo)
+                    textarea.value = '';
+                    setTimeout(()=>{isSuccess.innerHTML = ''}, 2500)
+                } else {    // ● 댓글 작성 실패
+                    `<p style="color: red; margin: 0px;"><img src="/assets/images/util/fail.png" style="width: 20px; white-space: nowrap; margin-right: 10px;">댓글 작성을 실패했습니다.</p>`;
+                    textarea.value = '';
+                    setTimeout(()=>{isSuccess.innerHTML = ''}, 2500)
+                }
+            } else {
+                console.error('오류1', xhr.status)
+                console.error('오류2', xhr.response)
+            }
+        }
+    } else if(where == 1 && commentNo != 0) {    //대댓글
+        console.log('대댓글 입니다. ❗❗❗')
+        const jsObj = {
+            userNo:userNo,
+            commentNo:commentNo,
+            subContent:text
+        }
+        const jsStr = JSON.stringify(jsObj);
+
+        xhr.open('PATCH','/project/RnR/comments/subComment');
+        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8")
+        xhr.send(jsStr);
+        console.log(jsStr)
+        xhr.onload = function() {
+            const result = JSON.parse(xhr.response)
+            if(xhr.status === 200 || xhr.status === 201){
+                if(result.result == 1){    // ● 대댓글 작성 성공
+                    isSuccess.innerHTML =
+                        `<p style="color: green; margin: 0px;"><img src="/assets/images/util/success.png" style="width: 20px; white-space: nowrap; margin-right: 10px;">댓글이 작성되었습니다.</p>`;
+                    getComments(todoNo)
+                    textarea.value = '';
+                    const $label = document.getElementById('commentLabel');
+                    $label.innerHTML = '댓글 남기기';
+
+                    const $a = document.getElementById('writeBtn');
+                    $a.href = `javascript:write(${todoNo},0,0)`;
+                    setTimeout(()=>{isSuccess.innerHTML = ''}, 2500)
+                } else {    // ● 대댓글 작성 실패
+                    `<p style="color: red; margin: 0px;"><img src="/assets/images/util/fail.png" style="width: 20px; white-space: nowrap; margin-right: 10px;">댓글 작성을 실패했습니다.</p>`;
+                    textarea.value = '';
+                    setTimeout(()=>{isSuccess.innerHTML = ''}, 2500)
+                }
+            } else {
+                console.error('오류1', xhr.status)
+                console.error('오류2', xhr.response)
+            }
+        }
+    }
+}
+
+// ● [대댓글] 버튼 눌렀을때 [댓글]작성 버튼 함수 변경
+const reply = function(commentNo,nickname,todoNo) {
+    console.log('현재 누른 todoNo : '+todoNo)
+    const $button = document.createElement('button');
+    $button.type = 'button';
+    $button.style = 'margin-left: 10px; background-color:#405189; color: white; font-weight: bold;';
+    $button.textContent = '취소';
+    $button.id = 'cancel';
+    $button.onclick = function () {
+        // ● [대댓글] 취소 버튼
+        const $label = document.getElementById('commentLabel');
+        $label.innerHTML = '댓글 남기기';
+
+        const $a = document.getElementById('writeBtn');
+        $a.href = `javascript:write(${todoNo},0,0)`;
+    }
+    const $label = document.getElementById('commentLabel');
+    $label.innerHTML = '댓글 남기기 > reply > ['+nickname+'] 님의 댓글';
+    $label.appendChild($button);
+
+    const $a = document.getElementById('writeBtn');
+    $a.href = `javascript:write(${todoNo},1,${commentNo})`;
+}
+
+

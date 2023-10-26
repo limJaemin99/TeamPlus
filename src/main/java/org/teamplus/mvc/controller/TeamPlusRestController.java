@@ -217,20 +217,62 @@ public class TeamPlusRestController {
     public CommentsListDTO getComments(@PathVariable String todoNo){
         CommentsListDTO commentsListDTO = new CommentsListDTO();
 
+        //댓글 리스트
         List<CommentsDTO> commentsList = service.getCommentsList(todoNo);
-        Map<String,Object> subCommentsMap = new HashMap<>();
+        //댓글 - 유저 정보
+        List<UsersDTO> memberList = new ArrayList<>();
+        //대댓글 맵 -(댓글번호,대댓글 리스트)
+        List<SubCommentsDTO> subCommentsList = new ArrayList<>();
+        List<UsersDTO> subMemberList = new ArrayList<>();
 
         for(CommentsDTO dto : commentsList){
+            memberList.add(service.selectUserByUserNo(dto.getUserNo()));
+        }
+
+        for(CommentsDTO dto : commentsList){    //댓글 리스트를 하나씩 뺴서 유저넘버로 댓글 리스트를 뺸다.
             List<SubCommentsDTO> list = service.getSubCommentsList(dto.getCommentNo());
-            for(SubCommentsDTO subdto : list){
-                subCommentsMap.put(String.valueOf(subdto.getCommentNo()),subdto);
+            //대댓글 저장 (대댓글 리스트)
+            for(SubCommentsDTO subDTO : list){
+                subCommentsList.add(subDTO);
+                //대댓글 리스트에 대한 멤버 리스트를 뺴야함
+                subMemberList.add(service.selectUserByUserNo(subDTO.getUserNo()));
             }
         }
 
         commentsListDTO.setCommentsList(commentsList);
-        commentsListDTO.setSubCommentsMap(subCommentsMap);
+        commentsListDTO.setMemberList(memberList);
+        commentsListDTO.setSubCommentsList(subCommentsList);
+        commentsListDTO.setSubMemberList(subMemberList);
 
         return commentsListDTO;
     }
 
+    // ● 일반 댓글 작성
+    @PatchMapping("/project/RnR/comments/comment")
+    public Map<String,Object> writeComment(@RequestBody CommentsDTO commentsDTO){
+        //일반 댓글 작성에 필요한 것들 : todoNo,userNo,content ▶ CommentsDTO
+
+        Map<String,Object> map = new HashMap<>();
+
+        int result = service.writeComment(commentsDTO);
+
+        map.put("result",result);
+
+
+        return map;
+    }
+
+    // ● 대댓글 작성
+    @PatchMapping("/project/RnR/comments/subComment")
+    public Map<String,Object> writeComment(@RequestBody SubCommentsDTO subCommentsDTO){
+        //대댓글 작성에 필요한 것들 : UserNO,CommentNO,SubContent ▶ SubCommentsDTO
+
+        Map<String,Object> map = new HashMap<>();
+
+        int result = service.writeSubComment(subCommentsDTO);
+
+        map.put("result",result);
+
+        return map;
+    }
 }

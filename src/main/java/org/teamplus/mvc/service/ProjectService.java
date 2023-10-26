@@ -226,4 +226,10 @@ public class ProjectService {
     //파일 공유글 리스트 [출력]
     public List<DataShareDTO> DataselectList(String projectNo){return dataShareMapper.selectList(projectNo);}
 
+    //[댓글] 작성
+    public int writeComment(CommentsDTO dto){return commentsMapper.write(dto);};
+
+    //[대댓글] 작성
+    public int writeSubComment(SubCommentsDTO dto){return subCommentsMapper.write(dto);}
+
 }

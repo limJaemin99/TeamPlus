@@ -5,8 +5,8 @@
     <!-- 댓글 작성 -->
     <insert id="write" parameterType="CommentsDTO">
         INSERT INTO
-            comments (commentNo,todoNo,userNo,content)
-        VALUES (commentNo_seq.nextval,#{todoNo},#{userNo},#{content})
+            comments
+        VALUES (commentNo_seq.nextval,#{todoNo},#{userNo},#{content},sysdate)
     </insert>
 
     <!-- 댓글 리스트 [출력] -->
