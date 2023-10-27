@@ -2,6 +2,8 @@ package org.teamplus.mvc.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.teamplus.mvc.dto.*;
 import org.teamplus.mvc.util.*;
@@ -49,13 +51,13 @@ public class TeamPlusRestController {
     }
 
     //개인 메모 검색
-    @GetMapping("/private/tasklist/userSearch/{userNo}/{page}/{condition}/{word}")
-    public UserSearchDTO userSearch(@PathVariable String userNo, @PathVariable int page,
+    @GetMapping("/private/tasklist/userSearch/{page}/{condition}/{word}")
+    public UserSearchDTO userSearch(@SessionAttribute("user") UsersDTO user, @PathVariable int page,
                                     @PathVariable String condition, @PathVariable String word){
         UserSearchDTO userSearchDTO = new UserSearchDTO();
 
         PageRequestDTO requestDTO = PageRequestDTO.builder()
-                .userNo(userNo)
+                .userNo(user.getUserNo())
                 .page(page)
                 .type(condition)
                 .keyword(word)
@@ -66,10 +68,7 @@ public class TeamPlusRestController {
         List<MyNoteDTO> mynoteDto = service.UsergetPageList(requestDTO);
         List<UsersDTO> usersList = new ArrayList<>();
 
-        for(MyNoteDTO list : mynoteDto){
-            usersList.add(service.selectUserByUserNo(list.getUserNo()));
-        }
-
+        usersList.add(service.selectUserByUserNo(user.getUserNo()));
 
         userSearchDTO.setMyNoteList(mynoteDto);
         userSearchDTO.setUsersList(usersList);
@@ -314,5 +313,86 @@ public class TeamPlusRestController {
 
         return map;
     }
+
+    //프로젝트 캘린더
+    @GetMapping("/project/project-Calendar/{projectNo}")
+    @ResponseBody
+    public JSONArray projectmonthPlan(@PathVariable String projectNo) {
+        List<ProjectCalendarDTO> list = service.projectselectAll(projectNo);
+
+        JSONArray jsonArr = new JSONArray();
+
+        for (ProjectCalendarDTO event : list) {
+
+
+
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("projectNo", event.getProjectNo());
+            jsonObj.put("id", event.getId());
+            jsonObj.put("title", event.getTitle());
+            jsonObj.put("start", event.getStartDate());
+            jsonObj.put("end", event.getEndDate());
+            jsonObj.put("location", event.getLocation());
+            jsonObj.put("description", event.getDescription());
+
+            jsonArr.add(jsonObj);
+        }
+
+        return jsonArr;
+    }
+
+    @PostMapping("/project/projectAddEvent")
+    public int projectinsert(@RequestBody ProjectCalendarDTO projectCalendarDTO){
+        return service.projectinsert(projectCalendarDTO);
+    }
+
+    @PostMapping("/project/projectUpdateEvent")
+    public int projectupdate(@RequestBody ProjectCalendarDTO projectCalendarDTO){
+        return service.projectupdate(projectCalendarDTO);}
+    @DeleteMapping("/project/projectDeleteEvent/{eventId}")
+    public int projectdelete(@PathVariable int eventId){
+        return service.projectdelete(eventId);
+    }
+
+    @GetMapping("/private/private-Calendar/{userNo}")
+    @ResponseBody
+    public JSONArray privatemonthPlan(@PathVariable String userNo) {
+        List<PrivateCalendarDTO> list = service.privateselectAll(userNo);
+
+        JSONArray jsonArr = new JSONArray();
+
+        for (PrivateCalendarDTO event : list) {
+
+
+
+            JSONObject jsonObj = new JSONObject();
+            jsonObj.put("userNo", event.getUserNo());
+            jsonObj.put("id", event.getId());
+            jsonObj.put("title", event.getTitle());
+            jsonObj.put("start", event.getStartDate());
+            jsonObj.put("end", event.getEndDate());
+            jsonObj.put("location", event.getLocation());
+            jsonObj.put("description", event.getDescription());
+
+            jsonArr.add(jsonObj);
+        }
+
+        return jsonArr;
+    }
+
+    @PostMapping("/private/privateaddEvent")
+    public int privateinsert(@RequestBody PrivateCalendarDTO privateCalendarDTO){
+        return service.privateinsert(privateCalendarDTO);
+    }
+
+    @PostMapping("/private/privateupdateEvent")
+    public int privateupdate(@RequestBody PrivateCalendarDTO privateCalendarDTO){
+        return service.privateupdate(privateCalendarDTO);}
+    @DeleteMapping("/private/privatedeleteEvent/{eventId}")
+    public int privatedelete(@PathVariable int eventId){
+        return service.privatedelete(eventId);
+    }
+
+
 
 }

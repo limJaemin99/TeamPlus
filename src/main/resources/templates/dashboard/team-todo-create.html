@@ -36,7 +36,7 @@
 								<textarea id="editor" name="description"></textarea>
 							</div>
 						</div>
-					</div>					<!-- end card body -->
+					</div>               <!-- end card body -->
 				</div>
 				<!-- end card -->
 
@@ -44,16 +44,10 @@
 					<div class="col-md-6">
 						<div class="card">
 							<div class="card-header">
-								<h5 class="card-title mb-0">TodoDate)</h5>
+								<h5 class="card-title mb-0">시작일 (TodoDate)</h5>
 							</div>
 							<div class="card-body">
-								<input type="date" name="todoDate" class="choices__inner">
-								<!-- <div class="input-group">
-                                     <input type="text" id="event-start-date"
-                                            class="form-control flatpickr flatpickr-input"
-                                            placeholder="Select date" readonly required>
-                                     <span class="input-group-text"><i
-                                             class="ri-calendar-event-line"></i></span>-->
+								<input type="date" id="startDateInput" name="todoDate" class="choices__inner" onchange="javascript:updateDueDateMin()">
 							</div>
 						</div>
 						<!-- end card -->
@@ -64,7 +58,7 @@
 								<h5 class="card-title mb-0">종료 예정일 (DueDate)</h5>
 							</div>
 							<div class="card-body">
-								<input type="date" name="dueDate" class="choices__inner">
+								<input type="date" id="dueDateInput" name="dueDate" class="choices__inner">
 							</div>
 						</div>
 						<!-- end card -->
@@ -74,10 +68,8 @@
 				<!-- end row -->
 
 				<div class="text-end mb-4">
-					<!--<button type="submit" class="btn btn-danger w-sm">Delete</button>
-                        <button type="submit" class="btn btn-secondary w-sm">Draft</button>-->
 					<button type="submit" class="btn btn-success w-sm"
-					data-bs-target="#createProjectSuccess" data-bs-toggle="modal">Create</button>
+							data-bs-target="#createProjectSuccess" data-bs-toggle="modal">Create</button>
 				</div>
 			</div>
 			<!-- end col -->
@@ -89,33 +81,29 @@
 
 
 
-	<div class="modal fade" id="createProjectSuccess" data-bs-backdrop="static"
-		 data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-body text-center p-5">
-					<!--<lord-icon src="https://cdn.lordicon.com/lupuorrc.json" trigger="loop"
-							   colors="primary:#121331,secondary:#08a88a"
-							   style="width:120px;height:120px"></lord-icon>-->
-
-					<div class="mt-4">
-						<h4 class="mb-3" th:text="${title}"></h4>
-						<p class="text-muted mb-4" th:text="${message}"></p>
-						<div class="hstack gap-2 justify-content-center">
-							<a href="javascript:void(0);"
-							   class="btn btn-link link-success fw-medium"
-							   data-bs-dismiss="modal"><i
-									class="ri-close-line me-1 align-middle"></i> 닫기</a>
-							<a href="javascript:void(0);"
-							   class="btn" th:class="${result == 1} ? 'btn-success' : 'btn-danger' ">
-								<span th:text="${title}"></span>
-							</a>
-						</div>
+<div class="modal fade" id="createProjectSuccess" data-bs-backdrop="static"
+	 data-bs-keyboard="false" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-body text-center p-5">
+				<div class="mt-4">
+					<h4 class="mb-3" th:text="${title}"></h4>
+					<p class="text-muted mb-4" th:text="${message}"></p>
+					<div class="hstack gap-2 justify-content-center">
+						<a href="javascript:void(0);"
+						   class="btn btn-link link-success fw-medium"
+						   data-bs-dismiss="modal"><i
+								class="ri-close-line me-1 align-middle"></i> 닫기</a>
+						<a href="javascript:void(0);"
+						   class="btn" th:class="${result == 1} ? 'btn-success' : 'btn-danger' ">
+							<span th:text="${title}"></span>
+						</a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
 
 <th:block layout:fragment="pagejs">
 	<script>
@@ -140,7 +128,7 @@
 
 			// 폼 제출 이벤트 리스너
 			document.getElementById('editorForm').addEventListener('submit', function (e) {
-				e.preventDefault(); // 폼의 기본 제출 동작을 중지합니다.
+				e.preventDefault(); // 폼의 기본 제출 동작을 중지
 
 				// 에디터의 내용을 폼 필드에 설정
 				const contentValue = window.editor.getData();
@@ -151,6 +139,29 @@
 			});
 		});
 	</script>
+	<script type="text/javascript">
+		// 현재 날짜 가져오기
+		const date = new Date();
+
+		const yyyy = date.getFullYear();
+		const mm = String(date.getMonth() + 1).padStart(2, '0');
+		const dd = String(date.getDate()).padStart(2, '0');
+
+		const currentDate = `${yyyy}-${mm}-${dd}`;
+		document.getElementById('startDateInput').value = currentDate;
+		document.getElementById('dueDateInput').min = document.getElementById('startDateInput').value;
+
+		function updateDueDateMin() {
+			const startDateInput = document.getElementById('startDateInput');
+			const dueDateInput = document.getElementById('dueDateInput');
+
+			// 시작일 이후의 날짜를 최소 선택 가능한 날짜로 설정
+			dueDateInput.min = startDateInput.value;
+
+			if(startDateInput.value > dueDateInput.value)
+				dueDateInput.value = startDateInput.value;
+		}
+	</script>
 	<!-- ckeditor -->
 	<script src="/assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
 
@@ -158,15 +169,6 @@
 	<script src="/assets/libs/dropzone/dropzone-min.js"></script>
 	<!-- project-create init -->
 	<script src="/assets/js/pages/project-create.init.js"></script>
-	<!--
-
-        &lt;!&ndash; calendar min js &ndash;&gt;
-        <script src="/assets/libs/fullcalendar/main.min.js"></script>
-
-        &lt;!&ndash; Calendar init &ndash;&gt;
-        <script src="/assets/js/pages/calendar.init.js"></script>
-
-    -->
 </th:block>
 </body>
 

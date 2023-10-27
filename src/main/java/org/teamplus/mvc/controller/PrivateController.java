@@ -63,6 +63,7 @@ public class PrivateController {
         model.addAttribute("list",list);
         model.addAttribute("paging",responseDTO);
         model.addAttribute("page",pageRequestDTO.getPage());
+        model.addAttribute("userNo",user.getUserNo());
 
         return "dashboard/tasks-list-view";
     }
@@ -108,6 +109,13 @@ public class PrivateController {
         log.info(">>>>>>>>>>>>> noteNo :{} ",noteno);
         service.delete(noteno);
         return "redirect:/private/tasklist";
+    }
+
+    //개인 캘린더
+    @GetMapping("/privateCalendar")
+    public String privateCalendar(@SessionAttribute("user") UsersDTO user) {
+
+        return "/dashboard/privateCalendar";
     }
 
 

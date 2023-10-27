@@ -70,12 +70,6 @@
 							</div>
 							<div class="card-body">
 								<input type="date" id="startDateInput" name="startDate" class="choices__inner" th:value="${project.getStartDate()}" onchange="javascript:updateDueDateMin()">
-								<!-- <div class="input-group">
-                                     <input type="text" id="event-start-date"
-                                            class="form-control flatpickr flatpickr-input"
-                                            placeholder="Select date" readonly required>
-                                     <span class="input-group-text"><i
-                                             class="ri-calendar-event-line"></i></span>-->
 							</div>
 						</div>
 						<!-- end card -->
@@ -159,7 +153,7 @@
 
 			// 폼 제출 이벤트 리스너
 			document.getElementById('editorForm').addEventListener('submit', function (e) {
-				e.preventDefault(); // 폼의 기본 제출 동작을 중지합니다.
+				e.preventDefault(); // 폼의 기본 제출 동작을 중지
 
 				// 에디터의 내용을 폼 필드에 설정
 				const contentValue = window.editor.getData();
@@ -190,15 +184,6 @@
 	<script src="/assets/libs/dropzone/dropzone-min.js"></script>
 	<!-- project-create init -->
 	<script src="/assets/js/pages/project-create.init.js"></script>
-	<!--
-
-        &lt;!&ndash; calendar min js &ndash;&gt;
-        <script src="/assets/libs/fullcalendar/main.min.js"></script>
-
-        &lt;!&ndash; Calendar init &ndash;&gt;
-        <script src="/assets/js/pages/calendar.init.js"></script>
-
-    -->
 </th:block>
 </body>
 

@@ -79,21 +79,22 @@
 										<th class="sort" data-sort="id">NO</th>
 										<th class="sort" data-sort="project_name">TITLE</th>
 										<th class="sort" data-sort="content">CONTENT</th>
-										<th class="sort" data-sort="noteDate">NoteDate</th>
+										<th class="sort" data-sort="noteDate">NOTEDATE</th>
 										<th class="sort" data-sort="isPrivate">PRIVATE</th>
 									</tr>
 								</thead>
-								<tbody class="list form-check-all" th:each="vo : ${list}">
+								<tbody class="list form-check-all">
+								<th:block th:each="vo,status : ${list}">
 									<tr>
-										<td class="id" name="noteNo" id="noteNo" th:value="${vo.r}">[[${vo.r}]]</td>
-										<td class="project_name"  name="title" th:text="${vo.title}">[[${vo.title}]]</td>
-										<td class="id" name="content">
+										<td class="fw-medium" name="noteNo" id="noteNo" th:text="${(page -1)*10+status.count}"></td>
+										<td class="fw-medium" name="title" th:text="${vo.title}"></td>
+										<td class="fw-medium" name="content">
 											<span class="password-hidden" th:utext="${vo.password}" id="password"></span>
 										</td>
-										<td class="client_name" name="notedate" style="width: 300px;" th:text="${vo.noteDate}">[[${vo.noteDate}]]</td>
-										<td class="assignedto" style="text-align: center; width: 50px;" name="isPrivate">
+										<td class="fw-medium" name="notedate" style="width: 300px;" th:text="${vo.noteDate}"></td>
+										<td class="fw-medium" style="text-align: center; width: 50px;" name="isPrivate">
 											<div class="d-flex">
-												<div name="isPrivate">[[${vo.isPrivate}]]</div>
+												<div name="isPrivate" th:text="${vo.isPrivate}"></div>
 												<div class="flex-shrink-0 ms-4">
 													<ul class="list-inline tasks-list-menu mb-0">
 														<li class="list-inline-item"><a
@@ -104,14 +105,12 @@
 																						th:href="|@{taskmodify(noteNo=${vo.noteNo})}|"><i
 																class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>
 														</li>
-														<a class="remove-item-btn" data-bs-toggle="modal" href="#passwordModal">
-															<i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-														</a>
 													</ul>
 												</div>
 											</div>
 										</td>
 									</tr>
+								</th:block>
 								</tbody>
 							</table>
 						</div>
@@ -123,33 +122,33 @@
 									<th:block th:if="${paging.startPage == 1}">
 										<!-- 페이지 시작 번호가 1인 경우 -->
 										<li class="page-item disabled">
-											<a th:href="@{private(userNo=${session.user.userNo},page=1)}" th:data-num="1" class="page-link" style="background-color: #EFEFEF"><<</a>
+											<a th:href="@{tasklist(page=1)}" th:data-num="1" class="page-link" style="background-color: #EFEFEF"><<</a>
 										</li>
 										<span th:if="${page == 1}">
 														<li class="page-item disabled">
-															<a th:href="@{private(userNo=${session.user.userNo},page=${page -1})}" th:data-num="${page -1}" class="page-link" style="background-color: #EFEFEF"><</a>
+															<a th:href="@{tasklist(page=${page -1})}" th:data-num="${page -1}" class="page-link" style="background-color: #EFEFEF"><</a>
 														</li>
 													</span>
 										<span th:if="${page != 1}">
 														<li class="page-item">
-															<a th:href="@{private(userNo=${session.user.userNo},page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
+															<a th:href="@{tasklist(page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
 														</li>
 													</span>
 									</th:block>
 									<th:block th:if="${paging.startPage != 1}">
 										<!-- 페이지 시작 번호가 1이 아닐 경우 -->
 										<li class="page-item">
-											<a th:href="@{private(userNo=${session.user.userNo},page=1)}" th:data-num="1" class="page-link"><<</a>
+											<a th:href="@{tasklist(page=1)}" th:data-num="1" class="page-link"><<</a>
 										</li>
 										<li class="page-item">
-											<a th:href="@{private(userNo=${session.user.userNo},page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
+											<a th:href="@{tasklist(page=${page -1})}" th:data-num="${page -1}" class="page-link"><</a>
 										</li>
 									</th:block>
 
 									<!-- 페이지 번호 -->
 									<th:block th:each="i:${#numbers.sequence(start,last)}">
 										<li class="page-item">
-											<a th:href="@{private(userNo=${session.user.userNo},page=${i})}"
+											<a th:href="@{tasklist(page=${i})}"
 											   th:text="${i}" th:data-num="${i}"
 											   th:class="${i==page}?'page-link active':'page-link'"></a>
 										</li>
@@ -160,25 +159,25 @@
 										<!-- 현재 페이지가 마지막 페이지인 경우 -->
 										<span th:if="${page == paging.totalPage}">
 														<li class="page-item disabled">
-															<a th:href="@{private(userNo=${session.user.userNo},page=${page +1})}" th:data-num="${page +1}" class="page-link" style="background-color: #EFEFEF">></a>
+															<a th:href="@{tasklist(page=${page +1})}" th:data-num="${page +1}" class="page-link" style="background-color: #EFEFEF">></a>
 														</li>
 													</span>
 										<span th:if="${page != paging.totalPage}">
 														<li class="page-item">
-															<a th:href="@{private(userNo=${session.user.userNo},page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
+															<a th:href="@{tasklist(page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
 														</li>
 													</span>
 										<li class="page-item disabled">
-											<a th:href="@{private(userNo=${session.user.userNo},page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link" style="background-color: #EFEFEF">>></a>
+											<a th:href="@{tasklist(page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link" style="background-color: #EFEFEF">>></a>
 										</li>
 									</th:block>
 									<th:block th:if="${paging.endPage != paging.totalPage}">
 										<!-- 현재 페이지가 마지막 페이지가 아닌 경우 -->
 										<li class="page-item">
-											<a th:href="@{private(userNo=${session.user.userNo},page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
+											<a th:href="@{tasklist(page=${page +1})}" th:data-num="${page +1}" class="page-link">></a>
 										</li>
 										<li class="page-item">
-											<a th:href="@{private(userNo=${session.user.userNo},page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link">>></a>
+											<a th:href="@{tasklist(page=${paging.totalPage})}" th:data-num="${paging.totalPage}" class="page-link">>></a>
 										</li>
 									</th:block>
 								</th:block>

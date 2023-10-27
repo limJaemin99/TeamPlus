@@ -92,7 +92,7 @@
         WHERE noteNo=#{noteNo} <include refid="search"/>
     </select>
 
-    <!-- [페이지네이션] 페이지 수를 계산하기 위한 쿼리  -->
+    <!-- [페이지네이션] 페이지 수를 계산하기 위한 쿼리 - userNo -->
     <select id="countByUserNo" resultType="int">
         SELECT COUNT(*)
         FROM MyNote

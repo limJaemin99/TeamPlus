@@ -24,7 +24,7 @@ window.addEventListener('load', getSession);
 //검색 버튼
 const userSearch = function(){
     const xhr = new XMLHttpRequest();   //비동기 통신 객체 생성
-    const userNo = userSession
+    const userNo = document.getElementById('userNo').value
     const page = document.getElementById('page').value
     let userCondition = document.getElementById('userCondition').value
     let word = document.getElementById('search-word').value;
@@ -36,7 +36,7 @@ const userSearch = function(){
     } else {
         word = '전체검색'
     }
-    xhr.open('GET','/private/tasklist/userSearch/'+userNo+'/'+page+'/'+userCondition+'/'+word);    //전송 보낼 준비 (url과 method)
+    xhr.open('GET','/private/tasklist/userSearch/'+page+'/'+userCondition+'/'+word);    //전송 보낼 준비 (url과 method)
     xhr.send();
     xhr.onload=function(){
         if(xhr.status === 200 || xhr.status ===201){
@@ -45,7 +45,7 @@ const userSearch = function(){
             if(userSearchDTO.myNoteList.length == 0)
                 nullList()
             else
-                usermakeList(UserSearchDTO)
+                usermakeList(userSearchDTO)
         } else {
             if(xhr.status === 500 && userCondition == 'title') {
                 nullList()
@@ -65,35 +65,45 @@ const usermakeList = function (userSearchDTO){
 
    document.querySelector('tbody').innerHTML =''
 
-    const userNoteList = userSearchDTO.myNoteList;
+    const myNoteList = userSearchDTO.myNoteList;
     let count = 0;
 
-    userNoteList.forEach(item => {    //배열에서 하나 가져온 member
+    myNoteList.forEach(item => {    //배열에서 하나 가져온 member
         const $tr = document.createElement("tr");
         let note = item.noteNo;
 
+        // content 처리
+        const passwordText = item.password;
+        const asterisks = "*".repeat(passwordText.length);
+
+
         const $temp =
-            `<td class="id" name="noteNo" id="noteNo">${(note -1)*10+count+1}</td>
-             <td class="project_name"  name="title">${item.title}</td>
-            <td class="id" name="content">
-            <span class="password-hidden" id="password">${item.password}</span>
-            </td>
-            <td class="client_name" name="notedate" style="width: 300px;">${item.noteDate}</td>
-            <td class="assignedto" style="text-align: center; width: 50px;" name="isPrivate">
-            <div class="d-flex">
-            <div name="isPrivate">${item.isPrivate}</div>
-            <div class="flex-shrink-0 ms-4">
-            <ul class="list-inline tasks-list-menu mb-0">
-            <li class="list-inline-item">
-            <a th:href="@{taskread(noteNo=${item.noteNo})}|"><i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
-            </li>
-            <li class="list-inline-item"><a class="list-inline-item" th:href="|@{taskmodify(noteNo=${item.noteNo})}|"><i
-            class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>
-            </li>`
+            `<td class="fw-medium" name="noteNo" id="noteNo">${(userSearchDTO.page -1)*10+count+1}</td>
+			 <td class="fw-medium" name="title">${item.title}</td>
+			 <td class="fw-medium" name="content">
+            <span class="password-hidden">${asterisks}</span>
+             </td>
+			 <td class="fw-medium" name="notedate" style="width: 300px;">${item.noteDate}</td>
+			 <td class="fw-medium" style="text-align: center; width: 50px;" name="isPrivate">
+			    <div class="d-flex">
+					<div name="isPrivate">${item.isPrivate}</div>
+						<div class="flex-shrink-0 ms-4">
+							<ul class="list-inline tasks-list-menu mb-0">
+								<li class="list-inline-item"><a href="taskread?noteNo=${note}">
+								<i class="ri-eye-fill align-bottom me-2 text-muted"></i></a>
+								</li>
+								<li class="list-inline-item"><a class="list-inline-item" href="taskmodify?noteNo=${note}">
+								<i class="ri-pencil-fill align-bottom me-2 text-muted"></i></a>
+								</li>
+							</ul>
+						</div>
+				</div>
+			</td>`
         $tr.innerHTML=$temp;
         document.querySelector('tbody').appendChild($tr);
         count++;
     });
+
 
     //● 페이지네이션 추가 부분
 
@@ -112,23 +122,23 @@ const usermakeList = function (userSearchDTO){
     let back;
     if(userSearchDTO.pageResponseDTO.startPage == 1){    //페이지 시작 번호가 1인 경우
         back = `<li class="page-item disabled">
-                    <a href="private?userNo=${usersList.userNo}&page=1" data-num="1" class="page-link" style="background-color: #EFEFEF"><<</a>
+                    <a href="tasklist?page=1" data-num="1" class="page-link" style="background-color: #EFEFEF"><<</a>
                 </li>`
         if(userSearchDTO.page == 1){
             back += `\n<li class="page-item disabled">
-                        <a href="private?userNo=${usersList}&page=${userSearchDTO.page -1}" data-num="${userSearchDTO.page -1}" class="page-link" style="background-color: #EFEFEF"><</a>
+                        <a href="tasklist?page=${userSearchDTO.page -1}" data-num="${userSearchDTO.page -1}" class="page-link" style="background-color: #EFEFEF"><</a>
                      </li>`
         } else {
             back += `\n<li class="page-item">
-                        <a href="private?userNo=${usersList}&page=${userSearchDTO.page -1}" data-num="${userSearchDTO.page -1}" class="page-link"><</a>
+                        <a href="tasklist?page=${userSearchDTO.page -1}" data-num="${userSearchDTO.page -1}" class="page-link"><</a>
                      </li>`
         }
     } else {
         back = `<li class="page-item">
-                    <a href="private?userNo=${usersList}&page=1" data-num="1" class="page-link"><<</a>
+                    <a href="tasklist?page=1" data-num="1" class="page-link"><<</a>
                 </li>
                 <li class="page-item">
-                    <a href="private?userNo=${usersList}&page=${userSearchDTO.page -1}" data-num="${userSearchDTO.page -1}" class="page-link"><</a>
+                    <a href="tasklist?page=${userSearchDTO.page -1}" data-num="${userSearchDTO.page -1}" class="page-link"><</a>
                 </li>`
     }
 
@@ -137,11 +147,11 @@ const usermakeList = function (userSearchDTO){
     for(let i= userSearchDTO.pageResponseDTO.startPage; i<=userSearchDTO.pageResponseDTO.endPage; i++){
         if(i == userSearchDTO.page){
             pageNum += `<li class="page-item">
-                        <a href="private?userNo=${usersList}&page=${i}" data-num="${i}" class="page-link active">${i}</a>
+                        <a href="tasklist?page=${i}" data-num="${i}" class="page-link active">${i}</a>
                     </li>\n`
         } else {
             pageNum += `<li class="page-item">
-                        <a href="private?userNo=${usersList}&page=${i}" data-num="${i}" class="page-link">${i}</a>
+                        <a href="tasklist?page=${i}" data-num="${i}" class="page-link">${i}</a>
                     </li>\n`
         }
     }
@@ -151,22 +161,22 @@ const usermakeList = function (userSearchDTO){
     if(userSearchDTO.pageResponseDTO.endPage == userSearchDTO.pageResponseDTO.totalPage){   //endPage 가 마지막 페이지일 경우
         if(userSearchDTO.page == userSearchDTO.pageResponseDTO.totalPage) {
             next = `<li class="page-item disabled">
-                    <a href="private?userNo=${usersList}&page=${userSearchDTO.page + 1}" data-num="${userSearchDTO.page + 1}" class="page-link" style="background-color: #EFEFEF">></a>
+                    <a href="tasklist?page=${userSearchDTO.page + 1}" data-num="${userSearchDTO.page + 1}" class="page-link" style="background-color: #EFEFEF">></a>
                 </li>`;
         } else {
             next = `<li class="page-item">
-                    <a href="private?userNo=${usersList}&page=${userSearchDTO.page + 1}" data-num="${userSearchDTO.page + 1}" class="page-link">></a>
+                    <a href="tasklist?page=${userSearchDTO.page + 1}" data-num="${userSearchDTO.page + 1}" class="page-link">></a>
                 </li>`;
         }
         next += `<li class="page-item disabled">
-                    <a href="private?userNo=${usersList}&page=${userSearchDTO.pageResponseDTO.totalPage})}" data-num="${userSearchDTO.pageResponseDTO.totalPage}" class="page-link" style="background-color: #EFEFEF">>></a>
+                    <a href="tasklist?page=${userSearchDTO.pageResponseDTO.totalPage})}" data-num="${userSearchDTO.pageResponseDTO.totalPage}" class="page-link" style="background-color: #EFEFEF">>></a>
                  </li>`;
     } else {
         next = `<li class="page-item">
-                    <a href="private?userNo=${usersList}&page=${userSearchDTO.page + 1}"/ data-num="${userSearchDTO.page + 1}" class="page-link">></a>
+                    <a href="tasklist?page=${userSearchDTO.page + 1}"/ data-num="${userSearchDTO.page + 1}" class="page-link">></a>
                 </li>
                 <li class="page-item">
-                    <a href="private?userNo=${usersList}&page=${userSearchDTO.pageResponseDTO.totalPage}"/ data-num="${userSearchDTO.pageResponseDTO.totalPage}" class="page-link">>></a>
+                    <a href="tasklist?page=${userSearchDTO.pageResponseDTO.totalPage}"/ data-num="${userSearchDTO.pageResponseDTO.totalPage}" class="page-link">>></a>
                 </li>`;
     }
 
