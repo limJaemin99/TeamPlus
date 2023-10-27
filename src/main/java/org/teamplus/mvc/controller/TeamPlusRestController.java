@@ -296,4 +296,23 @@ public class TeamPlusRestController {
 
         return responseDTO;
     }
+
+    //팀원 초대 메일 보내기(모달)
+    @GetMapping("/project/invite/{userNo}/{projectNo}/{email}")
+    public Map<String,Integer> invite(@PathVariable String userNo, @PathVariable String projectNo, @PathVariable String email){
+        InviteMail mail = new InviteMail();
+        Map<String,Integer> map = new HashMap<>();
+        UsersDTO user = service.selectUserByUserNo(userNo);
+        String password = service.selectOne(projectNo).getPassword();
+
+        mail.setCaller(user.getName());
+        mail.setProjectNo(projectNo);
+        mail.setPassword(password);
+
+        int result = mail.sendMail(email);
+        map.put("result",result);
+
+        return map;
+    }
+
 }

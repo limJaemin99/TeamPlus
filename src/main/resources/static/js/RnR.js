@@ -24,7 +24,7 @@ window.addEventListener('load', getSession);
 
 //검색 버튼
 const search = function(){
-    const xhr = new XMLHttpRequest();   //비동기 통신 객체 생성
+    const xhr = new XMLHttpRequest();
     const projectNo = document.getElementById('projectNo').value
     const page = document.getElementById('page').value
     let condition = document.getElementById('condition').value
@@ -37,7 +37,7 @@ const search = function(){
     } else {
         word = '전체검색'
     }
-    xhr.open('GET','/project/RnR/search/'+projectNo+'/'+page+'/'+condition+'/'+word);    //전송 보낼 준비 (url과 method)
+    xhr.open('GET','/project/RnR/search/'+projectNo+'/'+page+'/'+condition+'/'+word);
     xhr.send();
     xhr.onload=function(){
         if(xhr.status === 200 || xhr.status ===201){
@@ -67,7 +67,7 @@ const makeList = function (searchDTO){
     const teamTodoList = searchDTO.teamTodoList;
     let count = 0;
 
-    teamTodoList.forEach(item => {    //배열에서 하나 가져온 member
+    teamTodoList.forEach(item => {
         const $tr = document.createElement("tr");
 
         let status;
@@ -144,10 +144,17 @@ const makeList = function (searchDTO){
         else
             $endDate = item.endDate
 
+        let title = item.title;
+        let description = item.description;
+        if(title.length > 10)
+            title = title.substring(0,11) + '...'
+        if(description != null && description.length > 20)
+            description = description.substring(0,21) + '...'
+
         const $temp=
             `<td class="fw-medium">${(searchDTO.page -1)*10+count+1}</td>
-             <td class="fw-medium">${item.title}</td>
-             <td class="fw-medium">${item.description}</td>
+             <td class="fw-medium" style="width: 220px;">${title}</td>
+             <td class="fw-medium" style="width: 325px;">${description}</td>
              <td class="fw-medium">${item.todoDate}</td>
              <td class="fw-medium">${item.dueDate}</td>
              <td class="fw-medium">${$endDate}</td>
@@ -176,7 +183,7 @@ const makeList = function (searchDTO){
         count++;
     });
 
-    //● 페이지네이션 추가 부분
+//● 페이지네이션 추가 부분
 
     //기존 페이지 번호 삭제
     const element = document.getElementById('main');
@@ -431,9 +438,6 @@ let $tr;
 let current$tr;
 function comments(c,todoNo) {
     const id = 'comments'+c
-    console.log('id = '+id)
-    console.log('todoNo = '+todoNo)
-
 
     let count;
     if(c%10 == 0)
@@ -450,8 +454,6 @@ function comments(c,todoNo) {
         return;
     }
 
-
-    console.log(c + '번째 글의 댓글 버튼 클릭');
     // ● 댓글창 행 추가
     $tr = document.createElement("tr");
     const $td = document.createElement("td");
@@ -511,26 +513,18 @@ function comments(c,todoNo) {
         $div10.classList.add('col-12', 'text-end');
         $div10.style.display = 'flex';
         $div10.style.justifyContent = 'space-between';
-    // const $button = document.createElement('button');
-    //     $button.type = 'button';
-    //     $button.classList.add('btn', 'btn-ghost-secondary', 'btn-icon', 'waves-effect', 'me-1');
     const $h6 = document.createElement('h6');
         $h6.id = 'isSuccess';
     const $i = document.createElement('i');
         $i.classList.add('ri-attachment-line', 'fs-16');
     const $a = document.createElement('a');
         $a.href = `javascript:write(${todoNo},0,0)`;
-        // $a.classList.add('btn', 'btn-info');
         $a.id = 'writeBtn';
         $a.classList = 'btn';
         $a.textContent = '작성';
         $a.style = 'background-color:#405189; color: white; font-weight: bold;';
 
-    // const $temp =
-    // 내용을 비동기로 받아와서 출력 10.25 저녁 (재민)
-
     getComments(todoNo);
-    // $div10.appendChild($button);
     $div10.appendChild($h6);
     $div10.appendChild($a);
     $div9.appendChild($label);
@@ -553,9 +547,6 @@ function comments(c,todoNo) {
     const $target = document.querySelectorAll('tr')[count]; // c번째 tr 요소 선택
     if ($target) {
         $target.insertAdjacentElement('afterend', $tr); // $tr을 선택한 tr 바로 다음에 삽입
-    } else {
-        // 선택한 tr 요소를 찾지 못했을 때에 대한 처리
-        console.error('c번째 tr을 찾을 수 없습니다.');
     }
 
     current$tr = count;
@@ -643,9 +634,6 @@ const makeComments = function(commentsDTO) {
     let count2 = 0;
     let $comment = '';
     comments.forEach(item => {
-        console.log('현재 count : '+count);
-        console.log('현재 멤버 : ')
-        console.log(commentsDTO.memberList[count])
         $comment +=
             `<div class="d-flex mb-4" style="margin-top: 16px;">
                 <div class="flex-shrink-0">
@@ -659,21 +647,14 @@ const makeComments = function(commentsDTO) {
                 </div>
              </div>`;
 
-        // console.log('━━━━━━━━━━━━━━━━━━━━')
-        // console.log(commentsDTO.subCommentsList[count])
-        // console.log(commentsDTO.subCommentsList[count].commentNo)
-        // console.log('━━━━━━━━━━━━━━━━━━━━')
         let subNo;
         if (commentsDTO.subCommentsList && commentsDTO.subCommentsList[count2]) {
             subNo = commentsDTO.subCommentsList[count2].commentNo;
-            // subNo를 사용한 나머지 코드
-        } else {
-            console.error('해당 요소는 존재하지 않습니다.');
         }
+
         const itemNo = item.commentNo;
 
         if(subNo == itemNo){
-            console.log('대댓글 있음 ⭕')
             while(true) {
                 $comment +=
                     `<div class="d-flex mt-4" style="padding-left: 50px; border-left: 1px solid lightgrey;">
@@ -689,16 +670,11 @@ const makeComments = function(commentsDTO) {
                 let subNo2;
                 if (commentsDTO.subCommentsList && commentsDTO.subCommentsList[count2]) {
                     subNo2 = commentsDTO.subCommentsList[count2].commentNo;
-                    // subNo를 사용한 나머지 코드
-                } else {
-                    console.error('해당 요소는 존재하지 않습니다.');
                 }
                 if(subNo2 != itemNo)
                     return;
             }
 
-        } else {
-            console.log('대댓글 없음 ❌')
         }
 
         count++;
@@ -722,7 +698,6 @@ const write = function(todoNo,where,commentNo) {
 
     const xhr = new XMLHttpRequest();
     if(where == 0 && todoNo != 0){ //일반 댓글
-        console.log('일반 댓글 입니다. ❗')
         const jsObj = {
             todoNo:todoNo,
             userNo:userNo,
@@ -754,7 +729,6 @@ const write = function(todoNo,where,commentNo) {
             }
         }
     } else if(where == 1 && commentNo != 0) {    //대댓글
-        console.log('대댓글 입니다. ❗❗❗')
         const jsObj = {
             userNo:userNo,
             commentNo:commentNo,
@@ -795,7 +769,6 @@ const write = function(todoNo,where,commentNo) {
 
 // ● [대댓글] 버튼 눌렀을때 [댓글]작성 버튼 함수 변경
 const reply = function(commentNo,nickname,todoNo) {
-    console.log('현재 누른 todoNo : '+todoNo)
     const $button = document.createElement('button');
     $button.type = 'button';
     $button.style = 'margin-left: 10px; background-color:#405189; color: white; font-weight: bold;';
@@ -817,4 +790,60 @@ const reply = function(commentNo,nickname,todoNo) {
     $a.href = `javascript:write(${todoNo},1,${commentNo})`;
 }
 
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
 
+// ● 회원 초대
+document.getElementById('invite').addEventListener('click',e=>{
+   const userNo = document.getElementById('userNo').value;
+   const projectNo = document.getElementById('projectNo').value;
+   const email = document.getElementById('email').value;
+
+   const newButton = document.createElement('button');
+   newButton.type = 'button';
+   newButton.classList.add('btn','btn-success');
+   newButton.id = 'reInvite';
+   newButton.onclick = reInvite;
+   newButton.innerHTML = '한명 더 초대하기';
+
+   const xhr = new XMLHttpRequest();
+   xhr.open('GET','/project/invite/'+userNo+'/'+projectNo+'/'+email);
+   xhr.send();
+   xhr.onload = function() {
+       if(xhr.status === 200 || xhr.status === 201){
+           const result = JSON.parse(xhr.response);
+
+           if(result.result == 1){  //성공
+               document.getElementById('image').src = "/assets/images/util/success.png";
+               document.getElementById('text1').innerHTML = '초대 코드 전송 완료!';
+               document.getElementById('text2').innerHTML = email+' 로 초대코드가 전송되었습니다.';
+               document.getElementById('inputDiv').style.display = 'none';
+               document.getElementById('invite').style.display = 'none';
+               document.getElementById('buttonDiv').appendChild(newButton);
+           } else { //실패
+               document.getElementById('image').src = "/assets/images/util/fail.png";
+               document.getElementById('text1').innerHTML = '초대 코드 전송 실패!';
+               document.getElementById('text2').innerHTML = '이메일 확인 후 다시 시도해주세요.';
+               document.getElementById('inputDiv').style.display = 'none';
+               document.getElementById('invite').style.display = 'none';
+               newButton.classList.add('btn','btn-danger');
+               newButton.innerHTML = '다시 초대하기';
+               document.getElementById('buttonDiv').appendChild(newButton);
+           }
+
+       } else {
+           console.error('오류1',xhr.status)
+           console.error('오류2',xhr.response)
+       }
+   }
+
+});
+
+const reInvite = function(){
+    document.getElementById('image').src = "/assets/images/util/invite.png";
+    document.getElementById('text1').innerHTML = '초대할 회원의 이메일을 입력해주세요!';
+    document.getElementById('text2').innerHTML = '입력한 회원의 이메일로 초대코드와 비밀번호가 전송됩니다.';
+    document.getElementById('email').value = '';
+    document.getElementById('inputDiv').style.display = 'block';
+    document.getElementById('invite').style.display = 'block';
+    document.getElementById('reInvite').remove();
+}

@@ -42,7 +42,7 @@
 					</div>
 					<div class="col-lg-auto">
 						<div class="hstack gap-2">
-							<button type="button" id="search" class="btn btn-primary">	<!-- Todo 검색 버튼 10.23 (재민) -->
+							<button type="button" id="search" class="btn btn-primary">
 								<i class="ri-search-2-line align-bottom me-1"></i>검색
 							</button>
 						</div>
@@ -66,7 +66,7 @@
 					</div>
 					<div class="col-lg-auto">
 						<div class="hstack gap-2">
-							<button type="button" id="statusSearch" class="btn btn-primary">	<!-- Todo 검색 버튼 10.23 (재민) -->
+							<button type="button" id="statusSearch" class="btn btn-primary">
 								<i class="ri-search-2-line align-bottom me-1"></i>검색
 							</button>
 						</div>
@@ -80,13 +80,13 @@
 								</a>
 							</th:block>
 							<!-- Todo 팀원 추가 기능 고려 - 10.23 (재민) -->
-<!--							<a href="#addmemberModal" data-bs-toggle="modal" class="avatar-group-item">-->
-<!--								<div class="avatar-xs">-->
-<!--									<div class="avatar-title rounded-circle">-->
-<!--										+-->
-<!--									</div>-->
-<!--								</div>-->
-<!--							</a>-->
+							<a href="#addmemberModal" data-bs-toggle="modal" class="avatar-group-item">
+								<div class="avatar-xs">
+									<div class="avatar-title rounded-circle">
+										+
+									</div>
+								</div>
+							</a>
 						</div>
 					</div>
 					<!--end col-->
@@ -103,16 +103,6 @@
 				<div class="card">
 					<div class="card-header border-0 align-items-center d-flex" style="padding-bottom: 0px;">
 						<h4 class="card-title flex-grow-1 mb-0">R&R List</h4>
-						<h6 style="margin: 0px; margin-right: 10px;">정렬 기준</h6>
-						<div class="col-lg-2">
-							<label style="height: 0px;" class="form-label"></label>
-							<div class="mb-3">
-								<select name="sort" id="sort" data-choices data-choices-text-unique-true>
-									<option value="">시작 날짜 ↑</option>
-									<option value="">시작 날짜 ↓</option>
-								</select>
-							</div>
-						</div>
 					</div><!-- end cardheader -->
 					<div class="card-body">
 
@@ -314,8 +304,8 @@
 		</div><!-- end row -->
 		<!-- ★ 수정 종료 ★ -->
 
-		<div class="modal fade" id="addmemberModal" tabindex="-1" aria-labelledby="addmemberModalLabel"
-			aria-hidden="true">
+		<div class="modal fade" id="addmemberModal" tabindex="-1.5" aria-labelledby="addmemberModalLabel" aria-hidden="true"
+			style="position: absolute; top: 50px; left: 0;">
 			<div class="modal-dialog">
 				<div class="modal-content border-0">
 					<div class="modal-header p-3 bg-soft-warning">
@@ -324,307 +314,29 @@
 							aria-label="Close"></button>
 					</div>
 					<div class="modal-body">
-						<form>
-							<div class="row g-3">
-								<div class="col-lg-12">
-									<label for="submissionidInput" class="form-label">Submission ID</label>
-									<input type="number" class="form-control" id="submissionidInput"
-										placeholder="Submission ID">
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="profileimgInput" class="form-label">Profile Images</label>
-									<input class="form-control" type="file" id="profileimgInput">
-								</div>
-								<!--end col-->
-								<div class="col-lg-6">
-									<label for="firstnameInput" class="form-label">First Name</label>
-									<input type="text" class="form-control" id="firstnameInput"
-										placeholder="Enter firstname">
-								</div>
-								<!--end col-->
-								<div class="col-lg-6">
-									<label for="lastnameInput" class="form-label">Last Name</label>
-									<input type="text" class="form-control" id="lastnameInput"
-										placeholder="Enter lastname">
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="designationInput" class="form-label">Designation</label>
-									<input type="text" class="form-control" id="designationInput"
-										placeholder="Designation">
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="titleInput" class="form-label">Title</label>
-									<input type="text" class="form-control" id="titleInput" placeholder="Title">
-								</div>
-								<!--end col-->
-								<div class="col-lg-6">
-									<label for="numberInput" class="form-label">Phone Number</label>
-									<input type="text" class="form-control" id="numberInput" placeholder="Phone number">
-								</div>
-								<!--end col-->
-								<div class="col-lg-6">
-									<label for="joiningdateInput" class="form-label">Joining Date</label>
-									<input type="text" class="form-control" id="joiningdateInput"
-										data-provider="flatpickr" placeholder="Select date">
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="emailInput" class="form-label">Email ID</label>
-									<input type="email" class="form-control" id="emailInput" placeholder="Email">
-								</div>
-								<!--end col-->
+						<div style="text-align: center; margin-bottom: 20px;">
+							<img src="/assets/images/util/invite.png" width="100px;" id="image">
+						</div>
+						<h3 style="text-align: center; font-weight: bold;" id="text1">초대할 회원의 이메일을 입력해주세요!</h3>
+						<h5 style="text-align: center; margin-bottom: 20px;" id="text2">입력한 회원의 이메일로 초대코드와 비밀번호가 전송됩니다.</h5>
+						<div class="row g-3" id="inputDiv">
+							<div class="col-lg-12">
+								<label for="email">e-mail</label>
+								<input type="text" class="form-control" id="email" placeholder="이메일을 입력해주세요">
 							</div>
-							<!--end row-->
-						</form>
+							<!--end col-->
+						</div>
+						<!--end row-->
 					</div>
-					<div class="modal-footer">
+					<div class="modal-footer" id="buttonDiv">
 						<button type="button" class="btn btn-light" data-bs-dismiss="modal"><i
-								class="ri-close-line align-bottom me-1"></i> Close</button>
-						<button type="button" class="btn btn-success" id="addMember">Add Member</button>
+								class="ri-close-line align-bottom me-1"></i> 닫기</button>
+						<button type="button" class="btn btn-success" id="invite">초대</button>
 					</div>
 				</div>
 			</div>
 		</div>
 		<!--end add member modal-->
-
-		<div class="modal fade" id="createboardModal" tabindex="-1" aria-labelledby="createboardModalLabel"
-			aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content border-0">
-					<div class="modal-header p-3 bg-soft-info">
-						<h5 class="modal-title" id="createboardModalLabel">Add Board</h5>
-						<button type="button" class="btn-close" id="addBoardBtn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<form action="#">
-							<div class="row">
-								<div class="col-lg-12">
-									<label for="boardName" class="form-label">Board Name</label>
-									<input type="text" class="form-control" id="boardName"
-										placeholder="Enter board name">
-								</div>
-								<div class="mt-4">
-									<div class="hstack gap-2 justify-content-end">
-										<button type="button" class="btn btn-light"
-											data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-success" id="addNewBoard">Add
-											Board</button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--end add board modal-->
-
-		<div class="modal fade" id="creatertaskModal" tabindex="-1" aria-labelledby="creatertaskModalLabel"
-			aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-lg">
-				<div class="modal-content border-0">
-					<div class="modal-header p-3 bg-soft-info">
-						<h5 class="modal-title" id="creatertaskModalLabel">Create New Task</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						<form action="#">
-							<div class="row g-3">
-								<div class="col-lg-12">
-									<label for="projectName" class="form-label">Project Name</label>
-									<input type="text" class="form-control" id="projectName"
-										placeholder="Enter project name">
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="sub-tasks" class="form-label">Task Title</label>
-									<input type="text" class="form-control" id="sub-tasks" placeholder="Task title">
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="task-description" class="form-label">Task Description</label>
-									<textarea class="form-control" id="task-description" rows="3"
-										placeholder="Task description"></textarea>
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="formFile" class="form-label">Tasks Images</label>
-									<input class="form-control" type="file" id="formFile">
-								</div>
-								<!--end col-->
-								<div class="col-lg-12">
-									<label for="tasks-progress" class="form-label">Add Team Member</label>
-									<div data-simplebar style="height: 95px;">
-										<ul class="list-unstyled vstack gap-2 mb-0">
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="anna-adame">
-													<label class="form-check-label d-flex align-items-center"
-														for="anna-adame">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Anna Adame
-														</span>
-													</label>
-												</div>
-											</li>
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="frank-hook">
-													<label class="form-check-label d-flex align-items-center"
-														for="frank-hook">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Frank Hook
-														</span>
-													</label>
-												</div>
-											</li>
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="alexis-clarke">
-													<label class="form-check-label d-flex align-items-center"
-														for="alexis-clarke">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Alexis Clarke
-														</span>
-													</label>
-												</div>
-											</li>
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="herbert-stokes">
-													<label class="form-check-label d-flex align-items-center"
-														for="herbert-stokes">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Herbert Stokes
-														</span>
-													</label>
-												</div>
-											</li>
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="michael-morris">
-													<label class="form-check-label d-flex align-items-center"
-														for="michael-morris">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Michael Morris
-														</span>
-													</label>
-												</div>
-											</li>
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="nancy-martino">
-													<label class="form-check-label d-flex align-items-center"
-														for="nancy-martino">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Nancy Martino
-														</span>
-													</label>
-												</div>
-											</li>
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="thomas-taylor">
-													<label class="form-check-label d-flex align-items-center"
-														for="thomas-taylor">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Thomas Taylor
-														</span>
-													</label>
-												</div>
-											</li>
-											<li>
-												<div class="form-check d-flex align-items-center">
-													<input class="form-check-input me-3" type="checkbox" value=""
-														id="tonya-noble">
-													<label class="form-check-label d-flex align-items-center"
-														for="tonya-noble">
-														<span class="flex-shrink-0">
-															<img src="/assets/images/users/user-dummy-img.jpg" alt=""
-																class="avatar-xxs rounded-circle" />
-														</span>
-														<span class="flex-grow-1 ms-2">
-															Tonya Noble
-														</span>
-													</label>
-												</div>
-											</li>
-										</ul>
-									</div>
-								</div>
-								<!--end col-->
-								<div class="col-lg-4">
-									<label for="due-date" class="form-label">Due Date</label>
-									<input type="text" class="form-control" id="due-date" data-provider="flatpickr"
-										placeholder="Select date">
-								</div>
-								<!--end col-->
-								<div class="col-lg-4">
-									<label for="categories" class="form-label">Tags</label>
-									<input type="text" class="form-control" id="categories" placeholder="Enter tag">
-								</div>
-								<!--end col-->
-								<div class="col-lg-4">
-									<label for="tasks-progress" class="form-label">Tasks Progress</label>
-									<input type="text" class="form-control" maxlength="3" id="tasks-progress"
-										placeholder="Enter progress">
-								</div>
-								<!--end col-->
-								<div class="mt-4">
-									<div class="hstack gap-2 justify-content-end">
-										<button type="button" class="btn btn-light"
-											data-bs-dismiss="modal">Close</button>
-										<button type="button" class="btn btn-success">Add Task</button>
-									</div>
-								</div>
-								<!--end col-->
-							</div>
-							<!--end row-->
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--end add board modal-->
 
 		<div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
