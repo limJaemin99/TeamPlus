@@ -54,6 +54,13 @@ public class ProjectController {
         return "dashboard/projects-overview";
     }
 
+    //프로젝트 캘린더
+    @GetMapping("/projectCalendar")
+    public String projectCalendar(@ModelAttribute("projectNo") String projectNo) {
+
+        return "/dashboard/projectCalendar";
+    }
+
     //프로젝트 수정 View (팀장만 접근 가능)
     @GetMapping("/modify")
     public String modifyView(@SessionAttribute("user") UsersDTO user,@ModelAttribute("projectNo") String projectNo,Model model){

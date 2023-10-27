@@ -16,6 +16,7 @@ public class MyNoteDTO {
     private int r;
     private String userNo;
     private int noteNo;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate noteDate;
     private String title;
