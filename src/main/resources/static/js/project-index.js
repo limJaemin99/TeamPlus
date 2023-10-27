@@ -1,89 +1,149 @@
-// 비동기 방식으로 프로젝트 클릭 시 해당 프로젝트의 대략적인 내용을 출력
-document.querySelector("#detaildiv").addEventListener('click',e=> {
-    console.log("click");
-    //#pagination 안에 있는 a 태그에 클릭 이벤트를 처리하도록 합니다.
-    e.preventDefault()         //a 태그 등 pagination 안에 있는 기본 클릭 동작을 중지
-    e.stopPropagation()         //클릭 이벤트는 자식 또는 부모요소에 전달되는데 그것을 중지
-    const target = e.target
-    if (target.tagName !== 'A') {
-        return
-    }         //클릭한 요소가 a 태그가 아니면 종료
+document.querySelectorAll('[id^="division"]').forEach(element => {
+    element.addEventListener('click', e => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+        e.preventDefault()
+        e.stopPropagation()
+        const select = document.getElementById(element.id)
+        const projectNo = select.children.namedItem('projectNo').value
 
-    const projectNo = target.getAttribute("data-num")
+        const date = new Date();
 
-    const showDetail = function (){
-        const xhr = new XMLHttpRequest()            //비동기 통신 객체 생성
-        xhr.open('GET','detail/'+projectNo)
-        xhr.send()
-        xhr.onload=function onload (){
-            if(xhr.status===200||xhr.response===201){
-                const res=JSON.parse(xhr.response)
-                console.log(res);
-                document.querySelector('#prj_title').innerHTML=res.prj.title;
-                document.querySelector('#prj_description').innerHTML=res.prj.description;
-                document.querySelector('#prj_startDate').innerHTML=res.prj.startDate;
-                document.querySelector('#prj_dueDate').innerHTML=res.prj.dueDate;
-                const status = res.prj.status
-                let statusValue;
-                if(status == 0){
-                    document.querySelector('#prj_status').className = 'badge rounded-pill bg-info fs-12'
-                    statusValue='진행전';
-                }else if(status == 1){
-                    document.querySelector('#prj_status').className = 'badge rounded-pill bg-success fs-12'
-                    statusValue='완료';
-                }else{
-                    document.querySelector('#prj_status').className = 'badge rounded-pill bg-warning fs-12'
-                    statusValue='진행중';
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        const currentDate = `${year}-${month}-${day}`;
+
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET','/project/detail/'+projectNo);
+        xhr.send();
+        xhr.onload = function() {
+            if(xhr.status === 200 || xhr.status === 201){
+                const projectInfoDTO = JSON.parse(xhr.response)
+
+                document.getElementById('listDiv').style = 'margin: 0px auto;';
+                const infoDiv = document.getElementById('infoDiv');
+                infoDiv.style = 'margin: 0px auto; display: block;'
+
+                const projectDTO = projectInfoDTO.projectDTO;
+                const usersList = projectInfoDTO.usersList;
+                const todoList = projectInfoDTO.todoList;
+
+                //Todo 프로젝트 정보
+                // ● 제목,설명,날짜
+                document.getElementById('title').innerHTML = projectDTO.title;
+                document.getElementById('description').innerHTML = projectDTO.description;
+                document.getElementById('startDate').innerHTML = projectDTO.startDate;
+
+                let statusClass;
+                let text;
+                if(projectDTO.status == 0) {
+                    statusClass = 'badge rounded-pill bg-warning fs-12'
+                    text = '진행중';
+                    document.getElementById('notEnd').style = 'display: block;';
+                    document.getElementById('end').style = 'display: none;';
+                    document.getElementById('dueDate').innerHTML = projectDTO.dueDate;
+                } else if(projectDTO.status == 1) {
+                    statusClass = 'badge rounded-pill bg-success fs-12'
+                    text = '종료';
+                    document.getElementById('notEnd').style = 'display: none;';
+                    document.getElementById('end').style = 'display: block;';
+                    document.getElementById('endDate').innerHTML = projectDTO.endDate;
                 }
-                document.querySelector('#prj_status').innerHTML=statusValue;
+                document.getElementById('statusInfo').classList = statusClass;
+                document.getElementById('statusInfo').textContent = text;
 
-                // 해당 프로젝트에 참여하는 사용자들(팀원)을 출력
                 document.querySelector('#members').innerHTML='';
-                console.log(res.users);
-                res.users.forEach(user => {
+                usersList.forEach(item => {
                     const $tr = document.createElement("tr");
-                    const $tmp = `<td class="fw-medium">
-                                        <img class="rounded-circle header-profile-user" src="${user.profileURL}" alt="Header Avatar" style="width: 50px;height: 50px;">
-                                        <span>${user.nickName}</span>
-                                     </td>`;
-                    $tr.innerHTML=$tmp
+                    const $temp =
+                        `<td class="fw-medium">
+                            <img class="rounded-circle header-profile-user" src="${item.profileURL}" alt="Header Avatar" style="width: 50px;height: 50px;">
+                            <span style="margin-left: 10px;">${item.nickName}</span>
+                            <div class="vr" style="margin: 0px 10px;"></div><span>${item.name}</span>
+                            <div class="vr" style="margin: 0px 10px;"></div><span>${item.job}</span>
+                            <div class="vr" style="margin: 0px 10px;"></div><span>${item.email}</span>
+                         </td>`;
+                    $tr.innerHTML=$temp
                     document.querySelector('#members').appendChild($tr);
-                });
+                })
 
-                // 예정 종료일이 오늘 이후인 할일들을 출력
                 document.querySelector('#todolist').innerHTML='';
-                res.todos.forEach(todo => {
+                let count = 1;
+
+                if(todoList.length == 0){
                     const $tr = document.createElement("tr");
-                    const $tmp = `<td class="fw-medium">${todo.title}</td>
-                                     <td class="fw-medium">${todo.dueDate}</td>
-                                     <td class="fw-medium">
-                                        <div id="todo_status">
-                                        ${todo.status==0?'진행전':todo.status==1?'완료':'진행중'}
-                                        </div>
-                                      </td>`;
-                    $tr.innerHTML=$tmp
+                    const $temp =
+                        `<td colspan="3" class="fw-medium" style="text-align: center;">
+                                <h5 class="fw-bold" style="margin: 0px;">오늘 종료 예정인 TODO List가 없어요.</h5>
+                         </td>`;
+                    $tr.innerHTML=$temp
                     document.querySelector('#todolist').appendChild($tr);
+                }
 
 
+                todoList.forEach(item => {
+                    if(count == 100) return;
 
-                });
-                const $tr2 = document.createElement("tr");
-                $tr2.innerHTML = `<td class="text-center" colspan="3">.<br>.<br>.</td>`;
-                document.querySelector('#todolist').appendChild($tr2);
+                    if(count == 11) {
+                        const $tr = document.createElement("tr");
+                        const $temp =
+                            `<td colspan="3" class="fw-medium" style="text-align: center;">
+                                <button type="button" onclick="location.href='RnR?projectNo=${projectNo}'" class="btn-rounded" style="width: 100px; background-color: #405189;">
+                                    <a href="RnR?projectNo=${projectNo}" style="color: white; font-weight: bold;">+ 더보기</a>
+                                </button>
+                             </td>`;
+                        $tr.innerHTML=$temp
+                        document.querySelector('#todolist').appendChild($tr);
+                        count = 100;
+                        return;
+                    }
 
-                document.querySelector('#homebtn').href="home?projectNo="+projectNo;
-                document.querySelector('#overviewbtn').href="overview?projectNo="+projectNo;
+                    if(item.dueDate == currentDate && count <= 10){
+                        let title = item.title;
+                        let description = item.description;
+                        if(title.length > 10)
+                            title = title.substring(0,11) + '...'
+                        if(description != null && description.length > 20)
+                            description = description.substring(0,21) + '...'
 
-            }else{
-                console.log(xhr.status)
-                console.log(xhr.response)
+                        let $status;
+                        if(item.status == 0)
+                            $status = `<span class="badge badge-soft-info">진행중</span>`
+                        else if(item.status == 1)
+                            $status = `<span class="badge badge-soft-success">작업 완료</span>`
+                        else if(item.status == 2)
+                            $status = `<span class="badge badge-soft-primary">작업 예정</span>`
+                        else if(item.status == 3)
+                            $status = `<span class="badge badge-soft-warning">검토 요청</span>`
+                        else if(item.status == 4)
+                            $status = `<span class="badge badge-soft-danger">오류 수정</span>`
+
+                        const $tr = document.createElement("tr");
+                        const $temp =
+                            `<td class="fw-medium">${title}</td>
+                             <td class="fw-medium">${description}</td>
+                             <td class="fw-medium">
+                                <div id="todo_status">
+                                    ${$status}
+                                </div>
+                             </td>`;
+                        $tr.innerHTML=$temp
+                        document.querySelector('#todolist').appendChild($tr);
+                    }
+                    count++;
+                })
+
+                document.getElementById('homeBtn').href = 'home?projectNo='+projectNo;
+
+            } else {
+                console.error('오류1', xhr.status)
+                console.error('오류2', xhr.response)
             }
-        }// end onload
-    }// end showDetail
+        }
 
-    showDetail();
+
+    });
 });
-
-
-// 리스트에서 프로젝트 선택 시 동작_프로젝트
-

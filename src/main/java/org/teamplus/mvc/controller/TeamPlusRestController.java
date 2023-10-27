@@ -277,24 +277,24 @@ public class TeamPlusRestController {
     }
 
     // 프로젝트 리스트에서 개별 프로젝트 상세정보 출력
-    @GetMapping("project/detail/{projectNo}")
-    public ProjectDetailResponseDTO showDetail(@SessionAttribute("user") UsersDTO user, @ModelAttribute("projectNo") String projectNo){
-        List<TeamDTO> teams = service.teamListByProjectNo(projectNo);
+    @GetMapping("/project/detail/{projectNo}")
+    public ProjectInfoDTO showDetail(@ModelAttribute("projectNo") String projectNo){
+        List<TeamDTO> team = service.teamListByProjectNo(projectNo);
 
         // 해당하는 프로젝트에 참여중인 user들을 담을 list
-        List<UsersDTO> users=new ArrayList<>();
+        List<UsersDTO> users = new ArrayList<>();
 
-        for (TeamDTO team:teams) {
-            users.add(service.selectUserByUserNo(team.getUserNo()));
+        for (TeamDTO dto:team) {
+            users.add(service.selectUserByUserNo(dto.getUserNo()));
         }
 
-        ProjectDetailResponseDTO responseDTO= ProjectDetailResponseDTO.builder()
-                .prj(service.selectOne(projectNo))
-                .todos(service.selectListAfterToday(projectNo))
-                .users(users)
+        ProjectInfoDTO projectInfoDTO= ProjectInfoDTO.builder()
+                .projectDTO(service.selectOne(projectNo))
+                .todoList(service.selectListAfterToday(projectNo))
+                .usersList(users)
                 .build();
 
-        return responseDTO;
+        return projectInfoDTO;
     }
 
     //팀원 초대 메일 보내기(모달)
