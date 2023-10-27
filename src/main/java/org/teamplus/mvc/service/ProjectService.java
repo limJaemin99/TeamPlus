@@ -232,4 +232,8 @@ public class ProjectService {
     //[대댓글] 작성
     public int writeSubComment(SubCommentsDTO dto){return subCommentsMapper.write(dto);}
 
+    // 프로젝트 투두리스트 [종료 예정일이 오늘 이후 출력]
+    public List<TeamTodoDTO> selectListAfterToday(String projectNo){return teamTodoMapper.selectListAfterToday(projectNo);}
+
+
 }

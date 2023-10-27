@@ -51,7 +51,7 @@ public class TeamTodoService {
         return dao.selectList(projectNo);
     }
 
-    // 프로젝트 투두리스트 [ProjectNo 와 UserNo별 조회]
+    // 프로젝트 투두리스트 [ProjectNo 와 UserNo별 조회]PRIVATECALENDAR
     public List<TeamTodoDTO> selectByUserNo(TeamTodoDTO dto){
         return dao.selectByUserNo(dto);
     }
@@ -61,8 +61,7 @@ public class TeamTodoService {
         return dao.selectByStatus(dto);
     }
 
-    // 프로젝트 투두리스트 [종료 예정일별 출력] : 필요시 추가
-
-
+    // 프로젝트 투두리스트 [종료 예정일이 오늘 이후 출력]
+    public List<TeamTodoDTO> selectListAfterToday(String projectNo){return dao.selectListAfterToday(projectNo);}
 
 }

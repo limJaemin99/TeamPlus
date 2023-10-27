@@ -275,4 +275,25 @@ public class TeamPlusRestController {
 
         return map;
     }
+
+    // 프로젝트 리스트에서 개별 프로젝트 상세정보 출력
+    @GetMapping("project/detail/{projectNo}")
+    public ProjectDetailResponseDTO showDetail(@SessionAttribute("user") UsersDTO user, @ModelAttribute("projectNo") String projectNo){
+        List<TeamDTO> teams = service.teamListByProjectNo(projectNo);
+
+        // 해당하는 프로젝트에 참여중인 user들을 담을 list
+        List<UsersDTO> users=new ArrayList<>();
+
+        for (TeamDTO team:teams) {
+            users.add(service.selectUserByUserNo(team.getUserNo()));
+        }
+
+        ProjectDetailResponseDTO responseDTO= ProjectDetailResponseDTO.builder()
+                .prj(service.selectOne(projectNo))
+                .todos(service.selectListAfterToday(projectNo))
+                .users(users)
+                .build();
+
+        return responseDTO;
+    }
 }
