@@ -25,6 +25,8 @@ public class ProjectService {
     private final CommentsMapper commentsMapper;
     private final SubCommentsMapper subCommentsMapper;
     private final DataShareMapper dataShareMapper;
+    private final PrivateCalendarMapper privateCalendarMapper;
+    private final ProjectCalendarMapper projectCalendarMapper;
 
     //프로젝트 번호 시퀀스
     public int getSequence(){return projectDao.getSequence();}
@@ -235,5 +237,16 @@ public class ProjectService {
     // 프로젝트 투두리스트 [종료 예정일이 오늘 이후 출력]
     public List<TeamTodoDTO> selectListAfterToday(String projectNo){return teamTodoMapper.selectListAfterToday(projectNo);}
 
+    //개인 캘린더
+    public List<PrivateCalendarDTO> privateselectAll(String userNo){return privateCalendarMapper.selectAll(userNo);}
+    public int privateinsert(PrivateCalendarDTO privateCalendarDTO){return privateCalendarMapper.insert(privateCalendarDTO);}
+    public int privateupdate(PrivateCalendarDTO privateCalendarDTO){return privateCalendarMapper.update(privateCalendarDTO);}
+    public int privatedelete(int id){return privateCalendarMapper.delete(id);}
+
+    //프로젝트 캘린더
+    public List<ProjectCalendarDTO> projectselectAll(String projectNo){return projectCalendarMapper.selectAll(projectNo);}
+    public int projectinsert(ProjectCalendarDTO projectCalendarDTO){return projectCalendarMapper.insert(projectCalendarDTO);}
+    public int projectupdate(ProjectCalendarDTO projectCalendarDTO){return projectCalendarMapper.update(projectCalendarDTO);}
+    public int projectdelete(int id){return projectCalendarMapper.delete(id);}
 
 }

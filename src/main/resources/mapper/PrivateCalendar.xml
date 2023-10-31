@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.teamplus.mvc.dao.PrivateCalendarMapper">
+
+    <select id="selectAll" resultType="PrivateCalendarDTO" parameterType="String">
+        select * from privatecalendar
+        where userNo = #{userNo}
+    </select>
+    <insert id="insert" parameterType="PrivateCalendarDTO">
+        insert into privatecalendar(userNo,id,title,startdate,enddate,location,description)
+            values(#{userNo},private_id_seq.nextval,#{title},#{startDate},#{endDate},#{location},#{description})
+    </insert>
+    <update id="update" parameterType="PrivateCalendarDTO">
+        update privatecalendar set title=#{title}, startdate=#{startDate}, enddate=#{endDate},location=#{location}, description=#{description}
+        where id=#{id}
+    </update>
+    <delete id="delete" parameterType="int">
+        delete privatecalendar where id=#{id}
+    </delete>
+</mapper>

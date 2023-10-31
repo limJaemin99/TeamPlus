@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+    <mapper namespace="org.teamplus.mvc.dao.ProjectCalendarMapper">
+
+        <select id="selectAll" resultType="ProjectCalendarDTO" parameterType="String">
+            select * from projectcalendar
+            where projectNo = #{projectNo}
+        </select>
+        <insert id="insert" parameterType="ProjectCalendarDTO">
+            insert into ProjectCalendar(projectNo,id,title,startdate,enddate,location,description)
+            values(#{projectNo},project_id_seq.nextval,#{title},#{startDate},#{endDate},#{location},#{description})
+        </insert>
+        <update id="update" parameterType="ProjectCalendarDTO">
+            update ProjectCalendar set title=#{title}, startdate=#{startDate}, enddate=#{endDate},location=#{location}, description=#{description}
+            where id=#{id}
+        </update>
+        <delete id="delete" parameterType="int">
+            delete ProjectCalendar where id=#{id}
+        </delete>
+    </mapper>
+

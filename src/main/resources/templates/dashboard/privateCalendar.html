@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{profile-layout}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>PrivateCalendar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/assets/css/fullcalendar.css">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- FullCalendar -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/fullcalendar@5.7.0/main.min.js"></script>
+
+    <script type="text/javascript">
+        //서버의 세션 가져오기
+        let userSession;
+        function getSession(){
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('GET','/getsession');
+            xhr.send();
+            xhr.onload = function() {
+                if(xhr.status === 200 || xhr.status === 201){
+                    const session = JSON.parse(xhr.response);
+                    console.log("▼ 현재 세션 ▼")
+                    console.log(session)
+
+                    userSession = session;
+                } else {
+                    console.error('오류1',xhr.status)
+                    console.error('오류2',xhr.response)
+                }
+            }
+        }
+        window.addEventListener('load', getSession);
+
+        calendarOpen();
+        var calendarEl
+        var calendar
+        function openEventDetailModal(event) {
+
+
+            // 이벤트 정보를 모달에 채웁니다.
+            document.getElementById('eventTitleDetail').textContent = event.event.title;
+            document.getElementById('eventStartDetail').textContent = event.event.start;
+            document.getElementById('eventEndDetail').textContent = event.event.end;
+            document.getElementById('eventUserNo').textContent = event.event.userNo;
+            document.getElementById('eventLocationDetail').textContent = event.event.extendedProps.location;
+            document.getElementById('eventDescriptionDetail').textContent = event.event.extendedProps.description;
+
+            // 모달을 엽니다.
+            $('#eventDetailModal').modal('show');
+            document.getElementById('closeDetail').addEventListener('click', function () {
+                $('#eventDetailModal').modal('hide');
+            });
+            document.getElementById('detailClose').addEventListener('click',function (){
+                $('#eventDetailModal').modal('hide');
+            })
+            document.getElementById('closeUpdate').addEventListener('click',function (){
+                $('#eventEditModal').modal('hide');
+            })
+            document.getElementById('editEvent').addEventListener('click', function () {
+                // 이벤트 속성을 편집 모달에 채우기
+                document.getElementById('eventEditTitle').value = event.event.title;
+                document.getElementById('eventEditStart').value = event.event.start;
+                document.getElementById('eventEditEnd').value = event.event.end;
+                document.getElementById('eventEditLocation').value = event.event.extendedProps.location;
+                document.getElementById('eventEditDescription').value = event.event.extendedProps.description;
+                document.getElementById('eventEditId').value = event.event.id;
+                document.getElementById('eventEditUserNo').value = event.event.userNo;
+
+                // 편집 모달 열기
+                $('#eventEditModal').modal('show');
+            });
+            document.getElementById('editClose').addEventListener('click',function (){
+                $('#eventEditModal').modal('hide');
+            })
+            document.getElementById('updateEvent').addEventListener('click', function () {
+                var eventId = document.getElementById('eventEditId').value;
+                var userNo = document.getElementById('eventEditUserNo').value;
+                // 사용자가 입력한 값을 가져오기
+                const updatedTitle = document.getElementById('eventEditTitle').value;
+                const updatedStart = document.getElementById('eventEditStart').value;
+                const updatedEnd = document.getElementById('eventEditEnd').value;
+                const updatedLocation = document.getElementById('eventEditLocation').value;
+                const updatedDescription = document.getElementById('eventEditDescription').value;
+                console.log('id check>>>',eventId)
+                // 업데이트할 이벤트 데이터 구성
+                const updatedEventData = {
+                    id:eventId,
+                    userNo:userNo,
+                    title: updatedTitle,
+                    startDate: updatedStart,
+                    endDate: updatedEnd,
+                    location: updatedLocation,
+                    description: updatedDescription
+                };
+
+                // 서버로 업데이트 요청 보내기 (예: REST API)
+                $.ajax({
+                    url: '/private/privateupdateEvent',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(updatedEventData),
+                    success: function (response) {
+                        console.log('요청이 성공했습니다.');
+                        alert('일정 수정 완료되었습니다.')
+                        // 서버에서의 응답을 처리할 수 있습니다.
+                        $('#eventEditModal').modal('hide');
+                        $('#eventDetailModal').modal('hide');
+                        location.reload();
+                    },
+                    error: function (error) {
+                        console.error('요청이 실패했습니다.');
+                    }
+                });
+            });
+            document.getElementById('deleteEvent').addEventListener('click', function () {
+                var eventId = event.event.id;
+                console.log('삭제를 위한 아이디 값 >> ',eventId)
+
+                // 서버로 삭제 요청 보내기
+                $.ajax({
+                    url: '/private/privatedeleteEvent/' + eventId, // 서버의 삭제 엔드포인트 경로
+                    method: 'DELETE',
+                    success: function (response) {
+                        alert('일정 삭제 완료되었습니다.')
+                        console.log('삭제 요청이 성공했습니다.');
+                        $('#eventDetailModal').modal('hide');
+                        location.reload();
+
+                    },
+                    error: function (error) {
+                        console.error('삭제 요청이 실패했습니다.');
+                    }
+                });
+            });
+        }
+        function calendarOpen() {
+            document.addEventListener('DOMContentLoaded', function () {
+                $(function () {
+                    var request = $.ajax({
+                        url: "/private/private-Calendar", // 변경하기
+                        method: "GET",
+                        dataType: "json"
+                    });
+
+                    request.done(function (data) {
+                        console.log(data); // 데이터 로그 출력
+
+                        data.forEach(function (event) {
+                            event.start = new Date(event.start); // 문자열을 Date 객체로 변환
+                            event.end = new Date(event.end);
+                            event.end.setHours(23, 59, 59); // Set to the end of the day
+                            event.id = event.id;
+                        });
+
+                        calendarEl = document.getElementById('calendar');
+
+                        calendar = new FullCalendar.Calendar(calendarEl, {
+                            headerToolbar: {
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                            },
+                            timezone: 'local',
+                            editable: true,
+                            droppable: true, // 이벤트를 캘린더로 드래그할 수 있게 함
+                            drop: function (arg) {
+                                if (document.getElementById('drop-remove').checked) {
+                                    arg.draggedEl.parentNode.removeChild(arg.draggedEl);
+                                }
+                            },
+                            events: data,
+                            eventClick: openEventDetailModal, // 이벤트 클릭 시 상세 모달 열기
+                            dateClick:function (){
+                                $('#eventModal').modal('show');
+                            }
+                        });
+
+                        calendar.render();
+                    });
+
+                    request.fail(function (jqXHR, textStatus) {
+                        alert("Request failed: " + textStatus);
+                    });
+                });
+            });
+
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('newEvent').addEventListener('click', function () {
+                $('#eventModal').modal('show');
+            });
+            document.getElementById('close').addEventListener('click', function () {
+                $('#eventModal').modal('hide');
+            });
+            document.getElementById('createClose').addEventListener('click',function (){
+                $('#eventModal').modal('hide');
+            })
+
+            document.getElementById('saveEvent').addEventListener('click', function () {
+                const title = document.getElementById('eventTitle').value;
+                const start = document.getElementById('eventStart').value;
+                const end = document.getElementById('eventEnd').value;
+                const location = document.getElementById('eventLocation').value;
+                const description = document.getElementById('eventDescription').value;
+                const userNo = document.getElementById('UserNo').value;
+
+
+
+
+
+                const eventData = {
+                    userNo: userNo,
+                    title: title,
+                    startDate: start,
+                    endDate: end,
+                    location: location,
+                    description: description
+                };
+
+                $.ajax({
+                    url: '/private/privateaddEvent',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(eventData),
+                    success: function (response) {
+                        alert('일정이 등록 되었습니다.')
+                        console.log('요청이 성공했습니다.');
+                        $('#eventModal').modal('hide');
+                        window.location.href = window.location.href;
+                    },
+                    error: function (error) {
+                        console.error('요청이 실패했습니다.');
+                    }
+                });
+
+            });
+
+
+        });
+    </script>
+
+    <style>
+        .fc-day:hover {
+            cursor: pointer; /* 마우스를 가져갔을 때 커서 스타일 변경 */
+        }
+        #calendarBox {
+            width: 70%;
+            padding-left: 15%;
+        }
+        #newEvent {
+            width: 175px; /* 원하는 너비로 설정 */
+            height: 40px; /* 원하는 높이로 설정 */
+            font-size: 14px; /* 원하는 글꼴 크기로 설정 */
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <button class="btn btn-primary" id="newEvent"><i class="mdi mdi-plus"></i>
+        Create New Event</button>
+    <div id="calendarBox">
+        <div id="calendar"></div>
+    </div>
+    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Create Event</h5>
+                    <button type="button" class="close" id="createClose" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="eventForm">
+                        <input type="hidden" id="UserNo" name="userNo" th:value="${session.user.userNo}">
+                        <div class="form-group">
+                            <label for="eventTitle">Title:</label>
+                            <input type="text" class="form-control" id="eventTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventStart">Start Date:</label>
+                            <input type="date" class="form-control" id="eventStart" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventEnd">End Date:</label>
+                            <input type="date" class="form-control" id="eventEnd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventLocation">Location:</label>
+                            <input type="text" class="form-control" id="eventLocation">
+                        </div>
+                        <div class="form-group">
+                            <label for="eventDescription">Description:</label>
+                            <textarea class="form-control" id="eventDescription"></textarea>
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="close">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveEvent">Save Event</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상세 이벤트 모달 추가 -->
+    <div class="modal fade" id="eventDetailModal" tabindex="-1" role="dialog" aria-labelledby="eventDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailModalLabel">Event Details</h5>
+                    <button type="button" class="close" id='detailClose' data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Title:</strong> <span id="eventTitleDetail"></span></p>
+                    <p><strong>Start:</strong> <span id="eventStartDetail"></span></p>
+                    <p><strong>End:</strong> <span id="eventEndDetail"></span></p>
+                    <p><strong>Location:</strong> <span id="eventLocationDetail"></span></p>
+                    <p><strong>Description:</strong> <span id="eventDescriptionDetail"></span></p>
+                </div>
+                <input type="hidden" id="eventUserNo" name="userNo" th:value="${session.user.userNo}">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="deleteEvent">Delete</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeDetail">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="editEvent">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="eventEditModal" tabindex="-1" role="dialog" aria-labelledby="eventEditModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventEditModalLabel">Edit Event</h5>
+                    <button type="button" class="close" id="editClose" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="eventEditForm">
+                        <div class="form-group">
+                            <label for="eventEditTitle">Title:</label>
+                            <input type="text" class="form-control" id="eventEditTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventEditStart">Start Date:</label>
+                            <input type="date" class="form-control" id="eventEditStart" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventEditEnd">End Date:</label>
+                            <input type="date" class="form-control" id="eventEditEnd" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="eventEditLocation">Location:</label>
+                            <input type="text" class="form-control" id="eventEditLocation">
+                        </div>
+                        <div class="form-group">
+                            <label for="eventEditDescription">Description:</label>
+                            <textarea class="form-control" id="eventEditDescription"></textarea>
+                        </div>
+                        <input type="hidden" id="eventEditId">
+                        <input type="hidden" id="eventEditUserNo" name="userNo" th:value="${session.user.userNo}">
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeUpdate">Close</button>
+                        <button type="button" class="btn btn-primary" id="updateEvent">Update Event</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
