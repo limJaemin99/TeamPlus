@@ -135,4 +135,11 @@
         WHERE nickName=#{nickName}
     </select>
 
+    <!-- 유저 번호로 [프로필사진] 가져오기 -->
+    <select id="getProfileURL" parameterType="String" resultType="String">
+        SELECT profileURL
+        FROM users
+        WHERE userNo=#{userNo}
+    </select>
+
 </mapper>

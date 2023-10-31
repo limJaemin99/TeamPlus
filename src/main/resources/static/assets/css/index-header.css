@@ -22,8 +22,9 @@
     align-items: center;
 }
 
-#flex-items .dropdown{
-    margin-left: 20px;
+#flex-items .inquiry{
+    color: black;
+    text-decoration: none;
 }
 
 #flex-items #right-items{
@@ -31,7 +32,7 @@
     align-items: center;
 }
 
-#flex-items #login{
+#flex-items #login,#join,#goProjectList,#logout{
     margin-right: 20px;
 }
 

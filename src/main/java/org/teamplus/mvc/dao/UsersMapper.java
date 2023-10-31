@@ -58,4 +58,7 @@ public interface UsersMapper {
 
     //[닉네임] 으로 유저 검색
     UsersDTO selectByNickName(String nickName);
+
+    //유저 번호로 [프로필사진] 가져오기
+    String getProfileURL(String userNo);
 }
