@@ -1,15 +1,16 @@
 package org.teamplus.mvc.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.teamplus.mvc.dao.UsersMapper;
 import org.teamplus.mvc.dto.UsersDTO;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UsersService {
 
     private final UsersMapper dao;
@@ -87,6 +88,9 @@ public class UsersService {
     //[비밀번호 재설정용] email 로 정보 가져오기
     public UsersDTO selectByEmail(String email){ return dao.selectByEmail(email); }
 
+    //[비밀번호 재설정용] 로그인 상태에서 비밀번호 변경
+    public int loginChangePassword(UsersDTO dto){ return dao.loginChangePassword(dto); }
+
     // 유저 [로그인]
     public UsersDTO signin(UsersDTO dto) {
         UsersDTO user = dao.signin(dto);
@@ -98,5 +102,18 @@ public class UsersService {
         }
     }
 
+    public UsersDTO snslogin(String email) { return dao.snslogin(email); }
+
+    public void snsinsert(UsersDTO dto) {
+        dao.snsinsert(dto);
+    }
+
+    public UsersDTO snsUpdate(UsersDTO dto) {
+        dao.snsUpdate(dto);
+        return dto;
+    }
+
 }
+
+
 

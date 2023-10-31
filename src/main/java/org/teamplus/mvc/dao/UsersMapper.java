@@ -51,6 +51,9 @@ public interface UsersMapper {
     // 유저 [비밀번호 재설정] : id랑 email 입력해서 일치하는 유저 비밀번호 변경
     int changePassword(UsersDTO dto);
 
+    // 유저 [비밀번호 재설정] : 로그인 상태에서 새로 입력한 비밀번호로 변경
+    int loginChangePassword(UsersDTO dto);
+
     UsersDTO signin(UsersDTO dto);
 
     //[비밀번호 재설정용] email 로 정보 가져오기
@@ -61,4 +64,13 @@ public interface UsersMapper {
 
     //유저 번호로 [프로필사진] 가져오기
     String getProfileURL(String userNo);
+
+    // 유저 [sns 로그인]
+    UsersDTO snslogin(String email);
+
+    // 유저 [sns 회원가입]
+    void snsinsert(UsersDTO dto);
+
+    // 유저 [sns회원가입한 유저 업데이트]
+    void snsUpdate(UsersDTO dto);
 }

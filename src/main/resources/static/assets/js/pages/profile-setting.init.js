@@ -145,7 +145,7 @@ function new_link() {
     div1.innerHTML = document.getElementById('newForm').innerHTML + delLink;
 
     document.getElementById('newlink').appendChild(div1);
-    
+
     var genericExamples = document.querySelectorAll("[data-trigger]");
     Array.from(genericExamples).forEach(function (genericExamp) {
         var element = genericExamp;
@@ -163,3 +163,314 @@ function deleteEl(eleId) {
     var parentEle = d.getElementById('newlink');
     parentEle.removeChild(ele);
 }
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━프로필 이미지 변경 함수━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+const defaultImagePath = "/assets/images/profile/none.jpg";
+// 이미지 파일 경로 배열
+const imagePaths = [
+    "/assets/images/profile/none.jpg",
+    "/assets/images/profile/boy1.png",
+    "/assets/images/profile/boy2.png",
+    "/assets/images/profile/girl.png",
+    "/assets/images/profile/man1.png",
+    "/assets/images/profile/man2.png",
+    "/assets/images/profile/man3.png",
+    "/assets/images/profile/man4.png",
+    "/assets/images/profile/mohican.png",
+    "/assets/images/profile/mustache.png",
+    "/assets/images/profile/woman1.png",
+    "/assets/images/profile/woman2.png",
+    "/assets/images/profile/woman3.png",
+    "/assets/images/profile/woman4.png",
+    "/assets/images/profile/Juicy.png",
+    "/assets/images/profile/Juicy-1.png"
+
+];
+
+// 이미지 목록을 동적으로 생성
+const imageList = document.getElementById('image-list');
+console.log(imageList)
+
+let selectedImage = null;
+let selectedImagePath = null;
+// 이미지를 클릭할 때 선택 이벤트를 처리
+imagePaths.forEach((imagePath, index) => {
+    const imageElement = document.createElement('img');
+    imageElement.src = imagePath;
+    imageElement.style.width = '100px';
+    imageElement.style.height = '100px';
+
+    // 이미지를 클릭할 때 선택 이벤트를 처리
+    imageElement.addEventListener('click', () => {
+        // 이전에 선택한 이미지의 테두리 제거
+        if (selectedImage) {
+            selectedImage.style.border = 'none';
+        }
+
+        // 현재 선택한 이미지 테두리 추가
+        imageElement.style.border = '2px solid #D4F4EC';
+
+        // 선택한 이미지를 저장
+        selectedImage = imageElement;
+
+        // 선택한 이미지의 경로를 가져와서 <img> 요소에 설정
+        selectedImagePath = imageElement.src; // 이 부분을 수정
+
+        const profileImage = document.getElementById('profile-image');
+        profileImage.src = selectedImagePath;
+    });
+
+    imageList.appendChild(imageElement);
+});
+
+// "confirmSelection" 버튼 클릭 시, 선택한 이미지를 확정
+const confirmSelectionButton = document.getElementById('confirmSelection');
+confirmSelectionButton.addEventListener('click', () => {
+    if (selectedImage) {
+        // 이미지가 선택된 경우
+        const profileURLInput = document.getElementById('profile-img-file-input');
+        selectedImagePath = selectedImagePath.replace('http://localhost:8086', '');
+        profileURLInput.value = selectedImagePath;
+    } else {
+        // 이미지가 선택되지 않은 경우, 기본 이미지를 사용
+        const profileURLInput = document.getElementById('profile-img-file-input');
+        profileURLInput.value = defaultImagePath;
+    }
+
+    // 이미지 경로 확인
+    console.log(profileURLInput.value);
+
+    const modifyProfileImageModal = new bootstrap.Modal(document.getElementById('modifyProfileImage'));
+    modifyProfileImageModal.hide();
+});
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━아이디 중복검사 함수  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+function idCheck() {
+    var d = document;
+    var newid = d.getElementById("Id").value;
+
+    var xhr = new XMLHttpRequest();
+    console.log(newid);
+
+    xhr.open("POST", "http://localhost:8086/api/idcheck", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); // JSON 요청 헤더 설정
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // 사용 가능한 닉네임
+                var errorMessage = "사용 가능한 id입니다.";
+                var errorDiv = document.getElementById("id-error-message");
+                errorDiv.innerHTML = errorMessage;
+                errorDiv.style.color = "green"; // 빨간색으로 설정
+                errorDiv.style.fontSize = "small"; // 원하는 글꼴 크기 설정
+                console.log("사용 가능한 닉네임입니다.");
+            } else if (xhr.status == 409) {
+                // 중복된 닉네임
+                var errorMessage = "중복된 id입니다.";
+                var errorDiv = document.getElementById("id-error-message");
+                errorDiv.innerHTML = errorMessage;
+                errorDiv.style.color = "red"; // 빨간색으로 설정
+                errorDiv.style.fontSize = "small"; // 원하는 글꼴 크기 설정
+                console.log("중복된 닉네임입니다.");
+            } else {
+                console.log("다른 오류 발생: " + xhr.status);
+            }
+        }
+    };
+    // 데이터를 JSON 형태로 보내기
+    xhr.send(JSON.stringify({ "newid": newid }));
+}
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━닉네임 중복검사 함수  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+function nickNameCheck() {
+    var d = document;
+    var newnick = d.getElementById("lastnameInput").value;
+    var xhr = new XMLHttpRequest();
+    console.log(newnick);
+
+    xhr.open("POST", "http://localhost:8086/api/nickcheck", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8"); // JSON 요청 헤더 설정
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // 사용 가능한 닉네임
+                var errorMessage = "사용 가능한 닉네임입니다.";
+                var errorDiv = document.getElementById("id-error-message");
+                errorDiv.innerHTML = errorMessage;
+                errorDiv.style.color = "green"; // 빨간색으로 설정
+                errorDiv.style.fontSize = "small"; // 원하는 글꼴 크기 설정
+                console.log("사용 가능한 닉네임입니다.");
+
+            } else if (xhr.status == 409) {
+                // 중복된 닉네임
+                var errorMessage = "중복된 닉네임입니다..";
+                var errorDiv = document.getElementById("id-error-message");
+                errorDiv.innerHTML = errorMessage;
+                errorDiv.style.color = "red"; // 빨간색으로 설정
+                errorDiv.style.fontSize = "small"; // 원하는 글꼴 크기 설정
+                console.log("중복된 닉네임입니다.");
+            } else {
+                console.log("다른 오류 발생: " + xhr.status);
+            }
+        }
+    };
+    // 데이터를 JSON 형태로 보내기
+    xhr.send(JSON.stringify({ "newnick": newnick }));
+}
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━이메일 인증 함수  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+function sendEmail() {
+    var d = document;
+    var email = d.getElementById("emailInput").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8086/api/sendmail");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    // 서버로 전송할 데이터 준비
+    var data = { "checkemail": email };
+    var jdata = JSON.stringify(data);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // 이메일 전송 성공 시, 인증 코드 입력 창 표시
+                document.getElementById("verificationCodeDiv").style.display = "flex";
+                document.querySelector("#verificationCodeDiv button").style.display = "block";
+                console.log("이메일이 전송되었습니다.");
+            } else if (xhr.status == 409) {
+                console.log("409 오류." + xhr.status);
+                alert("이메일 전송 실패");
+            } else {
+                console.log("다른 오류 발생: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(jdata);
+}
+
+function verifyCode() {
+    var d = document;
+    var verificationCode = d.getElementById("verificationCodeInput").value;
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8086/api/verifycode");
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    // 서버로 전송할 데이터 준비
+    var data = { "verificationCode": verificationCode };
+    var jdata = JSON.stringify(data);
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // 인증 코드 확인 성공 시 업데이트 로직 수행
+                console.log("인증 코드 확인 성공.");
+                alert("인증이 완료되었습니다.");
+
+                // 이후에 업데이트 로직을 추가하십시오.
+            } else if (xhr.status == 409) {
+                console.log("409 오류." + xhr.status);
+                alert("인증 코드 확인 실패");
+            } else {
+                console.log("다른 오류 발생: " + xhr.status);
+            }
+        }
+    };
+
+    xhr.send(jdata);
+}
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━프로필 변경 확인 함수  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+function confirmProfileModification() {
+    if (confirm("정말 수정하시겠습니까?")) {
+        // 사용자가 확인 버튼을 누르면 폼이 제출됩니다.
+        document.getElementById("profileForm").submit();
+    }
+    // 사용자가 확인 버튼을 누르지 않으면 폼이 제출되지 않습니다.
+    return false;
+}
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━비밀번호 변경 함수 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+var firstStep = false;
+var secondStep = false;
+function changePassword() {
+    var d = document;
+    oldpassword = d.getElementById("oldpasswordInput").value;
+    oldpasswordCheck = d.getElementById("oldpasswordCheck").value;
+    idForChangePassword = d.getElementById("idForChangePassword").value;
+    newpassword = d.getElementById("newpasswordInput").value;
+    confirmpassword = d.getElementById("confirmpasswordInput").value;
+
+    if (oldpassword === oldpasswordCheck) {
+        console.log("현재 비밀번호 일치")
+        firstStep = true;
+    } else {
+        console.log("현재 비밀번호 불일치")
+        firstStep = false;
+        alert("기존 비밀번호 입력이 잘못되었습니다.");
+    }
+
+    if (firstStep == true && newpassword === confirmpassword) {
+        console.log("새 비밀번호 일치 ")
+        secondStep = true;
+    } else {
+        console.log("새 비밀번호 불일치")
+        secondStep = false;
+        alert("새 비밀번호 입력이 잘못되었습니다.");
+    }
+
+    if (firstStep == true && secondStep == true) {
+        console.log("비밀번호 변경 가능");
+
+        // 사용자에게 확인 메시지 표시
+        var userConfirmed = confirm("비밀번호를 변경 하시겠습니까?");
+
+        if (userConfirmed) {
+            // 사용자가 "확인"을 클릭한 경우에만 비밀번호 변경 코드 실행
+            // JSON 데이터 생성
+            var data = {
+                "idForChangePassword": idForChangePassword,
+                "confirmpassword": confirmpassword
+            };
+
+            // JSON 데이터를 문자열로 변환
+            var jdata = JSON.stringify(data);
+
+            // XMLHttpRequest를 사용하여 서버로 전송
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "http://localhost:8086/api/changepassword");
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        console.log("비밀번호가 변경되었습니다.");
+                        alert("비밀번호가 변경되었습니다.");
+                    } else if (xhr.status == 409) {
+                        console.log("비밀번호 변경 실패: 409 오류." + xhr.status);
+
+                        alert("비밀번호 변경에 실패했습니다.");
+                    } else {
+                        console.log("다른 오류 발생: " + xhr.status);
+                    }
+                }
+            };
+
+            xhr.send(jdata);
+        } else {
+            console.log("사용자가 비밀번호 변경을 취소했습니다.");
+        }
+    } else {
+        console.log("변경 전 비밀번호와 같습니다.");
+    }
+}
+
+
+$(document).ready(function () {
+    // 페이지 로딩 시, hidden input의 값을 확인하여 인증 상태를 확인
+    if ($('#isVerificationComplete').val() === "false") {
+        alert('인증되지 않았습니다.');
+    }
+});

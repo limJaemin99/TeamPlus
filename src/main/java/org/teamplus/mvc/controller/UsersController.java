@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import org.teamplus.mvc.util.MailCodeDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.UsersService;
@@ -191,6 +192,28 @@ public class UsersController {
 
         return "MyPage/logout";
     }
+
+    @GetMapping("/snsUpdate")
+    public String snsUpdateView() {
+        return "MyPage/snsUpdate";
+    }
+
+    @PostMapping("/snsUpdate")
+    public RedirectView snsUpdate(@RequestParam("email") String email, RedirectAttributes attributes, UsersDTO dto, Model model) {
+        // email을 사용하여 사용자 정보를 업데이트하고 성공 또는 실패에 따라 리다이렉션합니다.
+        dto.setEmail(email);  // 이메일 주소 할당
+        UsersDTO updatedUser = service.snsUpdate(dto);
+        model.addAttribute("user",dto);
+        log.info("------------------ Email: {} ", email);
+
+        if (updatedUser != null) {
+            attributes.addFlashAttribute("successMessage", "회원 정보가 성공적으로 수정되었습니다.");
+        } else {
+            attributes.addFlashAttribute("errorMessage", "회원 정보 수정에 실패했습니다.");
+        }
+        return new RedirectView("/");
+    }
+
 
 //━━━━━ [프로필 관련] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 

@@ -77,6 +77,19 @@
             UserNo=#{userNO}
     </update>
 
+    <!-- 유저 [기존 회원정보 수정(전체 수정)] -->
+    <update id="updateProfile">
+        update Users
+        set
+            profileURL = #{profileURL},
+            name = #{name},
+            email = #{email},
+            nickName = #{nickName},
+            job = #{job},
+            description = #{description}
+        where UserNo = #{userNo}
+    </update>
+
     <!-- 유저 [회원 탈퇴] -->
     <delete id="delete">
         delete from Users
@@ -141,5 +154,35 @@
         FROM users
         WHERE userNo=#{userNo}
     </select>
+
+    <select id="snslogin" parameterType="java.util.HashMap" resultType="UsersDTO">
+        select * from Users where  email=#{email}
+    </select>
+
+    <insert id="snsinsert" parameterType="java.util.HashMap">
+        insert into Users(userno,name,email)
+        values(USERNO_seq.nextval,#{name},#{email})
+
+    </insert>
+
+    <update id="snsUpdate" parameterType="UsersDTO">
+        update users
+        set
+            id = #{id},
+            password = #{password},
+            name = #{name},
+            nickname = #{nickName},
+            job = #{job}
+        where
+            email = #{email}
+    </update>
+
+    <!-- 로그인 상태 O-->
+    <update id="loginChangePassword">
+        update Users
+        set Password=#{password}
+        where
+            Id=#{id}
+    </update>
 
 </mapper>
