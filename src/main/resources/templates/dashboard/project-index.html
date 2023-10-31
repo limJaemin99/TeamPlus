@@ -40,7 +40,7 @@
                                                         class="fw-semibold text-dark" th:text="${list.getTitle()}"></a>
                                                 </h5>
                                                 <p class="text-muted text-truncate mb-0">
-                                                    <span class="text-dark" th:text="${list.getDescription()}"></span>
+                                                    <span class="text-dark" th:utext="${list.getDescription()}"></span>
                                                 </p>
                                             </div>
                                             <div class="flex-shrink-0 ms-2">
