@@ -318,7 +318,8 @@ public class TeamPlusRestController {
     @GetMapping("/project/project-Calendar/{projectNo}")
     @ResponseBody
     public JSONArray projectmonthPlan(@PathVariable String projectNo) {
-        List<ProjectCalendarDTO> list = service.projectselectAll(projectNo);
+        ProjectDTO project = service.selectOne(projectNo);
+        List<ProjectCalendarDTO> list = service.projectselectAll(project.getProjectNo());
 
         JSONArray jsonArr = new JSONArray();
 
@@ -327,7 +328,7 @@ public class TeamPlusRestController {
 
 
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("projectNo", event.getProjectNo());
+            jsonObj.put("projectNo", project.getProjectNo());
             jsonObj.put("id", event.getId());
             jsonObj.put("title", event.getTitle());
             jsonObj.put("start", event.getStartDate());
@@ -341,8 +342,10 @@ public class TeamPlusRestController {
         return jsonArr;
     }
 
-    @PostMapping("/project/projectAddEvent")
-    public int projectinsert(@RequestBody ProjectCalendarDTO projectCalendarDTO){
+    @PostMapping("/project/projectAddEvent/{projectNo}")
+    public int projectinsert(@RequestBody ProjectCalendarDTO projectCalendarDTO,@PathVariable String projectNo){
+        ProjectDTO project = service.selectOne(projectNo);
+        projectCalendarDTO.setProjectNo(project.getProjectNo());
         return service.projectinsert(projectCalendarDTO);
     }
 
@@ -354,19 +357,17 @@ public class TeamPlusRestController {
         return service.projectdelete(eventId);
     }
 
-    @GetMapping("/private/private-Calendar/{userNo}")
+    @GetMapping("/private/private-Calendar")
     @ResponseBody
-    public JSONArray privatemonthPlan(@PathVariable String userNo) {
-        List<PrivateCalendarDTO> list = service.privateselectAll(userNo);
+    public JSONArray privatemonthPlan(@SessionAttribute("user") UsersDTO user) {
+        List<PrivateCalendarDTO> list = service.privateselectAll(user.getUserNo());
 
         JSONArray jsonArr = new JSONArray();
 
         for (PrivateCalendarDTO event : list) {
 
-
-
             JSONObject jsonObj = new JSONObject();
-            jsonObj.put("userNo", event.getUserNo());
+            jsonObj.put("userNo", user.getUserNo());
             jsonObj.put("id", event.getId());
             jsonObj.put("title", event.getTitle());
             jsonObj.put("start", event.getStartDate());

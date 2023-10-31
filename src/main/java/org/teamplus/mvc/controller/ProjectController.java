@@ -41,7 +41,6 @@ public class ProjectController {
         List<TeamDTO> team = service.teamListByProjectNo(projectNo);
         //팀원 정보 리스트
         List<UsersDTO> teamList = new ArrayList<>();
-        List<UsersDTO> upload = new ArrayList<>();
         List<DataShareDTO> dataShareList = service.DataselectList(projectNo);
 
         for(TeamDTO list : team){
@@ -56,7 +55,9 @@ public class ProjectController {
 
     //프로젝트 캘린더
     @GetMapping("/projectCalendar")
-    public String projectCalendar(@ModelAttribute("projectNo") String projectNo) {
+    public String projectCalendar(@ModelAttribute("projectNo") String projectNo,Model model) {
+        ProjectDTO project = service.selectOne(projectNo);
+        model.addAttribute("project",project);
 
         return "/dashboard/projectCalendar";
     }
