@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.teamplus.mvc.util.MailCodeDTO;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.UsersService;
@@ -31,23 +32,26 @@ public class UsersController {
     }
 
     @PostMapping("/signin")
-    public String signin(UsersDTO dto, Model model) {
+    public String signin(UsersDTO dto, Model model, RedirectAttributes redirectAttributes) {
         String redirect = "";
 
         log.info("━━━━━━━━━━ 입력받은 id/pw : {}",dto.toString());
 
-        UsersDTO user = service.signin(dto);
+        try {
+            UsersDTO user = service.signin(dto);
 
-        log.info("━━━━━━━━━━ 로그인 결과 : {}",user.toString());
+            log.info("━━━━━━━━━━ 로그인 결과 : {}",user.toString());
 
-        if (user != null) {
             log.info("━━━━━━━━━━ 로그인 성공 ⭕");
             model.addAttribute("user",user);
             redirect = "redirect:/";
-        } else {
+            redirectAttributes.addFlashAttribute("login",1);
+
+        } catch (NullPointerException e) {  //로그인 실패시 NullPointerException 발생
             log.info("━━━━━━━━━━ 로그인 실패 ❌");
             model.addAttribute("error", "로그인 실패");
             redirect = "redirect:/users/signin";
+            redirectAttributes.addFlashAttribute("login",0);
         }
 
         return redirect; // 로그인 페이지로 리디렉션
@@ -59,8 +63,9 @@ public class UsersController {
 
     // 회원가입 (정보 insert)
     @PostMapping("/signup")
-    public String signup(UsersDTO dto){
+    public String signup(UsersDTO dto, RedirectAttributes redirectAttributes){
         service.signUp(dto);
+        redirectAttributes.addFlashAttribute("signup",1);
         return "redirect:/users/signin";
     }
 

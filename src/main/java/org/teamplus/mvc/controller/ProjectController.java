@@ -170,13 +170,13 @@ public class ProjectController {
 
         Map<String,Object> members = new HashMap<>();
         for(String projectNo : projectNoList){
-            List<String> memberName = new ArrayList<>();
+            List<String> memberProfile = new ArrayList<>();
             List<TeamDTO> memberList = service.teamListByProjectNo(projectNo);
             for(TeamDTO member : memberList){
-                memberName.add(service.nameByUserNo(member.getUserNo()));
+                memberProfile.add(service.getProfileURL(member.getUserNo()));
             }
-            members.put(projectNo,memberName);
-            log.info("━━━━━━━━━━ members {}번 : {}",testCount,memberName.toString());
+            members.put(projectNo,memberProfile);
+            log.info("━━━━━━━━━━ members {}번 : {}",testCount,memberProfile.toString());
             testCount++;
         }
 
@@ -193,23 +193,29 @@ public class ProjectController {
     public String createView() { return "dashboard/project-create"; }
 
     @PostMapping("/create")
-    public String createAction(ProjectDTO dto, RedirectAttributes redirectAttributes){
+    public String createAction(@SessionAttribute("user") UsersDTO user, ProjectDTO dto, RedirectAttributes redirectAttributes, Model model){
         String projectNo="project"+service.getSequence();
         log.info(">>>>> 생성된 프로젝트번호 : {}",projectNo);
         dto.setProjectNo(projectNo);
         int result=service.newProject(dto);
         if(result==1) {
-            redirectAttributes.addFlashAttribute("message","프로젝트 생성 성공");
-            redirectAttributes.addFlashAttribute("title","Success");
-            log.info(">>>>> 프로젝트 생성 성공 여부(성공:1/실패:0) : {}",result);
-//            return "redirect:/project/create";
+            //생성했을 때 팀에 등록과 동시에 status 1로 지정
+            TeamDTO teamDTO = TeamDTO.builder()
+                    .projectNo(projectNo)
+                    .userNo(user.getUserNo())
+                    .leader(1)
+                    .build();
+            service.join(teamDTO);
+
+            redirectAttributes.addFlashAttribute("create",1);
+            redirectAttributes.addFlashAttribute("projectNo",projectNo);
+            redirectAttributes.addFlashAttribute("userNo",user.getUserNo());
         }else {
             redirectAttributes.addFlashAttribute("message","프로젝트 생성 실패");
             redirectAttributes.addFlashAttribute("title","Fail");
-            log.info(">>>>> 프로젝트 생성 성공 여부(성공:1/실패:0) : {}",result);
         }
         redirectAttributes.addFlashAttribute("result",result);
-        return "redirect:/project/create";
+        return "redirect:/project/list";
     }
 
     //프로젝트 참가 화면

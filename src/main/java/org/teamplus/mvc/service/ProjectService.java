@@ -249,4 +249,6 @@ public class ProjectService {
     public int projectupdate(ProjectCalendarDTO projectCalendarDTO){return projectCalendarMapper.update(projectCalendarDTO);}
     public int projectdelete(int id){return projectCalendarMapper.delete(id);}
 
+    //회원 번호로 프로필 주소 가져오기
+    public String getProfileURL(String userNo){return userDao.getProfileURL(userNo);}
 }

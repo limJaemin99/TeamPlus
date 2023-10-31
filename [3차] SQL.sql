@@ -73,9 +73,8 @@ CREATE TABLE PrivateCalendar
     title varchar2(1000) NOT NULL,
     startDate date NOT NULL,
     endDate date,
-    className varchar2(1000) NOT NULL,
-    allDay number(1) NOT NULL,
     description varchar2(1000),
+    location varchar(200),
     PRIMARY KEY (UserNo, id)
 );
 
@@ -88,9 +87,9 @@ CREATE TABLE PrivateTodo
 	UserNo varchar2(4000) NOT NULL,
 	Title varchar2(4000) NOT NULL,
 	Description varchar2(4000),
-	TodoDate date NOT NULL,
+	TodoDate date default sysdate,
 	EndDate date,
-	Status number(1) DEFAULT 3 NOT NULL,
+	Status number(1) DEFAULT 3,
 	PRIMARY KEY (TodoNo)
 );
 
@@ -119,9 +118,8 @@ CREATE TABLE ProjectCalendar
     title varchar2(1000) NOT NULL,
     startDate date NOT NULL,
     endDate date,
-    className varchar2(1000) NOT NULL,
-    allDay number(1) NOT NULL,
     description varchar2(1000),
+    location varchar2(200),
     PRIMARY KEY (ProjectNo, id)
 );
 
