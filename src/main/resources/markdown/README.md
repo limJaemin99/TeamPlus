@@ -2,8 +2,8 @@
 저희 TeamPlus는 협업 툴을 이용하여 팀원들과 원활한 커뮤니케이션이 가능합니다.<br>
 또한, TODO 리스트를 관리하며 MBTI J들을 위한 툴 입니다.<br><br>
 <button onclick="location.href='/users/signin'" style="padding:8px;border-radius: 10px;background: black; color: white; ">무료로 TeamPlus 사용하기 → </button>
-### ★★★메인 사진 넣기★★★ ###
-<img src="/assets/images/markdownImage/TEST.png" height="300" width="700" style="padding-bottom: 30px;">
+
+<img src="/assets/images/markdownImage/홈.png" height="600" width="700" style="padding-bottom: 30px;">
 <br>
 
 ## <img src="/assets/images/markdownImage/수백만명.gif" height="50" width="50"> 수백만명이 매일 사용하는 TeamPlus <img src="/assets/images/markdownImage/수백만명.gif" height="50" width="50">
