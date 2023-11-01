@@ -24,7 +24,12 @@
         <div class="col-4" id="listDiv">
 
             <div class="h-100" id="detaildiv">
-                <div class="row mb-3 pb-1"th:each="list,status:${list}">
+                <div class="row mb-3 pb-1" th:if="${list == null || list.size() == 0}">
+                    <h2 style="margin-bottom: 20px;">참여중인 프로젝트가 없어요</h2>
+                    <h4><a href="create">▶ 프로젝트 생성하러 가기</a></h4>
+                    <h4><a href="join">▶ 프로젝트 참여하러 가기</a></h4>
+                </div>
+                <div class="row mb-3 pb-1" th:each="list,status:${list}" th:if="${list != null}">
                         <div class="align-items-lg-center flex-lg-row flex-column">
                                 <div th:class="${status.count%5==0?'card profile-project-card shadow-none profile-project-primary'
                                           :(status.count%4==0?'card profile-project-card shadow-none profile-project-info'
