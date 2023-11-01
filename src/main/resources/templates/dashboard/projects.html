@@ -1000,12 +1000,66 @@
 		</div><!-- end col -->
 
 	</div><!-- end row -->
+	<!-- Todo ● 프로젝트 수정 후 모달 -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script type="text/javascript">
+		const modify = [[${modify}]]
+
+		if(modify == 1) {
+			document.addEventListener('DOMContentLoaded', function () {
+				$('#modify').modal('show');
+			});
+		}
+	</script>
+
+	<div class="modal fade" id="modify" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-body text-center p-5">
+					<img src="/assets/images/util/good.gif" width="200px;">
+					<div class="mt-4">
+						<h4 class="mb-3" style="color: #405189">프로젝트 수정이 완료되었습니다!</h4>
+						<div class="hstack gap-2 justify-content-center">
+							<a class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		const create = [[${create}]]
+
+		if(create == 1){
+			document.addEventListener('DOMContentLoaded', function () {
+				$('#create').modal('show');
+			})
+		}
+	</script>
+
+	<div class="modal fade" id="create" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-body text-center p-5">
+					<img src="/assets/images/util/write.gif" width="200px;">
+					<div class="mt-4">
+						<h4 class="mb-3" style="color: #405189">Todo 등록이 완료되었습니다!</h4>
+						<div class="hstack gap-2 justify-content-center">
+							<a class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <th:block layout:fragment="pagejs">
-
 	<!-- apexcharts -->
-	<!-- TODO 그래프 사용하는 js. 분석 필요-->
+	<!-- TODO 그래프 사용하는 js ▶ 분석 필요-->
 	<script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
 
 	<!-- Dashboard init -->
