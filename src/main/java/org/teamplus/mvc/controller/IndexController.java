@@ -22,7 +22,6 @@ public class IndexController {
             if (page == null) {
                 page="README.md";
             }
-            log.info("page: {}", page);
             String markdownValueFormLocal = getMarkdownValueFormLocal(page);
             Parser parser = Parser.builder().build();
             Node document = parser.parse(markdownValueFormLocal);
@@ -30,7 +29,10 @@ public class IndexController {
 
             model.addAttribute("contents", renderer.render(document));
 
-
+            //모달을 위한 login
+            Object login = model.getAttribute("login");
+            if(login == null)
+                model.addAttribute("login",0);
 
             return "index"; // index.html을 반환합니다.
         }
