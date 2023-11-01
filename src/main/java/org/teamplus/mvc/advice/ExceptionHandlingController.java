@@ -42,12 +42,16 @@ public class ExceptionHandlingController implements ErrorController {
                 model.addAttribute("code", status.toString());
                 model.addAttribute("message", httpStatus.getReasonPhrase());
                 model.addAttribute("timestamp", new Date());
+
                 return ERROR_404_PAGE_PATH;
             }
 
             // ● 500 error
             if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
-                // 서버에 대한 에러이기 때문에 사용자에게 정보를 제공하지 않음
+                //이전 경로 보냄
+                String referer = request.getHeader("REFERER");
+                model.addAttribute("pagePath", referer);
+
                 return ERROR_500_PAGE_PATH;
             }
         }

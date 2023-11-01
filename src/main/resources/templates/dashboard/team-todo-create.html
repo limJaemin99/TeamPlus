@@ -149,6 +149,7 @@
 
 		const currentDate = `${yyyy}-${mm}-${dd}`;
 		document.getElementById('startDateInput').value = currentDate;
+		document.getElementById('dueDateInput').value = currentDate;
 		document.getElementById('dueDateInput').min = document.getElementById('startDateInput').value;
 
 		function updateDueDateMin() {
