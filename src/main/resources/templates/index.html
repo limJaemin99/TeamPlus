@@ -44,7 +44,7 @@
                     <div class="modal-body text-center p-5">
                         <img src="/assets/images/util/welcome.gif" width="200px;">
                         <div class="mt-4">
-                            <h4 class="mb-3" style="color: #405189">[[${session.user.name}]]님 환영합니다!</h4>
+                            <h4 class="mb-3" style="color: #405189" th:if="${session.user != null}">[[${session.user.name}]]님 환영합니다!</h4>
                             <p class="text-muted mb-4" style="color: black;">오늘도 TeamPlus 에서 열심히 작업해봐요!</p>
                             <div class="hstack gap-2 justify-content-center">
                                 <a class="btn btn-link link-success fw-medium" data-bs-dismiss="modal"><i class="ri-close-line me-1 align-middle"></i> Close</a>
