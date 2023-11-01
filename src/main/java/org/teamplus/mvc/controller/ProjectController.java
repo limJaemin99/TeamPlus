@@ -29,7 +29,15 @@ public class ProjectController {
 
     // 프로젝트 홈 (프로젝트 진행 현황) 10.20 재민
     @GetMapping("/home")
-    public String overviewView(@ModelAttribute("projectNo") String projectNo) {
+    public String overviewView(@ModelAttribute("projectNo") String projectNo, RedirectAttributes redirectAttributes) {
+
+        //프로젝트 수정 후 모달에 사용할 Attribute
+        if(redirectAttributes.getFlashAttributes().get("modify") == null)
+            redirectAttributes.addAttribute("modify",0);
+
+        if(redirectAttributes.getFlashAttributes().get("create") == null)
+            redirectAttributes.addAttribute("create",0);
+
         return "dashboard/projects";
     }
 
@@ -87,16 +95,7 @@ public class ProjectController {
 
     //프로젝트 수정 POST (팀장만 접근 가능)
     @PostMapping("/modify")
-    public String modify(@ModelAttribute("projectNo") String projectNo,ProjectDTO project){
-        log.info("━━━━━ [프로젝트 수정] ━━━━━━━━━━");
-        log.info("┏┏┏┏┏┏┏┏┏┏ projectNo : {}",projectNo);
-        log.info("━━━━━━━━━━ status : {}",project.getStatus());
-        log.info("━━━━━━━━━━ title : {}",project.getTitle());
-        log.info("━━━━━━━━━━ description : {}",project.getDescription());
-        log.info("━━━━━━━━━━ startDate : {}",project.getStartDate());
-        log.info("━━━━━━━━━━ dueDate : {}",project.getDueDate());
-        log.info("┗┗┗┗┗┗┗┗┗┗ password : {}",project.getPassword());
-
+    public String modify(@ModelAttribute("projectNo") String projectNo, ProjectDTO project, RedirectAttributes redirectAttributes){
         if(project.getStatus() == 0){
             project.setEndDate(null);
         } else {
@@ -109,15 +108,9 @@ public class ProjectController {
 
         int result = service.update(project);
 
-        if(result == 1){    //업데이트 성공 ⭕
-            log.info("⭕ 업데이트 성공 ⭕");
+        redirectAttributes.addFlashAttribute("modify",result);
 
-        } else {    //업데이트 실패 ❌
-            log.info("❌ 업데이트 실패 ❌");
-
-        }
-
-        return "redirect:/project/home";
+        return "redirect:/project/home?projectNo="+projectNo;
     }
 
     // 파일 관리자
@@ -297,17 +290,18 @@ public class ProjectController {
     }
 
     @PostMapping("/todo-create")
-    public String createTodoAction(TeamTodoDTO dto,@SessionAttribute("user")UsersDTO user,
-                                   @ModelAttribute("projectNo") String projectNo){
-        // TODO 현재 임의값으로 테스트 완료, 결로 설정 후 테스트 필요
+    public String createTodoAction(TeamTodoDTO dto, @SessionAttribute("user")UsersDTO user,
+                                   @ModelAttribute("projectNo") String projectNo, RedirectAttributes redirectAttributes){
         log.info(">>>> projectNo : {}",projectNo);
         String todoNo = service.selectOne(projectNo).getTitle()+"_"+user.getId()+"_"+service.getTeamTodoSeq();
         log.info("::::::: 팀할일번호: {}",todoNo);
         dto.setTodoNo(todoNo);
         dto.setUserNo(user.getUserNo());
         int result = service.newTeamTodo(dto);
-        log.info("할일생성 성공 여부 : {}",result);
-        return "redirect:/project/home";
+
+        redirectAttributes.addFlashAttribute("create",result);
+
+        return "redirect:/project/home?projectNo="+projectNo;
 
     }
 }

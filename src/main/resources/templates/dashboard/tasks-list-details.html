@@ -15,7 +15,7 @@
 
 <body>
 <div layout:fragment="content">
-	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
+	<div th:replace="partials/page-title :: page-title('Create Memo','Memo')"></div>
 <form action="/private/save" method="post">
 	<input type="hidden" name="userNo">
 	<div class="row">
@@ -93,11 +93,6 @@
 </form>
 	</div>
 </div>
-
-
-<th:block layout:fragment="modal">
-
-</th:block>
 
 <th:block layout:fragment="pagejs">
 

@@ -47,6 +47,7 @@ document.querySelector('#inquiry-send').addEventListener('click',e=>{
                     $button.classList.add('btn','btn-light')
                     $button.setAttribute('data-bs-dismiss','modal')
                     $button.innerHTML = 'Close'
+                    $button.id = 'close'
                     footer.appendChild($button)
 
                     if(result.result == 1){
@@ -80,8 +81,3 @@ document.querySelector('#inquiry-send').addEventListener('click',e=>{
 })
 
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━//
-
-// ● [로그인] 성공
-
-
-

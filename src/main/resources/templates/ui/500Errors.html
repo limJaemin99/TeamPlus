@@ -25,11 +25,10 @@
 							<h1 class="title text-muted">500</h1>
 						</div>
 						<div>
-							<h4>Internal Server Error!</h4>
-							<p class="text-muted w-75 mx-auto">Server Error 500. We're not exactly sure what happened,
-								but our servers say something is wrong.</p>
-							<a href="/" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Back to
-								home</a>
+							<h4>☹ Internal Server Error! ☹</h4>
+							<p class="text-muted w-75 mx-auto">이전 화면으로 이동하거나 로그인 후 다시 시도해주세요</p>
+							<a th:href="${pagePath}" class="btn btn-success"><i class="mdi mdi-reload me-1"></i>Back</a>
+							<a href="../../users/signin" class="btn btn-success"><i class="mdi mdi-home me-1"></i>Login</a>
 						</div>
 					</div><!-- end col-->
 				</div>
