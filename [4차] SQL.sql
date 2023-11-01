@@ -10,6 +10,8 @@ DROP TABLE Team CASCADE CONSTRAINTS;
 DROP TABLE TeamTodo CASCADE CONSTRAINTS;
 DROP TABLE Project CASCADE CONSTRAINTS;
 DROP TABLE Users CASCADE CONSTRAINTS;
+DROP TABLE PRIVATECALENDAR CASCADE CONSTRAINTS;
+DROP TABLE PROJECTCALENDAR CASCADE CONSTRAINTS;
 
 
 
@@ -60,6 +62,7 @@ CREATE TABLE MyNote
 	Title varchar2(4000) NOT NULL,
 	Content varchar2(4000) NOT NULL,
 	password varchar2(100) NOT NULL,
+	isPrivate varchar2(100),
 	PRIMARY KEY (UserNo, NoteNo)
 );
 
@@ -180,6 +183,7 @@ CREATE TABLE Users
 	job varchar2(100),
 	description varchar2(4000),
     profileURL varchar2(4000),
+    sns varchar2(50),
 	PRIMARY KEY (UserNo)
 );
 

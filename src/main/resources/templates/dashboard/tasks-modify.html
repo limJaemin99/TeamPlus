@@ -15,7 +15,7 @@
 
 <body>
 <div layout:fragment="content">
-	<div th:replace="partials/page-title :: page-title('Create Project','Projects')"></div>
+	<div th:replace="partials/page-title :: page-title('Create Memo','Memo')"></div>
 <form action="/private/modifysave" method="post">
 	<input type="hidden" value="test1" name="userNo">
 	<input type="hidden" name="noteNo" th:value="${vo.noteNo}">
