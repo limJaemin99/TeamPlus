@@ -34,7 +34,7 @@ public class IndexController {
             if(login == null)
                 model.addAttribute("login",0);
 
-            return "index"; // index.html을 반환합니다.
+            return "index";
         }
 
         public String getMarkdownValueFormLocal(String manualPage) throws Exception {
