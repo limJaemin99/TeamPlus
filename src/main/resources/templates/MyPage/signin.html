@@ -89,21 +89,14 @@
 											<h5 class="fs-13 mb-4 title">Sign In with</h5>
 										</div>
 
-										<div id="naverlogin">
-											<a href="https://nid.naver.com/oauth2.0/authorize?client_id=eT4X7SwbVmc3l8LRcrps&redirect_uri=http://localhost:8086/naver/callback&response_type=code">
-												<img src="/static/assets/images/naverlogin.png">
-											</a>
-										</div>
+										<a href="https://nid.naver.com/oauth2.0/authorize?client_id=eT4X7SwbVmc3l8LRcrps&redirect_uri=http://localhost:8086/naver/callback&response_type=code" onclick="window.open(this.href, '_blank', 'width=800, height=600'); return false;">
+											<img src="/assets/images/users/naverlogin.png" style="width: 50px; height: 50px;">
+										</a>
 
-										<div>
-											<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7ce191ea09b6b4d1c1aab13d137d8a4e&redirect_uri=http://localhost:8086/kakao/callback">
-												<img src="/static/assets/images/kakao_login_medium_narrow.png">
-											</a>
-										</div>
-										<div id="googlelogin">
-											<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=email&response_type=code&state=security_token%3D138r5719ru3e1%26url%3Dhttps://oauth2.example.com/token&client_id=384518553760-170g64pjn4lpmarorlpvbp0pvnqoich7.apps.googleusercontent.com&redirect_uri=http://localhost:8086/google/callback&access_type=offline"
-											   class="btn btn-primary w-100">구글 로그인 </a>
-										</div>
+										<a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=7ce191ea09b6b4d1c1aab13d137d8a4e&redirect_uri=http://localhost:8086/kakao/callback">
+											<img src="/assets/images/users/kakao_login_medium_narrow.png" style="width: 50px; height: 50px;">
+										</a>
+										<a href="https://accounts.google.com/o/oauth2/v2/auth?scope=email&response_type=code&state=security_token%3D138r5719ru3e1%26url%3Dhttps://oauth2.example.com/token&client_id=384518553760-170g64pjn4lpmarorlpvbp0pvnqoich7.apps.googleusercontent.com&redirect_uri=http://localhost:8086/google/callback&access_type=offline"><img src="/assets/images/users/googlelogin.png" style="width: 50px; height: 50px;"> </a>
 									</div>
 								</form>
 							</div>

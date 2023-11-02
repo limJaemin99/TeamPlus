@@ -94,7 +94,6 @@ public class GoogleService {
         if (user == null) {
             UsersDTO newUser = new UsersDTO();
             newUser.setEmail(email);
-            newUser.setSns("google");
             service.snsinsert(newUser);
             user = service.snslogin(email);
         }

@@ -60,9 +60,6 @@ public class UsersService {
         return dao.changeProfile(dto);
     }
 
-    // 유저[회원정보 수정(이름 제외하고 전체)]
-    public int updateProfile(UsersDTO dto){return dao.updateProfile(dto);}
-
     // 유저 [회원 탈퇴]
     public int delete(UsersDTO dto) {
         return dao.delete(dto);

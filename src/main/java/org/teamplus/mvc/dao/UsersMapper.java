@@ -36,9 +36,6 @@ public interface UsersMapper {
     // 유저 [회원정보 수정(프로필 사진)]
     int changeProfile(UsersDTO dto);
 
-    // 유저 [회원정보 수정(이름제외 전체)]
-    int updateProfile(UsersDTO dto);
-
     // 유저 [회원 탈퇴]
     int delete(UsersDTO dto);
 

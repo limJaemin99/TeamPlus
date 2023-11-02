@@ -24,5 +24,4 @@ public class UsersDTO {
     private String job;
     private String description;
     private String profileURL;
-    private String sns;
 }

@@ -2,8 +2,8 @@ package org.teamplus.mvc.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,9 +14,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.teamplus.mvc.dto.UsersDTO;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -119,14 +116,12 @@ public class KakaoService {
 
         UsersDTO user;
 
-
         user = service.snslogin(email);
 
-        if (user == null) {
+        if(user == null){
+
             UsersDTO newUser = new UsersDTO();
             newUser.setEmail(email);
-            newUser.setSns("kakao");
-
             service.snsinsert(newUser);
 
             user = service.snslogin(email);
@@ -134,5 +129,36 @@ public class KakaoService {
         return user;
 
     }
+    public String getKakaoLogout(String accessToken) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + accessToken);
+
+            RestTemplate restTemplate = new RestTemplate();
+            HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(
+                    KAKAO_AUTH_URI + "/oauth/logout",
+                    HttpMethod.POST,
+                    httpEntity,
+                    String.class
+            );
+            log.info("-------------------------------");
+            log.info(accessToken);
+            log.info("--------------------------------------");
+
+            // 로그아웃 성공 여부에 따라 처리
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return "로그아웃 성공";
+            } else {
+                return "로그아웃 실패";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "로그아웃 실패";
+        }
+    }
+
+
 
 }
