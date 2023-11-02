@@ -145,7 +145,7 @@ function new_link() {
     div1.innerHTML = document.getElementById('newForm').innerHTML + delLink;
 
     document.getElementById('newlink').appendChild(div1);
-
+    
     var genericExamples = document.querySelectorAll("[data-trigger]");
     Array.from(genericExamples).forEach(function (genericExamp) {
         var element = genericExamp;
@@ -192,6 +192,21 @@ const imagePaths = [
 const imageList = document.getElementById('image-list');
 console.log(imageList)
 
+// 프로필 이미지 경로 확인
+const profileImage = document.getElementById('profileURLInput');
+console.log(profileImage)
+if (profileImage) {
+    const profileURL = profileImage.getAttribute('src');
+    console.log(profileURL)
+    if (!profileURL) {
+        // profileURL이 없는 경우 기본 이미지로 설정
+        profileImage.src = defaultImagePath;
+        console.log(defaultImagePath)
+    }
+}
+
+
+
 let selectedImage = null;
 let selectedImagePath = null;
 // 이미지를 클릭할 때 선택 이벤트를 처리
@@ -215,35 +230,41 @@ imagePaths.forEach((imagePath, index) => {
         selectedImage = imageElement;
 
         // 선택한 이미지의 경로를 가져와서 <img> 요소에 설정
-        selectedImagePath = imageElement.src; // 이 부분을 수정
+        selectedImagePath = imageElement.src;
 
-        const profileImage = document.getElementById('profile-image');
+        const profileImage = document.getElementById('profileURLInput');
         profileImage.src = selectedImagePath;
     });
 
-    imageList.appendChild(imageElement);
+        imageList.appendChild(imageElement);
 });
 
-// "confirmSelection" 버튼 클릭 시, 선택한 이미지를 확정
 const confirmSelectionButton = document.getElementById('confirmSelection');
 confirmSelectionButton.addEventListener('click', () => {
+    const profileURLInput = document.getElementById('profile-img-file-input');
+
     if (selectedImage) {
         // 이미지가 선택된 경우
-        const profileURLInput = document.getElementById('profile-img-file-input');
         selectedImagePath = selectedImagePath.replace('http://localhost:8086', '');
         profileURLInput.value = selectedImagePath;
-    } else {
-        // 이미지가 선택되지 않은 경우, 기본 이미지를 사용
-        const profileURLInput = document.getElementById('profile-img-file-input');
-        profileURLInput.value = defaultImagePath;
     }
 
+    // 추가: 이미지를 클릭하지 않았을 때 기본 이미지로 설정
+    if (!selectedImage) {
+        selectedImagePath = defaultImagePath;
+        const profileImage = document.getElementById('profileURLInput');
+        profileImage.src = selectedImagePath;
+
+        const profileURLInput = document.getElementById('profile-img-file-input');
+        profileURLInput.value = selectedImagePath;
+    }
     // 이미지 경로 확인
     console.log(profileURLInput.value);
 
     const modifyProfileImageModal = new bootstrap.Modal(document.getElementById('modifyProfileImage'));
     modifyProfileImageModal.hide();
 });
+
 
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━아이디 중복검사 함수  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 
@@ -260,15 +281,15 @@ function idCheck() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
-                // 사용 가능한 닉네임
+                // 사용 가능한 아이디
                 var errorMessage = "사용 가능한 id입니다.";
                 var errorDiv = document.getElementById("id-error-message");
                 errorDiv.innerHTML = errorMessage;
                 errorDiv.style.color = "green"; // 빨간색으로 설정
                 errorDiv.style.fontSize = "small"; // 원하는 글꼴 크기 설정
-                console.log("사용 가능한 닉네임입니다.");
+                console.log("사용 가능한 Id입니다.");
             } else if (xhr.status == 409) {
-                // 중복된 닉네임
+                // 중복된 아이디
                 var errorMessage = "중복된 id입니다.";
                 var errorDiv = document.getElementById("id-error-message");
                 errorDiv.innerHTML = errorMessage;
@@ -299,7 +320,7 @@ function nickNameCheck() {
             if (xhr.status == 200) {
                 // 사용 가능한 닉네임
                 var errorMessage = "사용 가능한 닉네임입니다.";
-                var errorDiv = document.getElementById("id-error-message");
+                var errorDiv = document.getElementById("nick-error-message");
                 errorDiv.innerHTML = errorMessage;
                 errorDiv.style.color = "green"; // 빨간색으로 설정
                 errorDiv.style.fontSize = "small"; // 원하는 글꼴 크기 설정
@@ -308,7 +329,7 @@ function nickNameCheck() {
             } else if (xhr.status == 409) {
                 // 중복된 닉네임
                 var errorMessage = "중복된 닉네임입니다..";
-                var errorDiv = document.getElementById("id-error-message");
+                var errorDiv = document.getElementById("nick-error-message");
                 errorDiv.innerHTML = errorMessage;
                 errorDiv.style.color = "red"; // 빨간색으로 설정
                 errorDiv.style.fontSize = "small"; // 원하는 글꼴 크기 설정
@@ -340,6 +361,7 @@ function sendEmail() {
                 // 이메일 전송 성공 시, 인증 코드 입력 창 표시
                 document.getElementById("verificationCodeDiv").style.display = "flex";
                 document.querySelector("#verificationCodeDiv button").style.display = "block";
+                alert("이메일이 전송되었습니다.")
                 console.log("이메일이 전송되었습니다.");
             } else if (xhr.status == 409) {
                 console.log("409 오류." + xhr.status);
@@ -370,13 +392,16 @@ function verifyCode() {
                 // 인증 코드 확인 성공 시 업데이트 로직 수행
                 console.log("인증 코드 확인 성공.");
                 alert("인증이 완료되었습니다.");
+                document.getElementById('isVerificationComplete').value=true;
 
-                // 이후에 업데이트 로직을 추가하십시오.
             } else if (xhr.status == 409) {
                 console.log("409 오류." + xhr.status);
+                document.getElementById('isVerificationComplete').value=false;
                 alert("인증 코드 확인 실패");
             } else {
+                document.getElementById('isVerificationComplete').value=false;
                 console.log("다른 오류 발생: " + xhr.status);
+
             }
         }
     };
@@ -384,15 +409,26 @@ function verifyCode() {
     xhr.send(jdata);
 }
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━프로필 변경 확인 함수  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
-function confirmProfileModification() {
-    if (confirm("정말 수정하시겠습니까?")) {
-        // 사용자가 확인 버튼을 누르면 폼이 제출됩니다.
-        document.getElementById("profileForm").submit();
-    }
-    // 사용자가 확인 버튼을 누르지 않으면 폼이 제출되지 않습니다.
-    return false;
-}
 
+function enableProfileModification() {
+    var isVerificationCompleteInput = document.getElementById('isVerificationComplete');
+    var errorDiv = document.getElementById('nick-error-message'); // Assuming you have an 'errorDiv' for the nickname error message
+    var errorMessage = errorDiv.innerHTML;
+
+    if (errorDiv.style.color === 'red') {
+        alert('중복된 닉네임입니다. 수정할 수 없습니다.');
+        return; // Prevent further execution of the function
+    }
+
+    if (isVerificationCompleteInput.value === 'true') {
+        if (confirm('정말 수정하시겠습니까?')) {
+            // 사용자가 확인 버튼을 누르면 폼이 제출됩니다.
+            document.getElementById('profileForm').submit();
+        }
+    } else {
+        alert('이메일이 인증되지 않았습니다.');
+    }
+}
 /*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━비밀번호 변경 함수 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
 var firstStep = false;
 var secondStep = false;
@@ -467,10 +503,82 @@ function changePassword() {
     }
 }
 
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━소셜 유저는 인증 X ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+document.addEventListener('DOMContentLoaded', function () {
+    var ownsns = document.getElementById('sns').value;
+    var socialdiv = document.getElementById('socialdiv');
+    var emailInput = document.getElementById('emailInput');
+    var passcodeElement = document.getElementById('isVerificationComplete');
 
-$(document).ready(function () {
-    // 페이지 로딩 시, hidden input의 값을 확인하여 인증 상태를 확인
-    if ($('#isVerificationComplete').val() === "false") {
-        alert('인증되지 않았습니다.');
+    if (ownsns != null && ownsns.trim() !== "") {
+        // SNS 정보가 존재하면 버튼을 제거합니다.
+        console.log(ownsns);
+        socialdiv.style.display = 'none';
+        emailInput.readOnly = true;
+
+        // 'isVerificationComplete' 요소의 값을 'true'로 설정합니다.
+        passcodeElement.value = 'true';
+        var passcode = passcodeElement.value;
+        console.log(passcode);
     }
 });
+
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━회원탈퇴 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+
+document.getElementById('deleteLink').addEventListener('click', function(event) {
+    event.preventDefault(); // 기본 클릭 동작을 막음
+
+    if (confirm('정말로 탈퇴하시겠습니까?')) {
+        var userNo = document.getElementById('userNoFordelete').value; // userNo 값을 가져옴
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/api/delete', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                alert('탈퇴되었습니다.');
+                window.location.href = '/users/signin';
+            } else {
+                alert('탈퇴 요청에 실패했습니다.');
+            }
+        };
+
+        var requestData = JSON.stringify({ userNo: userNo });
+        xhr.send(requestData);
+    }
+});
+
+/*━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━회원가입 오류메세지 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+function signup() {
+    var d = document;
+    var newnick = d.getElementById("lastnameInput").value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:8086/api/signup", true);
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+                // Sign Up 성공
+                var form = document.getElementById("signupForm"); // 폼 요소를 가져옵니다.
+                form.submit();
+                window.location.href = "/users/signup"; // 원하는 페이지로 리디렉션
+            } else if (xhr.status == 400) {
+                // 서버에서 반환된 에러 메시지 표시
+                var errorMessages = JSON.parse(xhr.responseText);
+                var errorMessageText = errorMessages.join('<br>');
+                document.getElementById("errorMessages").innerHTML = errorMessageText;
+
+                $('#errorModal').modal('show'); // 모달을 표시
+            } else {
+                console.log("다른 오류 발생: " + xhr.status);
+            }
+        }
+    };
+
+    var requestBody = JSON.stringify({ "newnick": newnick });
+    xhr.send(requestBody);
+}

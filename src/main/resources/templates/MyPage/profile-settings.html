@@ -1,10 +1,10 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{profile-layout}">
+      layout:decorate="~{profile-layout}">
 
 <th:block layout:fragment="pagetitle">
-	<!--page title-->
-	<div th:replace="partials/title-meta :: title-meta('Profile Settings')"></div>
+    <!--page title-->
+    <div th:replace="partials/title-meta :: title-meta('Profile Settings')"></div>
 </th:block>
 
 <head>
@@ -13,451 +13,466 @@
 
 <body>
 <div layout:fragment="content">
-	<div class="position-relative mx-n4 mt-n4">
-		<div class="profile-wid-bg profile-setting-img">
-			<img src="/assets/images/users/user-dummy-img.jpg" class="profile-wid-img" alt="">
-			<div class="overlay-content">
-				<div class="text-end p-3">
-					<div class="p-0 ms-auto rounded-circle profile-photo-edit">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<form class="needs-validation" action="/users/modify" method="post" id="profileForm">
-		<div class="row">
-			<div class="col-xxl-3">
-				<div class="card mt-n5">
-					<div class="card-body p-4">
-						<div class="text-center">
-							<div class="profile-user position-relative d-inline-block mx-auto  mb-3">
-								<img th:src="${session.user.profileURL}"
-									 class="rounded-circle avatar-xl img-thumbnail user-profile-image"
-									 alt="user-profile-image" id="profile-image">
-								<div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-									<input id="profile-img-file-input" type="hidden"
-										   class="profile-img-file-input" name="profileURL">
-									<label for="profile-img-file-input"
-										   class="profile-photo-edit avatar-xs">
-										<button type="button" class="avatar-title rounded-circle bg-light text-body"
-												data-bs-target="#modifyProfileImage"
-												data-bs-toggle="modal">
-											<i class="ri-camera-fill"></i>
-										</button>
-									</label>
-								</div>
-								<div class="modal fade zoomIn" id="modifyProfileImage" tabindex="-1"
-									 aria-labelledby="createProjectModalLabel"
-									 aria-hidden="true">
-									<div class="modal-dialog modal-dialog-centered">
-										<div class="modal-content">
-											<div class="modal-header p-3 bg-soft-success">
-												<h5 class="modal-title" id="createProjectModalLabel">Choose Your
-													Image</h5>
-												<button type="button" class="btn-close" data-bs-dismiss="modal"
-														id="ProfileImage-close"
-														aria-label="Close"></button>
-											</div>
-											<div class="modal-body">
-												<div class="mb-4">
-													<label class="form-label">Profile Pictures</label>
-													<div id="image-list">
-														<!-- 이미지 목록을 여기에 동적으로 추가합니다. -->
-													</div>
-												</div>
-												<div class="hstack gap-2 justify-content-end">
-													<button type="button" class="btn btn-ghost-success"
-															data-bs-dismiss="modal"><i
-															class="ri-close-line align-bottom"></i>
-														Close
-													</button>
-													<button type="button" class="btn btn-primary" id="confirmSelection"
-															data-bs-dismiss="modal">선택
-													</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- end modal-dialog -->
-								</div>
-								<!-- End Create Project Modal -->
-							</div>
-							<h5 class="fs-16 mb-1" th:text="${session.user.name}"></h5>
-							<p class="text-muted mb-0" th:text="${session.user.job}"></p>
-						</div>
-					</div>
-				</div>
-				<!--end card-->
-			</div>
-			<!--end col-->
-			<div class="col-xxl-9">
-				<div class="card mt-xxl-n5">
-					<div class="card-header">
-						<ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
-							<li class="nav-item">
-								<a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
-									<i class="fas fa-home"></i> Personal Details
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
-									<i class="far fa-user"></i> Change Password
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="card-body p-4">
-						<div class="tab-content">
-							<div class="tab-pane active" id="personalDetails" role="tabpanel">
-								<div class="row">
-									<div class="col-lg-5">
-										<div class="mb-3">
-											<label for="firstnameInput" class="form-label">Name</label>
-											<input type="text" class="form-control" id="firstnameInput"
-												   th:value="${session.user.name}" name="name" readonly>
-										</div>
-									</div>
-									<div class="col-lg-5">
-										<div class="mb-3">
-											<label for="lastnameInput" class="form-label">NickName</label>
-											<div style="display:inline-block; margin-left: 10px;"
-												 id="id-error-message"></div>
-											<input type="text" class="form-control" id="lastnameInput"
-												   th:value="${session.user.nickName}" name="nickName">
-										</div>
-									</div>
-									<div class="col-lg-2"
-										 style="text-align: center; display: flex; align-items: center;">
-										<button type="button" onclick="nickNameCheck()" class="btn btn-primary"
-												style="margin-top: 10px;">
-											중복검사
-										</button>
-									</div>
-									<!--end col-->
-									<div class="col-lg-5">
-										<div class="mb-3">
-											<label for="emailInput" class="form-label">Email Address</label>
-											<input type="email" class="form-control" id="emailInput"
-												   th:value="${session.user.email}" name="email">
-										</div>
-									</div>
-									<div class="col-lg-2"
-										 style="text-align: center; display: flex; align-items: center;">
-										<button type="button" onclick="sendEmail()" class="btn btn-primary" style="margin-top: 10px;">
-											이메일 인증
-										</button>
-									</div>
-									<div id="verificationCodeDiv" style="display: none; align-items: center;">
-										<input type="text" class="form-control" style="width:100px; margin-right: 10px;" id="verificationCodeInput" placeholder="인증 코드">
-										<button class="btn btn-primary" onclick="verifyCode()">코드 확인</button>
-									</div>
+    <div class="position-relative mx-n4 mt-n4">
+        <div class="profile-wid-bg profile-setting-img">
+            <img src="/assets/images/profilecover.png" class="profile-wid-img" alt="" style="opacity: 0.9;">
+            <div class="overlay-content">
+                <div class="text-end p-3">
+                    <div class="p-0 ms-auto rounded-circle profile-photo-edit">
+                        <input id="profile-foreground-img-file-input" type="file"
+                               class="profile-foreground-img-file-input">
+                        <label for="profile-foreground-img-file-input" class="profile-photo-edit btn btn-light">
+                            <i class="ri-image-edit-line align-bottom me-1"></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="needs-validation" action="/users/modify" method="post" id="profileForm">
+        <div class="row">
+            <div class="col-xxl-3">
+                <div class="card mt-n5">
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <div class="profile-user position-relative d-inline-block mx-auto  mb-3">
+                                <img th:src="${session.user.profileURL}"
+                                     class="rounded-circle avatar-xl img-thumbnail user-profile-image"
+                                     alt="user-profile-image" id="profileURLInput">
+                                <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                    <input id="profile-img-file-input" type="hidden"
+                                           class="profile-img-file-input" name="profileURL">
+                                    <label for="profile-img-file-input"
+                                           class="profile-photo-edit avatar-xs">
+                                        <button type="button" class="avatar-title rounded-circle bg-light text-body"
+                                                data-bs-target="#modifyProfileImage"
+                                                data-bs-toggle="modal">
+                                            <i class="ri-camera-fill"></i>
+                                        </button>
+                                    </label>
+                                </div>
+                                <div class="modal fade zoomIn" id="modifyProfileImage" tabindex="-1"
+                                     aria-labelledby="createProjectModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header p-3 bg-soft-success">
+                                                <h5 class="modal-title" id="createProjectModalLabel">Choose Your
+                                                    Image</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        id="ProfileImage-close"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Profile Pictures</label>
+                                                    <div id="image-list">
+                                                        <!-- 이미지 목록을 여기에 동적으로 추가합니다. -->
+                                                    </div>
+                                                </div>
+                                                <div class="hstack gap-2 justify-content-end">
+                                                    <button type="button" class="btn btn-ghost-success"
+                                                            data-bs-dismiss="modal"><i
+                                                            class="ri-close-line align-bottom"></i>
+                                                        Close
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary" id="confirmSelection"
+                                                            data-bs-dismiss="modal">선택
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end modal-dialog -->
+                                </div>
+                                <!-- End Create Project Modal -->
+                            </div>
+                            <h5 class="fs-16 mb-1" th:text="${session.user.name}"></h5>
+                            <p class="text-muted mb-0" th:text="${session.user.job}"></p>
+                        </div>
+                    </div>
+                </div>
+                <!--end card-->
+            </div>
+            <!--end col-->
+            <div class="col-xxl-9">
+                <div class="card mt-xxl-n5">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#personalDetails" role="tab">
+                                    <i class="fas fa-home"></i> Personal Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-bs-toggle="tab" href="#changePassword" role="tab">
+                                    <i class="far fa-user"></i> Change Password
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="personalDetails" role="tabpanel">
+                                <div class="row">
+                                    <div class="col-lg-5">
+                                        <div class="mb-3">
+                                            <label for="firstnameInput" class="form-label">Name</label>
+                                            <input type="text" class="form-control" id="firstnameInput"
+                                                   th:value="${session.user.name}" name="name" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-5">
+                                        <div class="mb-3">
+                                            <label for="lastnameInput" class="form-label">NickName</label>
+                                            <div style="display:inline-block; margin-left: 10px;"
+                                                 id="nick-error-message"></div>
+                                            <input type="text" class="form-control" id="lastnameInput"
+                                                   th:value="${session.user.nickName}" name="nickName">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2"
+                                         style="text-align: center; display: flex; align-items: center;">
+                                        <button type="button" onclick="nickNameCheck()" class="btn btn-primary"
+                                                style="margin-top: 10px;">
+                                            중복검사
+                                        </button>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-5">
+                                        <div class="mb-3">
+                                            <label for="emailInput" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="emailInput"
+                                                   th:value="${session.user.email}" name="email">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-1"
+                                         style="text-align: center; display: flex; width:auto; align-items: center;"
+                                         id="socialdiv">
+                                        <input type="hidden" th:value="${session.user.sns}" id="sns">
+                                        <button type="button" onclick="sendEmail()" class="btn btn-primary"
+                                                style="margin-top: 10px;"
+                                                id="emailVerificationButton">
+                                            이메일인증
+                                        </button>
+                                    </div>
+                                    <div id="verificationCodeDiv" style="display: none; align-items: center;">
+                                        <input type="text" class="form-control" style="width:100px; margin-right: 10px;"
+                                               id="verificationCodeInput" placeholder="인증 코드">
+                                        <button class="btn btn-primary" onclick="verifyCode()">코드 확인</button>
+                                    </div>
 
-									<!--end col-->
-									<div class="col-lg-5">
-										<div class="mb-3">
-											<label for="skillsInput" class="form-label">Job</label>
-											<select name="job" data-choices th:value="${session.user.job}"
-													data-choices-text-unique-true id="skillsInput">
-												<option value="3D 애니메이터"
-														th:selected="${session.user.job == '3D 애니메이터'}">3D 애니메이터
-												</option>
-												<option value="디지털 영상 편집 전문가"
-														th:selected="${session.user.job == '디지털 영상 편집 전문가'}">디지털 영상 편집
-													전문가
-												</option>
-												<option value="웹 마스터"
-														th:selected="${session.user.job == '웹 마스터'}">웹 마스터
-												</option>
-												<option value="웹 PD"
-														th:selected="${session.user.job == '웹 PD'}">웹 PD
-												</option>
-												<option value="게임 그래픽 디자이너"
-														th:selected="${session.user.job == '게임 그래픽 디자이너'}">게임 그래픽 디자이너
-												</option>
-												<option value="게임 프로그래머"
-														th:selected="${session.user.job == '게임 프로그래머'}">게임 프로그래머
-												</option>
-												<option value="IT 전문 강사"
-														th:selected="${session.user.job == 'IT 전문 강사'}">IT 전문 강사
-												</option>
-												<option value="프로젝트 매니저"
-														th:selected="${session.user.job == '프로젝트 매니저'}">프로젝트 매니저
-												</option>
-												<option value="네트워크 디자이너"
-														th:selected="${session.user.job == '네트워크 디자이너'}">네트워크 디자이너
-												</option>
-												<option value="리눅스 전문가"
-														th:selected="${session.user.job == '리눅스 전문가'}">리눅스 전문가
-												</option>
-												<option value="소프트웨어 개발자"
-														th:selected="${session.user.job == '소프트웨어 개발자'}">소프트웨어 개발자
-												</option>
-												<option value="웹 마케터"
-														th:selected="${session.user.job == '웹 마케터'}">웹 마케터
-												</option>
-												<option value="인터넷 쇼핑몰 운영자"
-														th:selected="${session.user.job == '인터넷 쇼핑몰 운영자'}">인터넷 쇼핑몰 운영자
-												</option>
-												<option value="그래픽 디자이너"
-														th:selected="${session.user.job == '그래픽 디자이너'}">그래픽 디자이너
-												</option>
-												<option value="CAD/CAM 전문가"
-														th:selected="${session.user.job == 'CAD/CAM 전문가'}">CAD/CAM 전문가
-												</option>
-												<option value="네트워크 전문가"
-														th:selected="${session.user.job == '네트워크 전문가'}">네트워크 전문가
-												</option>
-												<option value="시스템 엔지니어"
-														th:selected="${session.user.job == '시스템 엔지니어'}">시스템 엔지니어
-												</option>
-												<option value="보안 전문가"
-														th:selected="${session.user.job == '보안 전문가'}">보안 전문가
-												</option>
-												<option value="IP 전문가"
-														th:selected="${session.user.job == 'IP 전문가'}">IP 전문가
-												</option>
-												<option value="웹 기획자"
-														th:selected="${session.user.job == '웹 기획자'}">웹 기획자
-												</option>
-												<option value="웹 카피라이터"
-														th:selected="${session.user.job == '웹 카피라이터'}">웹 카피라이터
-												</option>
-												<option value="정보통신 기술자"
-														th:selected="${session.user.job == '정보통신 기술자'}">정보통신 기술자
-												</option>
-												<option value="프로게이머"
-														th:selected="${session.user.job == '프로게이머'}">프로게이머
-												</option>
-												<option value="SI/SM/솔루션"
-														th:selected="${session.user.job == 'SI/SM/솔루션'}">SI/SM/솔루션
-												</option>
-												<option value="웹 개발자"
-														th:selected="${session.user.job == '웹 개발자'}">웹 개발자
-												</option>
-												<option value="애플리케이션 개발자"
-														th:selected="${session.user.job == '애플리케이션 개발자'}">애플리케이션 개발자
-												</option>
-												<option value="게임 개발자"
-														th:selected="${session.user.job == '게임 개발자'}">게임 개발자
-												</option>
-												<option value="프론트엔드 개발자"
-														th:selected="${session.user.job == '프론트엔드 개발자'}">프론트엔드 개발자
-												</option>
-												<option value="보안 개발자"
-														th:selected="${session.user.job == '보안 개발자'}">보안 개발자
-												</option>
-												<option value="백엔드 개발자"
-														th:selected="${session.user.job == '백엔드 개발자'}">백엔드 개발자
-												</option>
-												<option value="풀스택 개발자"
-														th:selected="${session.user.job == '풀스택 개발자'}">풀스택 개발자
-												</option>
-												<option value="컴파일러 개발자"
-														th:selected="${session.user.job == '컴파일러 개발자'}">컴파일러 개발자
-												</option>
-												<option value="빅데이터 개발자"
-														th:selected="${session.user.job == '빅데이터 개발자'}">빅데이터 개발자
-												</option>
-												<option value="애플리케이션 개발자"
-														th:selected="${session.user.job == '애플리케이션 개발자'}">애플리케이션 개발자
-												</option>
-												<option value="Desktop 개발자"
-														th:selected="${session.user.job == 'Desktop 개발자'}">Desktop 개발자
-												</option>
-												<option value="모바일 개발자"
-														th:selected="${session.user.job == '모바일 개발자'}">모바일 개발자
-												</option>
-												<option value="그래픽 개발자"
-														th:selected="${session.user.job == '그래픽 개발자'}">그래픽 개발자
-												</option>
-												<option value="데이터 사이언티스트"
-														th:selected="${session.user.job == '데이터 사이언티스트'}">데이터 사이언티스트
-												</option>
-												<option value="CRM 개발자"
-														th:selected="${session.user.job == 'CRM 개발자'}">CRM 개발자
-												</option>
-												<option value="AI 개발자"
-														th:selected="${session.user.job == 'AI 개발자'}">AI 개발자
-												</option>
-												<option value="엔지니어"
-														th:selected="${session.user.job == '엔지니어'}">엔지니어
-												</option>
-												<option value="기타 IT 업종"
-														th:selected="${session.user.job == '기타 IT 업종'}">기타 IT 업종
-												</option>
-											</select>
-										</div>
-									</div>
-									<!--end col-->
-									<div class="col-lg-6"></div>
-									<!--end col-->
-									<div class="col-lg-12">
-										<div class="mb-3 pb-2">
-											<label for="exampleFormControlTextarea"
-												   class="form-label">Description</label>
-											<textarea class="form-control" id="exampleFormControlTextarea"
-													  th:text="${session.user.description}"
-													  rows="7" style="resize: none;" name="description"></textarea>
-										</div>
-									</div>
-									<input type="hidden" th:value="${session.user.userNo}" name="userNo">
-									<input type="hidden" th:value="${session.user.id}" name="id">
-									<input type="hidden" th:value="${session.user.password}" name="password">
-									<!--end col-->
+                                    <!--end col-->
+                                    <div class="col-lg-5">
+                                        <div class="mb-3">
+                                            <label for="skillsInput" class="form-label">Job</label>
+                                            <select name="job" data-choices th:value="${session.user.job}"
+                                                    data-choices-text-unique-true id="skillsInput">
+                                                <option value="3D 애니메이터"
+                                                        th:selected="${session.user.job == '3D 애니메이터'}">3D 애니메이터
+                                                </option>
+                                                <option value="디지털 영상 편집 전문가"
+                                                        th:selected="${session.user.job == '디지털 영상 편집 전문가'}">디지털 영상 편집
+                                                    전문가
+                                                </option>
+                                                <option value="웹 마스터"
+                                                        th:selected="${session.user.job == '웹 마스터'}">웹 마스터
+                                                </option>
+                                                <option value="웹 PD"
+                                                        th:selected="${session.user.job == '웹 PD'}">웹 PD
+                                                </option>
+                                                <option value="게임 그래픽 디자이너"
+                                                        th:selected="${session.user.job == '게임 그래픽 디자이너'}">게임 그래픽 디자이너
+                                                </option>
+                                                <option value="게임 프로그래머"
+                                                        th:selected="${session.user.job == '게임 프로그래머'}">게임 프로그래머
+                                                </option>
+                                                <option value="IT 전문 강사"
+                                                        th:selected="${session.user.job == 'IT 전문 강사'}">IT 전문 강사
+                                                </option>
+                                                <option value="프로젝트 매니저"
+                                                        th:selected="${session.user.job == '프로젝트 매니저'}">프로젝트 매니저
+                                                </option>
+                                                <option value="네트워크 디자이너"
+                                                        th:selected="${session.user.job == '네트워크 디자이너'}">네트워크 디자이너
+                                                </option>
+                                                <option value="리눅스 전문가"
+                                                        th:selected="${session.user.job == '리눅스 전문가'}">리눅스 전문가
+                                                </option>
+                                                <option value="소프트웨어 개발자"
+                                                        th:selected="${session.user.job == '소프트웨어 개발자'}">소프트웨어 개발자
+                                                </option>
+                                                <option value="웹 마케터"
+                                                        th:selected="${session.user.job == '웹 마케터'}">웹 마케터
+                                                </option>
+                                                <option value="인터넷 쇼핑몰 운영자"
+                                                        th:selected="${session.user.job == '인터넷 쇼핑몰 운영자'}">인터넷 쇼핑몰 운영자
+                                                </option>
+                                                <option value="그래픽 디자이너"
+                                                        th:selected="${session.user.job == '그래픽 디자이너'}">그래픽 디자이너
+                                                </option>
+                                                <option value="CAD/CAM 전문가"
+                                                        th:selected="${session.user.job == 'CAD/CAM 전문가'}">CAD/CAM 전문가
+                                                </option>
+                                                <option value="네트워크 전문가"
+                                                        th:selected="${session.user.job == '네트워크 전문가'}">네트워크 전문가
+                                                </option>
+                                                <option value="시스템 엔지니어"
+                                                        th:selected="${session.user.job == '시스템 엔지니어'}">시스템 엔지니어
+                                                </option>
+                                                <option value="보안 전문가"
+                                                        th:selected="${session.user.job == '보안 전문가'}">보안 전문가
+                                                </option>
+                                                <option value="IP 전문가"
+                                                        th:selected="${session.user.job == 'IP 전문가'}">IP 전문가
+                                                </option>
+                                                <option value="웹 기획자"
+                                                        th:selected="${session.user.job == '웹 기획자'}">웹 기획자
+                                                </option>
+                                                <option value="웹 카피라이터"
+                                                        th:selected="${session.user.job == '웹 카피라이터'}">웹 카피라이터
+                                                </option>
+                                                <option value="정보통신 기술자"
+                                                        th:selected="${session.user.job == '정보통신 기술자'}">정보통신 기술자
+                                                </option>
+                                                <option value="프로게이머"
+                                                        th:selected="${session.user.job == '프로게이머'}">프로게이머
+                                                </option>
+                                                <option value="SI/SM/솔루션"
+                                                        th:selected="${session.user.job == 'SI/SM/솔루션'}">SI/SM/솔루션
+                                                </option>
+                                                <option value="웹 개발자"
+                                                        th:selected="${session.user.job == '웹 개발자'}">웹 개발자
+                                                </option>
+                                                <option value="애플리케이션 개발자"
+                                                        th:selected="${session.user.job == '애플리케이션 개발자'}">애플리케이션 개발자
+                                                </option>
+                                                <option value="게임 개발자"
+                                                        th:selected="${session.user.job == '게임 개발자'}">게임 개발자
+                                                </option>
+                                                <option value="프론트엔드 개발자"
+                                                        th:selected="${session.user.job == '프론트엔드 개발자'}">프론트엔드 개발자
+                                                </option>
+                                                <option value="보안 개발자"
+                                                        th:selected="${session.user.job == '보안 개발자'}">보안 개발자
+                                                </option>
+                                                <option value="백엔드 개발자"
+                                                        th:selected="${session.user.job == '백엔드 개발자'}">백엔드 개발자
+                                                </option>
+                                                <option value="풀스택 개발자"
+                                                        th:selected="${session.user.job == '풀스택 개발자'}">풀스택 개발자
+                                                </option>
+                                                <option value="컴파일러 개발자"
+                                                        th:selected="${session.user.job == '컴파일러 개발자'}">컴파일러 개발자
+                                                </option>
+                                                <option value="빅데이터 개발자"
+                                                        th:selected="${session.user.job == '빅데이터 개발자'}">빅데이터 개발자
+                                                </option>
+                                                <option value="애플리케이션 개발자"
+                                                        th:selected="${session.user.job == '애플리케이션 개발자'}">애플리케이션 개발자
+                                                </option>
+                                                <option value="Desktop 개발자"
+                                                        th:selected="${session.user.job == 'Desktop 개발자'}">Desktop 개발자
+                                                </option>
+                                                <option value="모바일 개발자"
+                                                        th:selected="${session.user.job == '모바일 개발자'}">모바일 개발자
+                                                </option>
+                                                <option value="그래픽 개발자"
+                                                        th:selected="${session.user.job == '그래픽 개발자'}">그래픽 개발자
+                                                </option>
+                                                <option value="데이터 사이언티스트"
+                                                        th:selected="${session.user.job == '데이터 사이언티스트'}">데이터 사이언티스트
+                                                </option>
+                                                <option value="CRM 개발자"
+                                                        th:selected="${session.user.job == 'CRM 개발자'}">CRM 개발자
+                                                </option>
+                                                <option value="AI 개발자"
+                                                        th:selected="${session.user.job == 'AI 개발자'}">AI 개발자
+                                                </option>
+                                                <option value="엔지니어"
+                                                        th:selected="${session.user.job == '엔지니어'}">엔지니어
+                                                </option>
+                                                <option value="기타 IT 업종"
+                                                        th:selected="${session.user.job == '기타 IT 업종'}">기타 IT 업종
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6"></div>
+                                    <!--end col-->
+                                    <div class="col-lg-12">
+                                        <div class="mb-3 pb-2">
+                                            <label for="exampleFormControlTextarea"
+                                                   class="form-label">Description</label>
+                                            <textarea class="form-control" id="exampleFormControlTextarea"
+                                                      th:text="${session.user.description}"
+                                                      rows="7" style="resize: none;" name="description"></textarea>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" th:value="${session.user.userNo}" name="userNo">
+                                    <input type="hidden" th:value="${session.user.id}" name="id">
+                                    <input type="hidden" th:value="${session.user.password}" name="password">
+                                    <!--end col-->
 
-									<div class="col-lg-12">
-										<div class="hstack gap-2 justify-content-end">
-											<button type="button" class="btn btn-primary"
-													onclick="confirmProfileModification()">Updates
-											</button>
-											<button type="button" class="btn btn-soft-success">Cancel</button>
-										</div>
-									</div>
+                                    <div class="col-lg-12">
+                                        <div class="hstack gap-2 justify-content-end">
+                                            <button type="button" class="btn btn-primary"
+                                                    onclick="enableProfileModification()">Updates
+                                            </button>
+                                            <button type="button" class="btn btn-soft-success">Cancel</button>
+                                        </div>
+                                    </div>
+                                    <a href="#" id="deleteLink" style="font-size: smaller; width: 80px;">
+    <span style="text-decoration: underline;">
+        회원 탈퇴
+    </span>
+                                    </a>
+                                    <input type="hidden" id="userNoFordelete" th:value="${session.user.userNo}">
 
-									<a href="/" style="font-size: smaller; width: 80px;">
-											<span style="text-decoration: underline;">
-												회원 탈퇴
-											</span>
-									</a>
-									<!--end col-->
+                                    <!--end col-->
 
-								</div>
-								<!--end row-->
-							</div>
+                                </div>
+                                <!--end row-->
+                            </div>
 
 
-							<!--end tab-pane-->
-							<div class="tab-pane" id="changePassword" role="tabpanel">
-								<form action="/api/changepassword" motehod="post">
-									<div class="row g-2">
-										<div class="col-lg-4">
-											<div>
-												<label for="oldpasswordInput" class="form-label">Old Password*</label>
-												<input type="password" class="form-control" id="oldpasswordInput"
-													   placeholder="Enter current password">
-												<input type="hidden" id="oldpasswordCheck" th:value="${session.user.password}">
-												<input type="hidden" id="idForChangePassword" th:value="${session.user.id}">
-												<input type="hidden" id="isVerificationComplete" value="false" />
-											</div>
-										</div>
-										<!--end col-->
-										<div class="col-lg-4">
-											<div>
-												<label for="newpasswordInput" class="form-label">New Password*</label>
-												<input type="password" class="form-control pe-5 password-input"
-													   onpaste="return false" placeholder="비밀번호를 입력해주세요"
-													   id="newpasswordInput"
-													   aria-describedby="passwordInput"
-													   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
-											</div>
-										</div>
-										<!--end col-->
-										<div class="col-lg-4">
-											<div>
-												<label for="confirmpasswordInput" class="form-label">Confirm
-													Password*</label>
-												<input type="password" class="form-control pe-5 password-input"
-													   onpaste="return false" placeholder="비밀번호를 입력해주세요"
-													   id="confirmpasswordInput" name="password"
-													   aria-describedby="passwordInput"
-													   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
-											</div>
-										</div>
-										<!--end col-->
-										<div class="col-lg-12">
-											<div class="mb-3">
-												<a href="http://localhost:8086/users/sendmail"
-												   class="link-primary text-decoration-underline">Forgot Password ?</a>
-											</div>
-										</div>
-										<!--end col-->
-										<div class="col-lg-12">
-											<div class="text-end">
-												<button type="button" onclick="changePassword()" class="btn btn-success">Change Password</button>
-											</div>
-										</div>
-										<!--end col-->
-									</div>
-									<!--end row-->
-								</form>
-								<div class="mt-4 mb-3 border-bottom pb-2">
-									<div class="float-end">
-										<a href="javascript:void(0);" class="link-primary">All Logout</a>
-									</div>
-									<h5 class="card-title">Login History</h5>
-								</div>
-								<div class="d-flex align-items-center mb-3">
-									<div class="flex-shrink-0 avatar-sm">
-										<div class="avatar-title bg-light text-primary rounded-3 fs-18">
-											<i class="ri-smartphone-line"></i>
-										</div>
-									</div>
-									<div class="flex-grow-1 ms-3">
-										<h6>iPhone 12 Pro</h6>
-										<p class="text-muted mb-0">Los Angeles, United States - March 16 at 2:47PM</p>
-									</div>
-									<div>
-										<a href="javascript:void(0);">Logout</a>
-									</div>
-								</div>
-								<div class="d-flex align-items-center mb-3">
-									<div class="flex-shrink-0 avatar-sm">
-										<div class="avatar-title bg-light text-primary rounded-3 fs-18">
-											<i class="ri-tablet-line"></i>
-										</div>
-									</div>
-									<div class="flex-grow-1 ms-3">
-										<h6>Apple iPad Pro</h6>
-										<p class="text-muted mb-0">Washington, United States - November 06 at 10:43AM
-										</p>
-									</div>
-									<div>
-										<a href="javascript:void(0);">Logout</a>
-									</div>
-								</div>
-								<div class="d-flex align-items-center mb-3">
-									<div class="flex-shrink-0 avatar-sm">
-										<div class="avatar-title bg-light text-primary rounded-3 fs-18">
-											<i class="ri-smartphone-line"></i>
-										</div>
-									</div>
-									<div class="flex-grow-1 ms-3">
-										<h6>Galaxy S21 Ultra 5G</h6>
-										<p class="text-muted mb-0">Conneticut, United States - June 12 at 3:24PM</p>
-									</div>
-									<div>
-										<a href="javascript:void(0);">Logout</a>
-									</div>
-								</div>
-								<div class="d-flex align-items-center">
-									<div class="flex-shrink-0 avatar-sm">
-										<div class="avatar-title bg-light text-primary rounded-3 fs-18">
-											<i class="ri-macbook-line"></i>
-										</div>
-									</div>
-									<div class="flex-grow-1 ms-3">
-										<h6>Dell Inspiron 14</h6>
-										<p class="text-muted mb-0">Phoenix, United States - July 26 at 8:10AM</p>
-									</div>
-									<div>
-										<a href="javascript:void(0);">Logout</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--end col-->
-		</div>
-	</form>
-	<!--end row-->
+                            <!--end tab-pane-->
+                            <div class="tab-pane" id="changePassword" role="tabpanel">
+                                <form action="/api/changepassword" motehod="post">
+                                    <div class="row g-2">
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <label for="oldpasswordInput" class="form-label">Old Password*</label>
+                                                <input type="password" class="form-control" id="oldpasswordInput"
+                                                       placeholder="Enter current password">
+                                                <input type="hidden" id="oldpasswordCheck"
+                                                       th:value="${session.user.password}">
+                                                <input type="hidden" id="idForChangePassword"
+                                                       th:value="${session.user.id}">
+                                                <input type="hidden" id="isVerificationComplete" value="false">
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <label for="newpasswordInput" class="form-label">New Password*</label>
+                                                <input type="password" class="form-control pe-5 password-input"
+                                                       onpaste="return false" placeholder="비밀번호를 입력해주세요"
+                                                       id="newpasswordInput"
+                                                       aria-describedby="passwordInput"
+                                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-lg-4">
+                                            <div>
+                                                <label for="confirmpasswordInput" class="form-label">Confirm
+                                                    Password*</label>
+                                                <input type="password" class="form-control pe-5 password-input"
+                                                       onpaste="return false" placeholder="비밀번호를 입력해주세요"
+                                                       id="confirmpasswordInput" name="password"
+                                                       aria-describedby="passwordInput"
+                                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <a href="http://localhost:8086/users/sendmail"
+                                                   class="link-primary text-decoration-underline">Forgot Password ?</a>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                        <div class="col-lg-12">
+                                            <div class="text-end">
+                                                <button type="button" onclick="changePassword()"
+                                                        class="btn btn-success">Change Password
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                    </div>
+                                    <!--end row-->
+                                </form>
+                                <div class="mt-4 mb-3 border-bottom pb-2">
+                                    <div class="float-end">
+                                        <a href="javascript:void(0);" class="link-primary">All Logout</a>
+                                    </div>
+                                    <h5 class="card-title">Login History</h5>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="flex-shrink-0 avatar-sm">
+                                        <div class="avatar-title bg-light text-primary rounded-3 fs-18">
+                                            <i class="ri-smartphone-line"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>iPhone 12 Pro</h6>
+                                        <p class="text-muted mb-0">Los Angeles, United States - March 16 at 2:47PM</p>
+                                    </div>
+                                    <div>
+                                        <a href="javascript:void(0);">Logout</a>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="flex-shrink-0 avatar-sm">
+                                        <div class="avatar-title bg-light text-primary rounded-3 fs-18">
+                                            <i class="ri-tablet-line"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>Apple iPad Pro</h6>
+                                        <p class="text-muted mb-0">Washington, United States - November 06 at 10:43AM
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <a href="javascript:void(0);">Logout</a>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="flex-shrink-0 avatar-sm">
+                                        <div class="avatar-title bg-light text-primary rounded-3 fs-18">
+                                            <i class="ri-smartphone-line"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>Galaxy S21 Ultra 5G</h6>
+                                        <p class="text-muted mb-0">Conneticut, United States - June 12 at 3:24PM</p>
+                                    </div>
+                                    <div>
+                                        <a href="javascript:void(0);">Logout</a>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 avatar-sm">
+                                        <div class="avatar-title bg-light text-primary rounded-3 fs-18">
+                                            <i class="ri-macbook-line"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>Dell Inspiron 14</h6>
+                                        <p class="text-muted mb-0">Phoenix, United States - July 26 at 8:10AM</p>
+                                    </div>
+                                    <div>
+                                        <a href="javascript:void(0);">Logout</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end col-->
+        </div>
+    </form>
+    <!--end row-->
 </div>
 <th:block layout:fragment="pagejs">
 
-	<!-- profile-setting init js -->
-	<script src="/assets/js/pages/profile-setting.init.js"></script>
-	<script src="/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+    <!-- profile-setting init js -->
+    <script src="/assets/js/pages/profile-setting.init.js"></script>
+    <script src="/assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
 </th:block>
 </body>
 

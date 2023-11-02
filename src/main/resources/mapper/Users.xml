@@ -126,6 +126,14 @@
             Id=#{id} AND Email=#{email}
     </update>
 
+    <!-- 로그인 상태 O-->
+    <update id="loginChangePassword">
+        update Users
+        set Password=#{password}
+        where
+            Id=#{id}
+    </update>
+
     <select id="signin" resultType="UsersDTO" parameterType="UsersDTO">
         select *
         from
@@ -147,6 +155,45 @@
         FROM users
         WHERE nickName=#{nickName}
     </select>
+
+    <select id="snslogin" parameterType="java.util.HashMap" resultType="UsersDTO">
+        select * from Users where  email=#{email}
+    </select>
+
+    <insert id="snsinsert" parameterType="java.util.HashMap">
+        insert into Users(userno, sns, email)
+        values(
+        <choose>
+            <when test="sns == 'google'">
+                'g'||guserNO_seq.nextval
+            </when>
+            <when test="sns == 'naver'">
+                'n'||nuserNO_seq.nextval
+            </when>
+            <when test="sns == 'kakao'">
+                'k'||kuserNO_seq.nextval
+            </when>
+            <otherwise>
+                userno_seq.nextval
+            </otherwise>
+        </choose>,
+        #{sns},
+        #{email}
+        )
+    </insert>
+
+    <update id="snsUpdate" parameterType="UsersDTO">
+        update users
+        set
+            id = #{id},
+            password = #{password},
+            name = #{name},
+            nickname = #{nickName},
+            job = #{job},
+            profileURL =#{profileURL}
+        where
+            email = #{email}
+    </update>
 
     <!-- 유저 번호로 [프로필사진] 가져오기 -->
     <select id="getProfileURL" parameterType="String" resultType="String">

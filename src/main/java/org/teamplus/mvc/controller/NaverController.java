@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("naver")
 @Slf4j
 @SessionAttributes("user")
-public class NaverController {
+public class    NaverController {
     private final NaverService service;
 
     @GetMapping("/callback")

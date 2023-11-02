@@ -14,6 +14,7 @@ import org.teamplus.mvc.service.UsersService;
 import org.teamplus.mvc.util.MailCheck;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Log4j2
 @Controller
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 public class UsersController {
 
     private final UsersService service;
+
+    private boolean isVerificationComplete = false;
 
 //━━━━━ [로그인 관련] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -194,7 +197,10 @@ public class UsersController {
     }
 
     @GetMapping("/snsUpdate")
-    public String snsUpdateView() {
+    public String snsUpdateView(Model model,  HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String email = (String) session.getAttribute("email");
+        model.addAttribute("email", email);
         return "MyPage/snsUpdate";
     }
 
@@ -214,14 +220,29 @@ public class UsersController {
         return new RedirectView("/");
     }
 
+    //회원 탈퇴
+    @GetMapping("/delete")
+    public String delete(UsersDTO dto) {
+        service.delete(dto);
+        return "/signin";
+    }
+
+    //소셜로그인 중복확인
+    @GetMapping("/socialCheckemail")
+    public String socialCheckEmail(@RequestParam String email, Model model) {
+        int emailcheck = service.isEmailExist(email);
+        if (emailcheck != 1) {
+            return "redirect:/users/snsUpdate?email=" + email;
+        } else {
+            UsersDTO dto = service.selectByEmail(email);
+            model.addAttribute("user", dto);
+            service.signin(dto);
+            log.info("━━━━━━━━━━ 로그인 성공 ⭕");
+            return "redirect:/";
+        }
+    }
 
 //━━━━━ [프로필 관련] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-    // Starter 화면 todo 사용 안할듯 ❌ 10.20 (재민)
-    @GetMapping("/starter")
-    public String starter() {
-        return "MyPage/starter";
-    }
 
     // 프로필 보기 컨트롤러
     @GetMapping("/profile")
@@ -233,6 +254,28 @@ public class UsersController {
     @GetMapping("/modify")
     public String modifyView() {
         return "MyPage/profile-settings";
+    }
+
+    @PostMapping("/modify")
+    public String modifyProfile(UsersDTO usersDTO, HttpSession session, HttpServletRequest request) {
+        if (session == null) {
+            // 세션이 아직 생성되지 않은 경우에만 세션을 새로 생성
+            session = request.getSession();
+        }
+        // 이메일 확인이 성공적으로 이루어진 후에 isVerificationComplete를 true로 설정합니다.
+        session.setAttribute("isVerificationComplete", true);
+
+        boolean isVerificationComplete = (boolean) session.getAttribute("isVerificationComplete");
+        log.info(isVerificationComplete);
+        if (isVerificationComplete) {
+            log.info(usersDTO);
+            service.updateProfile(usersDTO);
+            service.signin(usersDTO);
+            return "redirect:/project/list";
+        } else {
+            log.info("error");
+            return "redirect:/";
+        }
     }
 
 }

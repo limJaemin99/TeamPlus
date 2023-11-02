@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.teamplus.mvc.dto.UsersDTO;
 import org.teamplus.mvc.service.UsersService;
 import org.teamplus.mvc.util.MailCheck;
@@ -122,6 +123,23 @@ public class ApiController {
         } else {
             // 인증 코드 불일치
             return ResponseEntity.status(HttpStatus.CONFLICT).body("인증 코드 확인 실패.");
+        }
+    }
+
+    /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━회원 탈퇴 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━*/
+    @PostMapping("/delete")
+    public String delete(@RequestBody Map<String, String> requestBody, SessionStatus sessionStatus) {
+        String userNo = requestBody.get("userNo"); // 요청 바디에서 userNo를 추출
+        if (userNo != null && !userNo.isEmpty()) {
+            // userNo를 이용해 탈퇴 작업 수행
+            UsersDTO dto = new UsersDTO();
+            dto.setUserNo(userNo); // userNo를 숫자로 변환
+            service.delete(dto);
+            // 세션을 종료하여 사용자 로그아웃 처리
+            sessionStatus.setComplete();
+            return "redirect:/users/signin"; // 로그인 페이지로 리디렉션
+        } else {
+            return "/";
         }
     }
 }

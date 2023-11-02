@@ -56,6 +56,10 @@
 								<h3 class="text-primary">Create New Account</h3>
 								<p class="text-muted">TeamPlus 에 오신것을 환영합니다!</p>
 							</div>
+							<!--오류메세지-->
+							<div class="alert alert-danger" th:if="${idErrorMessage}">
+								<span th:text="${idErrorMessage}"></span>
+							</div>
 							<div class="p-2 mt-4">
 								<form class="needs-validation" action="/users/signup" method="post">
 									<label for="Id" class="form-label">Profile Image<span
@@ -78,9 +82,8 @@
 														</button>
 													</label>
 												</div>
-												<div class="modal fade zoomIn" id="modifyProfileImage" tabindex="-1"
-													 aria-labelledby="createProjectModalLabel"
-													 aria-hidden="true">
+												<div aria-hidden="true" aria-labelledby="createProjectModalLabel"
+													 class="modal fade zoomIn" id="modifyProfileImage" tabindex="-1">
 													<div class="modal-dialog modal-dialog-centered">
 														<div class="modal-content">
 															<div class="modal-header p-3 bg-soft-success">
@@ -99,15 +102,11 @@
 																	</div>
 																</div>
 																<div class="hstack gap-2 justify-content-end">
-																	<button type="button" class="btn btn-ghost-success"
-																			data-bs-dismiss="modal"><i
-																			class="ri-close-line align-bottom"></i>
+																	<button class="btn btn-ghost-success" data-bs-dismiss="modal" type="button">
+																		<i class="ri-close-line align-bottom"></i>
 																		Close
 																	</button>
-																	<button type="button" class="btn btn-primary"
-																			id="confirmSelection"
-																			data-bs-dismiss="modal">선택
-																	</button>
+																	<button class="btn btn-primary" data-bs-dismiss="modal" id="confirmSelection" type="button">선택</button>
 																</div>
 															</div>
 														</div>
@@ -118,42 +117,56 @@
 										</div>
 										<!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 프로필 이미지 선택━━━━━━━━━━━━━━━━━━━━━━-->
 										<div class="mb-3">
-											<label for="Id" class="form-label">ID <span
+											<label class="form-label" for="Id">ID <span
 													class="text-danger">*</span></label>
-											<input type="text" class="form-control" id="Id" name="id"
-												   placeholder="ID를 입력해주세요" required>
 											<div id="id-error-message"></div>
-											<button>중복검사</button>
+											<input class="form-control" id="Id" name="id" placeholder="ID를 입력해주세요"
+												   required type="text">
+											<button class="btn btn-success" onclick="idCheck()"
+													style="margin-top: 5px;">중복검사
+											</button>
 										</div>
 										<div class="mb-3">
-											<label for="name" class="form-label">Username <span
+											<label class="form-label" for="name">Username <span
 													class="text-danger">*</span></label>
-											<input type="text" class="form-control" id="name" name="name"
-												   placeholder="성함을 입력해주세요" required>
+											<input class="form-control" id="name" name="name" placeholder="성함을 입력해주세요"
+												   required type="text">
 											<div class="invalid-feedback">
 												성함을 입력해주세요
 											</div>
 										</div>
 										<div class="mb-3">
-											<label for="NickName" class="form-label">NickName <span
+											<label class="form-label" for="lastnameInput">NickName <span
 													class="text-danger">*</span></label>
-											<input type="text" class="form-control" id="NickName" name="NickName"
-												   placeholder="닉네임을 입력해주세요" required>
+											<div id="nick-error-message"></div>
+											<input class="form-control" id="lastnameInput" name="NickName"
+												   placeholder="닉네임을 입력해주세요"
+												   required type="text">
 											<div class="invalid-feedback">
 												닉네임을 입력해주세요
 											</div>
+											<button class="btn btn-success" onclick="nickNameCheck()"
+													style="margin-top: 5px;"
+													type="button">
+												중복검사
+											</button>
 										</div>
+										<!--비밀번호 검사 -->
 										<div class="mb-3">
 											<label class="form-label" for="password-input">Password <span
 													class="text-danger">*</span></label>
 											<div class="position-relative auth-pass-inputgroup">
-												<input type="password" class="form-control pe-5 password-input"
-													   onpaste="return false" placeholder="비밀번호를 입력해주세요"
+												<input aria-describedby="passwordInput"
+													   class="form-control pe-5 password-input"
 													   id="password-input" name="password"
-													   aria-describedby="passwordInput"
-													   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+													   onpaste="return false"
+													   pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,}$"
+													   placeholder="비밀번호를 입력해주세요"
+													   required type="password"
+													   title="영문자,기호,숫자를 반드시 1개 포함하여 4~24 글자"
+												>
 												<button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
-														type="button" id="password-addon">
+														id="password-addon" type="button">
 													<i class="ri-eye-fill align-middle"></i>
 												</button>
 												<div class="invalid-feedback">
@@ -165,9 +178,10 @@
 											<label class="form-label" for="password-input">Password Again <span
 													class="text-danger">*</span></label>
 											<div class="position-relative auth-pass-inputgroup">
-												<input type="password" class="form-control pe-5 password-input"
-													   onpaste="return false" placeholder="한번 더 입력해주세요"
-													   id="confirm-password-input" aria-descripbedby="passwordInput">
+												<input aria-descripbedby="passwordInput"
+													   class="form-control pe-5 password-input"
+													   id="confirm-password-input" onpaste="return false"
+													   placeholder="한번 더 입력해주세요" type="password">
 												<button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon"
 														type="button">
 													<i class="ri-eye-fill align-middle"></i>
@@ -178,19 +192,20 @@
 											</div>
 										</div>
 										<div class="mb-3">
-											<label for="useremail" class="form-label">Email <span
+											<label class="form-label" for="useremail">Email <span
 													class="text-danger">*</span></label>
-											<input type="email" class="form-control" id="useremail" name="email"
-												   placeholder="Email을 입력해주세요" required>
+											<input class="form-control" id="useremail" name="email"
+												   placeholder="Email을 입력해주세요"
+												   required type="email">
 											<div class="invalid-feedback">
 												Email을 입력해주세요
 											</div>
 										</div>
 										<div class="col-lg-6">
 											<div class="mb-3">
-												<label for="skillsInput" class="form-label">Job</label>
-												<select name="job" data-choices
-														data-choices-text-unique-true id="skillsInput">
+												<label class="form-label" for="skillsInput">Job</label>
+												<select data-choices data-choices-text-unique-true
+														id="skillsInput" name="job">
 													<option value="3D 애니메이터">3D 애니메이터</option>
 													<option value="디지털 영상 편집 전문가">디지털 영상 편집 전문가</option>
 													<option value="웹 마스터">웹 마스터</option>
@@ -237,15 +252,15 @@
 											</div>
 										</div>
 
-										<div id="password-contain" class="p-3 bg-light mb-2 rounded">
+										<div class="p-3 bg-light mb-2 rounded" id="password-contain">
 											<h5 class="fs-13">Password must contain:</h5>
-											<p id="pass-length" class="invalid fs-12 mb-2">Minimum <b>8 characters</b>
+											<p class="invalid fs-12 mb-2" id="pass-length">Minimum <b>8 characters</b>
 											</p>
-											<p id="pass-lower" class="invalid fs-12 mb-2">At <b>lowercase</b> letter
+											<p class="invalid fs-12 mb-2" id="pass-lower">At <b>lowercase</b> letter
 												(a-z)</p>
-											<p id="pass-upper" class="invalid fs-12 mb-2">At least <b>uppercase</b>
+											<p class="invalid fs-12 mb-2" id="pass-upper">At least <b>uppercase</b>
 												letter (A-Z)</p>
-											<p id="pass-number" class="invalid fs-12 mb-0">A least <b>number</b> (0-9)
+											<p class="invalid fs-12 mb-0" id="pass-number">A least <b>number</b> (0-9)
 											</p>
 										</div>
 										<div class="mt-4">
@@ -280,8 +295,7 @@
 					<div class="text-center">
 						<p class="mb-0 text-muted">&copy;
 							<script>document.write(new Date().getFullYear())</script>
-							TeamPlus. Crafted with <i
-									class="mdi mdi-heart text-danger"></i>
+							TeamPlus. Crafted with <i class="mdi mdi-heart text-danger"></i>
 						</p>
 					</div>
 				</div>
