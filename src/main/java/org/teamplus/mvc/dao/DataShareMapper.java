@@ -16,4 +16,7 @@ public interface DataShareMapper {
 
     //파일 공유글 리스트 [출력]
     List<DataShareDTO> selectList(String projectNo);
+
+    //파일 다운로드 count update
+    int countUpdate(String dataURL);
 }
