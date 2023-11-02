@@ -93,7 +93,7 @@
 									<div class="card-body">
 										<div class="text-muted">
 											<h3 class="mb-3 fw-semibold text-uppercase">[[${project.title}]]</h3>
-											<p>[[${project.description}]]</p>
+											<p th:utext="${project.description}">[[${project.description}]]</p>
 											<div>
 												<button type="button" class="btn btn-link link-success p-0">Read
 													more</button>
@@ -279,18 +279,9 @@
 																	<i class="ri-more-fill"></i>
 																</a>
 																<ul class="dropdown-menu dropdown-menu-end">
-																	<li><a class="dropdown-item"
-																			href="javascript:void(0);"><i
-																				class="ri-eye-fill me-2 align-bottom text-muted"></i>View</a>
-																	</li>
-																	<li><a class="dropdown-item"
-																			href="javascript:void(0);"><i
+																	<li><a class="dropdown-item download-link"
+																		   th:href="|@{download(file=${vo.dataURL})}|" role="button"><i
 																				class="ri-download-2-fill me-2 align-bottom text-muted"></i>Download</a>
-																	</li>
-																	<li class="dropdown-divider"></li>
-																	<li><a class="dropdown-item"
-																			href="javascript:void(0);"><i
-																				class="ri-delete-bin-5-fill me-2 align-bottom text-muted"></i>Delete</a>
 																	</li>
 																</ul>
 															</div>
@@ -304,6 +295,20 @@
 							</div>
 						</div>
 					</div>
+					<script>
+						document.addEventListener("DOMContentLoaded", function() {
+							const downloadLinks = document.querySelectorAll(".download-link");
+							downloadLinks.forEach(function(link) {
+								link.addEventListener("click", function(event) {
+									event.preventDefault(); // 기본 링크 동작(페이지 이동 X)
+
+									const downloadUrl = "/download?file="+[[${dataURL}]];
+
+									window.location.href = downloadUrl;
+								});
+							});
+						});
+					</script>
 					<!-- end tab pane -->
 					<div class="tab-pane fade" id="project-team" role="tabpanel">
 						<div class="team-list list-view-filter" >

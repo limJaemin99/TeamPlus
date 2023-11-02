@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.teamplus.mvc.dto.MyNoteDTO;
 import org.teamplus.mvc.dto.PrivateTodoDTO;
 import org.teamplus.mvc.dto.UsersDTO;
@@ -74,7 +75,7 @@ public class PrivateController {
         return "dashboard/tasks-list-details";
     }
     @PostMapping("/save")
-    public String taskwriteAction(@SessionAttribute("user") UsersDTO user,MyNoteDTO vo){
+    public String taskwriteAction(@SessionAttribute("user") UsersDTO user, MyNoteDTO vo){
         int noteNo = service.getMynoteSequence()+1;
         vo.setNoteNo(noteNo);
         vo.setUserNo(user.getUserNo());
