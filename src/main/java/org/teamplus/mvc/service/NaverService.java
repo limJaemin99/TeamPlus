@@ -114,9 +114,10 @@ import org.teamplus.mvc.dto.UsersDTO;
         user = service.snslogin(email);
 
         if (user == null) {
-
             UsersDTO newUser = new UsersDTO();
             newUser.setEmail(email);
+            newUser.setSns("naver");
+
             service.snsinsert(newUser);
 
             user = service.snslogin(email);
