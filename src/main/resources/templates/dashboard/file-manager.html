@@ -17,96 +17,40 @@
 		<div class="chat-wrapper d-lg-flex gap-1 mx-n4 mt-n4 p-1">
 			<div class="file-manager-content w-100 p-3 py-0">
 				<div class="mx-n3 pt-4 px-4 file-manager-content-scroll" data-simplebar>
-					<div id="folder-list" class="mb-2">
-						<div class="row justify-content-beetwen g-2 mb-3">
-
-							<div class="col">
-								<div class="d-flex align-items-center">
-									<div class="flex-shrink-0 me-2 d-block d-lg-none">
-										<button type="button"
-											class="btn btn-soft-success btn-icon btn-sm fs-16 file-menu-btn">
-											<i class="ri-menu-2-fill align-bottom"></i>
-										</button>
-									</div>
-									<div class="flex-grow-1">
-										<h5 class="fs-16 mb-0">Folders</h5>
-									</div>
-								</div>
-							</div>
-							<!--end col-->
-							<div class="col-auto">
-								<div class="d-flex gap-2 align-items-start">
-									<select class="form-control" data-choices data-choices-search-false
-										name="choices-single-default" id="file-type">
-										<option value="">File Type</option>
-										<option value="All" selected>All</option>
-										<option value="Video">Video</option>
-										<option value="Images">Images</option>
-										<option value="Music">Music</option>
-										<option value="Documents">Documents</option>
-									</select>
-
-									<button class="btn btn-success w-sm create-folder-modal flex-shrink-0"
-										data-bs-toggle="modal" data-bs-target="#createFolderModal"><i
-											class="ri-add-line align-bottom me-1"></i> Create Folders</button>
-								</div>
-							</div>
-							<!--end col-->
-						</div>
-						<!--end row-->
-						<div class="row" id="folderlist-data">
-							<div class="col-xxl-3 col-6 folder-card">
-								<div class="card bg-light shadow-none" id="folder-1">
-									<div class="card-body">
-										<div class="d-flex mb-1">
-											<div class="form-check form-check-danger mb-3 fs-15 flex-grow-1">
-												<input class="form-check-input" type="checkbox" value=""
-													id="folderlistCheckbox_1" checked>
-												<label class="form-check-label" for="folderlistCheckbox_1"></label>
-											</div>
-											<div class="dropdown">
-												<button class="btn btn-ghost-primary btn-icon btn-sm dropdown"
-													type="button" data-bs-toggle="dropdown" aria-expanded="false">
-													<i class="ri-more-2-fill fs-16 align-bottom"></i>
-												</button>
-												<ul class="dropdown-menu dropdown-menu-end">
-													<li><a class="dropdown-item view-item-btn"
-															href="javascript:void(0);">Open</a></li>
-													<li><a class="dropdown-item edit-folder-list"
-															href="#createFolderModal" data-bs-toggle="modal"
-															role="button">Rename</a></li>
-													<li><a class="dropdown-item" href="#removeFolderModal"
-															data-bs-toggle="modal" role="button">Delete</a></li>
-												</ul>
-											</div>
-										</div>
-
-										<div class="text-center">
-											<div class="mb-2">
-												<i class="ri-folder-2-fill align-bottom text-warning display-5"></i>
-											</div>
-											<h6 class="fs-15 folder-name">파일 제목</h6>
-										</div>
-									</div>
-								</div>
-							</div>
-							<!--end col-->
-						</div>
-						<!--end row-->
-					</div>
 					<div>
 						<div class="table-responsive">
 							<table class="table align-middle table-nowrap mb-0">
 								<thead class="table-active">
 									<tr>
-										<th scope="col">넘버</th>
-										<th scope="col">File Name</th>
-										<th scope="col">제목</th>
-										<th scope="col">내용</th>
+										<th scope="col" class="text-center">No</th>
+										<th scope="col" class="text-center">File Name</th>
+										<th scope="col" class="text-center">제목</th>
+										<th scope="col" class="text-center">내용</th>
+										<th scope="col" class="text-center">다운로드 수</th>
 										<th scope="col" class="text-center">Actions</th>
 									</tr>
 								</thead>
-								<tbody id="file-list"></tbody>
+								<tbody id="file-list">
+									<tr th:each="list:${dataList}" class="text-center">
+										<td th:text="${list.r}"></td>
+										<td th:text="${list.dataURL}"></td>
+										<td th:text="${list.title}"></td>
+										<td th:text="${list.content}"></td>
+										<td th:text="${list.count}"></td>
+											<td><div class="dropdown">
+												<button class="btn btn-ghost-primary btn-icon btn-sm dropdown"
+														type="button" data-bs-toggle="dropdown" aria-expanded="false">
+													<i class="ri-more-2-fill fs-16 align-bottom"></i>
+												</button>
+												<ul class="dropdown-menu dropdown-menu-end">
+													<li><a class="dropdown-item download-link" th:href="|@{download(file=${list.dataURL})}|"
+														  role="button">Download</a></li>
+												</ul>
+											</div>
+											</td>
+									</tr>
+
+								</tbody>
 							</table>
 						</div>
 						<ul id="pagination" class="pagination pagination-lg"></ul>
@@ -329,66 +273,34 @@
 			</div>
 		</div>
 		<div>
-			<h5 class="fs-14 mb-1" style="padding-top: 10px">Product Gallery</h5>
-			<p class="text-muted">Add Product Gallery Images.</p>
+			<form action="filesSave" method="post" enctype="multipart/form-data">
+			<h5 class="fs-14 mb-1" style="padding-top: 10px">Project Files</h5>
+			<p class="text-muted">Add Project Files All.</p>
+				<input type="hidden" name="projectNo" th:value="${project.projectNo}">
+				<input type="hidden" name="userNo" th:value="${session.user.userNo}">
 			<div class="dropzone">
 				<div class="fallback">
-					<input name="file" type="file" multiple="multiple">
-				</div>
-				<div class="dz-message needsclick">
-					<div class="mb-3">
-						<i class="display-4 text-muted ri-upload-cloud-2-fill"></i>
+					<div class="col-lg-4">
+						<div class="mb-3">
+                    		<label class="form-label" for="title" style="">제목</label>
+								<input type="text" class="form-control" id="title" name="title"
+									placeholder="Enter File title" style="width:200px;">
+						</div>
 					</div>
-
-					<h5>Drop files here or click to upload.</h5>
+					<div class="col-lg-8">
+						<div class="mb-3">
+							<label class="form-label" for="content">설명</label>
+								<input type="text" class="form-control" id="content" name="content"
+									placeholder="Enter File content" style="width:400px;">
+						</div>
+					</div>
+					<input name="file" type="file" accept="image/*">
 				</div>
 			</div>
-
-			<ul class="list-unstyled mb-0" id="dropzone-preview" style="padding-bottom: 10px">
-				<li class="mt-2" id="dropzone-preview-list">
-					<!-- This is used as the file preview template -->
-					<div class="row">
-						<div class="col-lg-4">
-							<div class="mb-3">
-								<label class="form-label" for="file-title-input">제목</label>
-								<input type="text" class="form-control" id="file-title-input" name="title"
-								placeholder="Enter File title">
-							</div>
-						</div>
-						<div class="col-lg-8">
-							<div class="mb-3">
-								<label class="form-label" for="file-content-input">설명</label>
-								<input type="text" class="form-control" id="file-content-input" name="content"
-						   		placeholder="Enter File content">
-							</div>
-						</div>
-					</div>
-					<div class="border rounded">
-						<div class="d-flex p-2">
-							<div class="flex-shrink-0 me-3">
-								<div class="avatar-sm bg-light rounded">
-									<img data-dz-thumbnail class="img-fluid rounded d-block" src="#"
-										 alt="Product-Image" />
-								</div>
-							</div>
-							<div class="flex-grow-1">
-								<div class="pt-1">
-									<h5 class="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-									<p class="fs-13 text-muted mb-0" data-dz-size></p>
-									<strong class="error text-danger" data-dz-errormessage></strong>
-								</div>
-							</div>
-							<div class="flex-shrink-0 ms-3">
-								<button data-dz-remove class="btn btn-sm btn-danger">Delete</button>
-							</div>
-						</div>
-					</div>
-				</li>
-			</ul>
-			<!-- end dropzon-preview -->
-		</div>
-		<div class="text-end mb-3">
-			<button type="submit" class="btn btn-success w-sm">Submit</button>
+				<div class="text-end mb-3">
+					<button type="submit" class="btn btn-success w-sm">Submit</button>
+				</div>
+			</form>
 		</div>
 	</div>
 	<!-- end col -->
@@ -397,6 +309,20 @@
 	</div>
 	<!-- end card -->
 	</div>
+	<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			const downloadLinks = document.querySelectorAll(".download-link");
+			downloadLinks.forEach(function(link) {
+				link.addEventListener("click", function(event) {
+					event.preventDefault(); // 기본 링크 동작(페이지 이동 X)
+
+					const downloadUrl = "/download?file="+[[${dataURL}]];
+
+					window.location.href = downloadUrl;
+				});
+			});
+		});
+	</script>
 
 
 	<th:block layout:fragment="modal">

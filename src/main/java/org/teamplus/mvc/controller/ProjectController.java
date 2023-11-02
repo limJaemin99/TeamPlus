@@ -2,20 +2,24 @@ package org.teamplus.mvc.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.teamplus.mvc.dto.*;
 import org.teamplus.mvc.service.ProjectService;
 import org.teamplus.mvc.util.PageRequestDTO;
 import org.teamplus.mvc.util.PageResponseDTO;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Log4j2
 @Controller
@@ -115,8 +119,69 @@ public class ProjectController {
 
     // 파일 관리자
     @GetMapping("/files")
-    public String filesView() {
+    public String filesView(@ModelAttribute("projectNo") String projectNo, Model model) {
+        ProjectDTO project = service.selectOne(projectNo);
+        List<DataShareDTO> dataShareList = service.DataselectList(projectNo);
+        model.addAttribute("dataList",dataShareList);
+        model.addAttribute("project",project);
+
+
         return "dashboard/file-manager";
+    }
+    @PostMapping("/filesSave")
+    public String filesAction(@ModelAttribute("projectNo") String projectNo,DataShareDTO dto){
+
+//        String path ="D:\\iclass0419\\upload";
+        String path ="C:\\iclass0419\\upload";
+        StringBuilder filenames = new StringBuilder();
+
+        if(dto.getFile().getSize()!=0) {   //getSize()는 첨부파일의 크기
+            String ofilename = dto.getFile().getOriginalFilename();      // 원래의 파일명 (파일이름.확장자)
+//            String prefix = ofilename.substring(0, ofilename.lastIndexOf("."));   // original 파일이름
+            String postfix = ofilename.substring(ofilename.lastIndexOf("."));    //확장자
+            StringBuilder newfile = new StringBuilder("project_")
+                    //      .append(prefix)      //원래의 파일이름
+                    .append(UUID.randomUUID().toString().substring(0,8)).append(postfix);
+            // 사용자가 전송한 파일명 사용하지 않고 UUID.randomUUID() 로 랜덤 문자열 생성한 것 8글자로 함.
+            //path 폴더에 newfile 로  File 객체 생성해서 저장 준비
+            File file = new File(path + "\\"+newfile);
+            //저장
+            try {
+                dto.getFile().transferTo(file);         // f 파이르이 내용을 file 객체로 전송.(파일복사)
+                filenames.append(newfile);  //db 테이블에 들어갈 파일명
+            } catch (IOException e) {   }
+        }
+
+        dto.setDataURL(filenames.toString());
+        dto.setShareNo(service.DatagetSequence());
+        service.Datawrite(dto);
+
+        return "redirect:/project/files";
+    }
+
+    @GetMapping("/download")
+    public StreamingResponseBody downloadFile(@RequestParam("file") String dataURL, HttpServletResponse response,Model model) {
+        response.setHeader("Content-Disposition", "attachment; filename=" + dataURL);
+
+        StreamingResponseBody stream = out -> {
+            try (InputStream is = new FileInputStream("C:/iclass0419/upload/" + dataURL)) {
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = is.read(buffer)) != -1) {
+                    out.write(buffer, 0, bytesRead);
+                }
+                int count = service.countUpdate(dataURL);
+                if (count > 0) {
+                    log.info("update 성공 ⭕");
+                } else {
+                    log.info("update 실패 ❌");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        };
+        model.addAttribute("dataURL",dataURL);
+        return stream;
     }
 
     // To-Do 화면

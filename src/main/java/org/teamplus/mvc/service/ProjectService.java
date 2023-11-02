@@ -228,6 +228,9 @@ public class ProjectService {
     //파일 공유글 리스트 [출력]
     public List<DataShareDTO> DataselectList(String projectNo){return dataShareMapper.selectList(projectNo);}
 
+    //파일 다운로드 count update
+    public int countUpdate(String dataURL){return dataShareMapper.countUpdate(dataURL);}
+
     //[댓글] 작성
     public int writeComment(CommentsDTO dto){return commentsMapper.write(dto);};
 

@@ -11,16 +11,24 @@
     <!-- 파일 공유글 작성 -->
     <insert id="write" parameterType="DataShareDTO">
         INSERT INTO
-            dataShare (shareNo,projectNo,userNo,title,content,dataURL)
-        values (#{shareNo},#{projectNo},#{userNo},#{title},#{content},#{dataURL})
+            dataShare (shareNo,projectNo,userNo,title,content,dataURL,regDate)
+        values (#{shareNo},#{projectNo},#{userNo},#{title},#{content},#{dataURL},sysdate)
     </insert>
 
     <!-- 파일 공유글 리스트 [출력] -->
     <select id="selectList" parameterType="String" resultType="DataShareDTO">
         SELECT *
-        FROM dataShare
-        WHERE projectNo=#{projectNo}
-        ORDER BY regDate DESC
+        FROM (SELECT rownum r , f.*
+              FROM
+                  (SELECT *
+                   FROM dataShare
+                    WHERE projectNo=#{projectNo}
+                    ORDER BY regDate DESC) f)
     </select>
 
+    <update id="countUpdate" parameterType="string">
+        update dataShare
+        set count = count + 1
+        where dataURL = #{dataURL}
+    </update>
 </mapper>
