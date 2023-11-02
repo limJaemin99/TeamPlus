@@ -132,19 +132,11 @@
                                             성함을 입력해주세요
                                         </div>
                                     </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="lastnameInput">NickName <span
-                                                    class="text-danger">*</span></label>
-                                            <div id="nick-error-message"></div>
-                                            <input class="form-control" id="lastnameInput" name="NickName" placeholder="닉네임을 입력해주세요"
-                                                   required type="text">
-                                            <div class="invalid-feedback">
-                                                닉네임을 입력해주세요
-                                            </div>
-                                            <button class="btn btn-success" onclick="nickNameCheck()" style="margin-top: 5px;"
-                                                    type="button">
-                                                중복검사
-                                            </button>
+                                        <label class="form-label" for="lastnameInput">NickName <span class="text-danger">*</span></label>
+                                        <div id="nick-error-message"></div>
+                                        <div class="mb-3" style="display: flex; align-items: center;">
+                                            <input class="form-control" id="lastnameInput" name="NickName" placeholder="닉네임을 입력해주세요" required type="text" style="flex: 1;">
+                                            <button class="btn btn-success" onclick="nickNameCheck()" style="margin-left: 5px;" type="button">중복검사</button>
                                         </div>
                                     <div class="mb-3">
                                         <label for="useremail" class="form-label">Email <span
