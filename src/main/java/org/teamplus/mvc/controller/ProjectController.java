@@ -293,7 +293,7 @@ public class ProjectController {
     public String createTodoAction(TeamTodoDTO dto, @SessionAttribute("user")UsersDTO user,
                                    @ModelAttribute("projectNo") String projectNo, RedirectAttributes redirectAttributes){
         log.info(">>>> projectNo : {}",projectNo);
-        String todoNo = service.selectOne(projectNo).getTitle()+"_"+user.getId()+"_"+service.getTeamTodoSeq();
+        String todoNo = ""+service.getTeamTodoSeq();
         log.info("::::::: 팀할일번호: {}",todoNo);
         dto.setTodoNo(todoNo);
         dto.setUserNo(user.getUserNo());
